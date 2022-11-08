@@ -1,0 +1,123 @@
+ROUTINE Browser_Version_Control ON (Web.Request) { // Browser Version Control
+    STRING detectedVersion  // Full version detected as a string
+    NUMBER majorVersion  // Major version (no decimal) as number
+
+    BOOLEAN blockSafari = TRUE
+    NUMBER minSafariVersion = 650
+    BOOLEAN blockChrome = TRUE
+    NUMBER minChromeVersion = 107
+    BOOLEAN blockEdge = TRUE
+    NUMBER minEdgeVersion = 107
+    BOOLEAN blockFirefox = TRUE
+    NUMBER minFirefoxVersion = 105
+    BOOLEAN blockOpera = TRUE
+    NUMBER minOperaVersion = 92
+
+    STRING customBlockPage_Message
+    STRING customBlockPage_Reason
+    STRING customBlockPage_HTMLSection
+
+    // Safari
+    IF blockSafari THEN {
+        detectedVersion = ToRegExJSi("^Mozilla.*\\([^\\)]*Mac OS X.*Version\\/(?:\\d+\.)*\\d+.*Safari\\/((?:\\d+\\.)*\\d+).*$").WildcardMatch(MWG.Request.Headers.Get("User-Agent")).Get(0)
+        IF NOT detectedVersion.IsEmpty THEN {
+            // Test for a valid version string
+            IF detectedVersion.Split(".").Size < 1 THEN
+                END
+            
+            // Find major version and block of out of date
+            majorVersion = detectedVersion.Split(".").Get(0).ToNumber
+            IF majorVersion < minSafariVersion THEN {
+                customBlockPage_Message = "Safari version out of date"
+                customBlockPage_Reason = "Safari version out of date."
+                customBlockPage_HTMLSection = "You are currently running Safari version " + detectedVersion + " which is out of date.  Please upgrade Safari to version " + minSafariVersion.ToString + " or later to continue browsing."
+                MWG.Block(McAfee_Custom_Block_Page, "Outdated Safari browser blocked", "Outdated Safari browser (" + detectedVersion + ")")
+            }
+            END
+        }        
+    }
+
+    // Chrome
+    IF blockChrome THEN {
+        // Skip if other browser types appear in User-Agent
+        IF NOT (ToRegExJSi("^Mozilla.*Edg\\/(?:\\d+.)*\\d+.*$").Matches(MWG.Request.Headers.Get("User-Agent")) OR ToRegExJSi("^Mozilla.*OPR\\/(?:\\d+.)*\\d+.*$").Matches(MWG.Request.Headers.Get("User-Agent"))) THEN {
+                
+            detectedVersion = ToRegExJSi("^Mozilla.*Chrome\\/((?:\\d+.)*\\d+).*$").WildcardMatch(MWG.Request.Headers.Get("User-Agent")).Get(0)
+            IF NOT detectedVersion.IsEmpty THEN {
+                // Test for a valid version string
+                IF detectedVersion.Split(".").Size < 1 THEN
+                    END
+                
+                // Find major version and block of out of date
+                majorVersion = detectedVersion.Split(".").Get(0).ToNumber
+                IF majorVersion < minChromeVersion THEN {
+                    customBlockPage_Message = "Chrome version out of date"
+                    customBlockPage_Reason = "Chrome version out of date."
+                    customBlockPage_HTMLSection = "You are currently running Chrome version " + detectedVersion + " which is out of date.  Please upgrade Chrome to version " + minChromeVersion.ToString + " or later to continue browsing."
+                    MWG.Block(McAfee_Custom_Block_Page, "Outdated Chrome browser blocked", "Outdated Chrome browser (" + detectedVersion + ")")
+                }
+                END
+            }   
+        }
+    }
+
+    // Edge
+    IF blockEdge THEN {
+        detectedVersion = ToRegExJSi("^Mozilla.*Edg\\/((?:\\d+.)*\\d+).*$").WildcardMatch(MWG.Request.Headers.Get("User-Agent")).Get(0)
+        IF NOT detectedVersion.IsEmpty THEN {
+            // Test for a valid version string
+            IF detectedVersion.Split(".").Size < 1 THEN
+                END
+            
+            // Find major version and block of out of date
+            majorVersion = detectedVersion.Split(".").Get(0).ToNumber
+            IF majorVersion < minEdgeVersion THEN {
+                customBlockPage_Message = "Edge version out of date"
+                customBlockPage_Reason = "Edge version out of date."
+                customBlockPage_HTMLSection = "You are currently running Edge version " + detectedVersion + " which is out of date.  Please upgrade Edge to version " + minEdgeVersion.ToString + " or later to continue browsing."
+                MWG.Block(McAfee_Custom_Block_Page, "Outdated Edge browser blocked", "Outdated Edge browser (" + detectedVersion + ")")
+            }
+            END
+        }        
+    }
+
+    // Firefox
+    IF blockFirefox THEN {
+        detectedVersion = ToRegExJSi("^Mozilla.*Firefox\\/((?:\\d+.)*\\d+).*$").WildcardMatch(MWG.Request.Headers.Get("User-Agent")).Get(0)
+        IF NOT detectedVersion.IsEmpty THEN {
+            // Test for a valid version string
+            IF detectedVersion.Split(".").Size < 1 THEN
+                END
+            
+            // Find major version and block of out of date
+            majorVersion = detectedVersion.Split(".").Get(0).ToNumber
+            IF majorVersion < minFirefoxVersion THEN {
+                customBlockPage_Message = "Firefox version out of date"
+                customBlockPage_Reason = "Firefox version out of date."
+                customBlockPage_HTMLSection = "You are currently running Firefox version " + detectedVersion + " which is out of date.  Please upgrade Firefox to version " + minFirefoxVersion.ToString + " or later to continue browsing."
+                MWG.Block(McAfee_Custom_Block_Page, "Outdated Firefox browser blocked", "Outdated Firefox browser (" + detectedVersion + ")")
+            }
+            END
+        }        
+    }
+
+    // Opera
+    IF blockOpera THEN {
+        detectedVersion = ToRegExJSi("^Mozilla.*OPR\\/((?:\\d+.)*\\d+).*$").WildcardMatch(MWG.Request.Headers.Get("User-Agent")).Get(0)
+        IF NOT detectedVersion.IsEmpty THEN {
+            // Test for a valid version string
+            IF detectedVersion.Split(".").Size < 1 THEN
+                END
+            
+            // Find major version and block of out of date
+            majorVersion = detectedVersion.Split(".").Get(0).ToNumber
+            IF majorVersion < minOperaVersion THEN {
+                customBlockPage_Message = "Opera version out of date"
+                customBlockPage_Reason = "Opera version out of date."
+                customBlockPage_HTMLSection = "You are currently running Opera version " + detectedVersion + " which is out of date.  Please upgrade Opera to version " + minEdgeVersion.ToString + " or later to continue browsing."
+                MWG.Block(McAfee_Custom_Block_Page, "Outdated Opera browser blocked", "Outdated Opera browser (" + detectedVersion + ")")
+            }
+            END
+        }        
+    }
+}

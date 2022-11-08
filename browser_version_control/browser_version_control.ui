@@ -1,0 +1,240 @@
+{
+    "default": false,
+    "id": "Browser_Version_Control.ui",
+    "name": "Browser Version Control",
+    "suffix": null,
+    "type": "",
+    "description": "Block out-of-date browsers.",
+    "settings": [],
+    "groups": [
+        {
+            "id": "group1",
+            "name": "Browsers",
+            "description": "",
+            "separator": false,
+            "align": "ROW",
+            "rules": [
+                {
+                    "id": "chrome",
+                    "name": "Block Chrome versions older than: ",
+                    "enableVariable": "blockChrome",
+                    "description": "",
+                    "enabled": true,
+                    "ruleData": [],
+                    "actionTags": [
+                        "Block"
+                    ],
+                    "additionalConfig": {
+                        "style": {
+                            "padding-right": "20px",
+                            "margin-left": "10px",
+                            "width": "400px"
+                        },
+                        "controls": [
+                            {
+                                "validators": [
+                                    {
+                                        "message": "The value must be greater than 0",
+                                        "type": "nonZero"
+                                    }
+                                ],
+                                "variable": {
+                                    "variable": "minChromeVersion",
+                                    "type": "NUMBER"
+                                },
+                                "control": {
+                                    "style": {
+                                        "margin-right": "5px",
+                                        "margin-top": "6px",
+                                        "min-width": "100px"
+                                    },
+                                    "placeholder": "REQUIRED",
+                                    "type": "TEXTFIELD"
+                                },
+                                "id": "minChromeVersion"
+                            }
+                        ],
+                        "title": "",
+                        "viewType": "EMBEDDED"
+                    }
+                },
+                {
+                    "id": "safari",
+                    "name": "Block Safari versions older than: ",
+                    "enableVariable": "blockSafari",
+                    "description": "",
+                    "enabled": true,
+                    "ruleData": [],
+                    "actionTags": [
+                        "Block"
+                    ],
+                    "additionalConfig": {
+                        "style": {
+                            "padding-right": "20px",
+                            "margin-left": "10px",
+                            "width": "400px"
+                        },
+                        "controls": [
+                            {
+                                "validators": [
+                                    {
+                                        "message": "The value must be greater than 0",
+                                        "type": "nonZero"
+                                    }
+                                ],
+                                "variable": {
+                                    "variable": "minSafariVersion",
+                                    "type": "NUMBER"
+                                },
+                                "control": {
+                                    "style": {
+                                        "margin-right": "5px",
+                                        "margin-top": "6px",
+                                        "min-width": "100px"
+                                    },
+                                    "placeholder": "REQUIRED",
+                                    "type": "TEXTFIELD"
+                                },
+                                "id": "minSafariVersion"
+                            }
+                        ],
+                        "title": "",
+                        "viewType": "EMBEDDED"
+                    }
+                },
+                {
+                    "id": "edge",
+                    "name": "Block Edge versions older than: ",
+                    "enableVariable": "blockEdge",
+                    "description": "",
+                    "enabled": true,
+                    "ruleData": [],
+                    "actionTags": [
+                        "Block"
+                    ],
+                    "additionalConfig": {
+                        "style": {
+                            "padding-right": "20px",
+                            "margin-left": "10px",
+                            "width": "400px"
+                        },
+                        "controls": [
+                            {
+                                "validators": [
+                                    {
+                                        "message": "The value must be greater than 0",
+                                        "type": "nonZero"
+                                    }
+                                ],
+                                "variable": {
+                                    "variable": "minEdgeVersion",
+                                    "type": "NUMBER"
+                                },
+                                "control": {
+                                    "style": {
+                                        "margin-right": "5px",
+                                        "margin-top": "6px",
+                                        "min-width": "100px"
+                                    },
+                                    "placeholder": "REQUIRED",
+                                    "type": "TEXTFIELD"
+                                },
+                                "id": "minEdgeVersion"
+                            }
+                        ],
+                        "title": "",
+                        "viewType": "EMBEDDED"
+                    }
+                },
+                {
+                    "id": "firefox",
+                    "name": "Block Firefox versions older than: ",
+                    "enableVariable": "blockFirefox",
+                    "description": "",
+                    "enabled": true,
+                    "ruleData": [],
+                    "actionTags": [
+                        "Block"
+                    ],
+                    "additionalConfig": {
+                        "style": {
+                            "padding-right": "20px",
+                            "margin-left": "10px",
+                            "width": "400px"
+                        },
+                        "controls": [
+                            {
+                                "validators": [
+                                    {
+                                        "message": "The value must be greater than 0",
+                                        "type": "nonZero"
+                                    }
+                                ],
+                                "variable": {
+                                    "variable": "minFirefoxVersion",
+                                    "type": "NUMBER"
+                                },
+                                "control": {
+                                    "style": {
+                                        "margin-right": "5px",
+                                        "margin-top": "6px",
+                                        "min-width": "100px"
+                                    },
+                                    "placeholder": "REQUIRED",
+                                    "type": "TEXTFIELD"
+                                },
+                                "id": "minFirefoxVersion"
+                            }
+                        ],
+                        "title": "",
+                        "viewType": "EMBEDDED"
+                    }
+                },
+                {
+                    "id": "opera",
+                    "name": "Block Opera versions older than: ",
+                    "enableVariable": "blockOpera",
+                    "description": "",
+                    "enabled": true,
+                    "ruleData": [],
+                    "actionTags": [
+                        "Block"
+                    ],
+                    "additionalConfig": {
+                        "style": {
+                            "padding-right": "20px",
+                            "margin-left": "10px",
+                            "width": "400px"
+                        },
+                        "controls": [
+                            {
+                                "validators": [
+                                    {
+                                        "message": "The value must be greater than 0",
+                                        "type": "nonZero"
+                                    }
+                                ],
+                                "variable": {
+                                    "variable": "minOperaVersion",
+                                    "type": "NUMBER"
+                                },
+                                "control": {
+                                    "style": {
+                                        "margin-right": "5px",
+                                        "margin-top": "6px",
+                                        "min-width": "100px"
+                                    },
+                                    "placeholder": "REQUIRED",
+                                    "type": "TEXTFIELD"
+                                },
+                                "id": "minOperaVersion"
+                            }
+                        ],
+                        "title": "",
+                        "viewType": "EMBEDDED"
+                    }
+                }
+            ]
+        }
+    ]
+}

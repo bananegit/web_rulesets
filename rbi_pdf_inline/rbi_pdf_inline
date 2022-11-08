@@ -1,0 +1,18 @@
+ROUTINE RBI_PDF_Inline ON (Web.Response) { // RBI PDF Inline
+    // Only apply in Isolation
+    IF NOT (RBI.IsInIsolation) THEN
+        END
+        
+    // Only apply if Content-Disposition header exists
+    IF NOT (MWG.Response.Headers.HasHeader("content-disposition")) THEN
+        END
+    
+    // Force inline viewing of PDFs
+    IF MediaType.FromHeader.ToString == "application/pdf" OR (MediaType.FromHeader.ToString == "application/octet-stream" AND ToRegExJSi(".*filename=\\\"[^\\\"]+\\.pdf\\\".*").Matches(MWG.Response.Headers.Get("content-disposition"))) THEN {
+        MWG.Response.Headers.Remove("content-disposition")
+
+        // Always treat as application/pdf if file extension is .pdf
+        MWG.Response.Headers.Remove("content-type")
+        MWG.Response.Headers.Add("content-type", "application/pdf")
+    }
+}

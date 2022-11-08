@@ -1,0 +1,235 @@
+{
+    "id": "Exclusion_Template.ui",
+    "name": "Bypass Template",
+    "type": "",
+    "description": "<p style=\"font-size: 12px;\">This rule set can only be viewed in code view.</p>",
+    "settings": [
+        {
+            "variable": "gtiSetting",
+            "type": "MWG.UrlCategorizationSetting"
+        }
+    ],
+    "groups": [
+        {
+            "id": "anyall",
+            "separator": false,
+            "rules": [
+                {
+                    "id": "matchAny",
+                    "name": "Match ANY of the following conditions",
+                    "enableVariable": "matchAny",
+                    "description": "new rule",
+                    "enabled": true,
+                    "control": {
+                        "typeGroup": "anyAll",
+                        "type": "RADIO"
+                    }
+                },
+                {
+                    "id": "matchAll",
+                    "name": "Match ALL of the following conditions",
+                    "enableVariable": "matchAll",
+                    "description": "new rule",
+                    "enabled": true,
+                    "control": {
+                        "typeGroup": "anyAll",
+                        "type": "RADIO"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "group1",
+            "description": "Bypass under the following conditions:",
+            "separator": false,
+            "rules": [
+                {
+                    "id": "users",
+                    "name": "Bypass for these users",
+                    "enableVariable": "excludeUsernames",
+                    "description": "new rule",
+                    "enabled": true,
+                    "ruleData": [
+                        {
+                            "type": "VECTOR<STRING>",
+                            "variable": "usernamesExcluded"
+                        }
+                    ]
+                },
+                {
+                    "id": "groups",
+                    "name": "Bypass for these user groups",
+                    "enableVariable": "excludeUserGroups",
+                    "description": "new rule",
+                    "enabled": true,
+                    "ruleData": [
+                        {
+                            "type": "VECTOR<STRING>",
+                            "variable": "usergroupsExcluded"
+                        }
+                    ]
+                },
+                {
+                    "id": "ipRanges",
+                    "name": "Bypass for these client IP ranges",
+                    "enableVariable": "excludeIPRanges",
+                    "description": "new rule",
+                    "enabled": true,
+                    "ruleData": [
+                        {
+                            "type": "VECTOR<Net.IPRange>",
+                            "variable": "ipRangesExcluded"
+                        }
+                    ],
+                    "dependentRules": [
+                        {
+                            "id": "useClientIP",
+                            "name": "Use client's local (private) IP address",
+                            "enableVariable": "useClientIP",
+                            "enabled": true,
+                            "ruleData": [],
+                            "control": {
+                                "typeGroup": "ipGroup",
+                                "type": "RADIO"
+                            }
+                        },
+                        {
+                            "id": "useEgressIP",
+                            "name": "Use client's egress (public) IP address",
+                            "enableVariable": "useEgressIP",
+                            "enabled": true,
+                            "ruleData": [],
+                            "control": {
+                                "typeGroup": "ipGroup",
+                                "type": "RADIO"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "userAgents",
+                    "name": "Bypass for these User-Agent values",
+                    "enableVariable": "excludeUserAgents",
+                    "description": "new rule",
+                    "enabled": true,
+                    "ruleData": [
+                        {
+                            "type": "RegExJSi.List",
+                            "variable": "userAgentsExcluded"
+                        }
+                    ]
+                },
+                {
+                    "id": "processes",
+                    "name": "Bypass from these processes",
+                    "enableVariable": "excludeProcesses",
+                    "description": "new rule",
+                    "enabled": true,
+                    "ruleData": [
+                        {
+                            "type": "VECTOR<STRING>",
+                            "variable": "processesExcluded"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "exclusions",
+            "name": "What to content to bypass",
+            "description": "Bypass the following content from web filtering:",
+            "rules": [
+                {
+                    "id": "hosts",
+                    "name": "Bypass traffic to these hosts",
+                    "enableVariable": "excludeHosts",
+                    "description": "",
+                    "enabled": true,
+                    "ruleData": [
+                        {
+                            "type": "MWG.SmartMatchList",
+                            "variable": "hostsExcluded"
+                        }
+                    ],
+                    "actionTags": [
+                        "Bypass"
+                    ]
+                },
+                {
+                    "id": "categories",
+                    "name": "Bypass traffic to these URL categories",
+                    "enableVariable": "excludeCategories",
+                    "description": "",
+                    "enabled": true,
+                    "ruleData": [
+                        {
+                            "type": "VECTOR<MWG.UrlCategory>",
+                            "variable": "categoriesExcluded"
+                        }
+                    ],
+                    "actionTags": [
+                        "Bypass"
+                    ]
+                },
+                {
+                    "id": "uncategorized",
+                    "name": "Bypass traffic to uncategorized sites",
+                    "enableVariable": "excludeUncategorized",
+                    "description": "",
+                    "enabled": true,
+                    "actionTags": [
+                        "Bypass"
+                    ]
+                },
+                {
+                    "id": "risk",
+                    "name": "Bypass traffic based on risk",
+                    "enableVariable": "excludeRisk",
+                    "description": "",
+                    "enabled": true,
+                    "actionTags": [
+                        "Bypass"
+                    ],
+                    "dependentRules": [
+                        {
+                            "id": "highRisk",
+                            "name": "Bypass traffic to High Risk sites",
+                            "enableVariable": "excludeHighRisk",
+                            "enabled": true,
+                            "actionTags": [
+                                "Bypass"
+                            ]
+                        },
+                        {
+                            "id": "mediumRisk",
+                            "name": "Bypass traffic to Medium Risk sites",
+                            "enableVariable": "excludeMediumRisk",
+                            "enabled": true,
+                            "actionTags": [
+                                "Bypass"
+                            ]
+                        },
+                        {
+                            "id": "lowRisk",
+                            "name": "Bypass traffic to Low Risk sites",
+                            "enableVariable": "excludeLowRisk",
+                            "enabled": true,
+                            "actionTags": [
+                                "Bypass"
+                            ]
+                        },
+                        {
+                            "id": "unknownRisk",
+                            "name": "Bypass traffic to sites with Unknown Risk",
+                            "enableVariable": "excludeUnknownRisk",
+                            "enabled": true,
+                            "actionTags": [
+                                "Bypass"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

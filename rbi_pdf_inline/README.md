@@ -1,0 +1,2 @@
+# RBI_PDF_Inline
+Some customers that are using Skyhigh Full Isolation may have certain user groups, websites, or scenarios where web pages are always viewed via Remote Browser Isolation.  In these cases, it's common to block *all* downloads.  In such situations, if you want to enforce that PDF files are *always* viewed inline and never downloaded.  This is done by always removing the `Content-Disposition` response header which indicates that the browser should save the file to disk rather than viewing it inline.

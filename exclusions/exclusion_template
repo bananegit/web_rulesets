@@ -1,0 +1,65 @@
+ROUTINE Exclusion_Template ON ANY { // Exclusion Template
+    MWG.UrlCategorizationSetting gtiSetting = config_TestfireGTISetting
+    BOOLEAN matchAll = FALSE
+    BOOLEAN matchAny = TRUE
+    BOOLEAN useClientIP = FALSE
+    BOOLEAN useEgressIP = TRUE
+    BOOLEAN excludeUsernames = TRUE
+    VECTOR<STRING> usernamesExcluded = list_ExceptionUserNames
+    BOOLEAN excludeUserGroups = TRUE
+    VECTOR<STRING> usergroupsExcluded = list_ExceptionUserGroups
+    BOOLEAN excludeUserAgents = FALSE
+    RegExJSi.List userAgentsExcluded = list_ExceptionUserAgents2
+    BOOLEAN excludeProcesses = FALSE
+    VECTOR<STRING> processesExcluded = list_ExceptionProcessNames
+    BOOLEAN excludeIPRanges = FALSE
+    VECTOR<Net.IPRange> ipRangesExcluded = list_ExceptionIPRanges
+    BOOLEAN excludeCategories = FALSE
+    BOOLEAN excludeUncategorized = FALSE
+    VECTOR<MWG.UrlCategory> categoriesExcluded = list_ExceptionCategories
+    BOOLEAN excludeHosts = FALSE
+    MWG.SmartMatchList hostsExcluded = list_ExceptionHosts
+    BOOLEAN excludeRisk = FALSE
+    BOOLEAN excludeLowRisk = FALSE
+    BOOLEAN excludeMediumRisk = FALSE
+    BOOLEAN excludeHighRisk = FALSE
+    BOOLEAN excludeUnknownRisk = FALSE
+    
+    // Check for bypass conditions and END routine if they don't match
+    IF matchAny THEN {
+        IF NOT ((excludeUsernames AND usernamesExcluded.ContainsCaseInsensitive(MWG.Username)) OR
+            (excludeUserAgents AND userAgentsExcluded.Matches(MWG.Request.Headers.Get("User-Agent"))) OR
+            (excludeUserGroups AND MWG.UserGroups.OverlapsCaseInsensitive(usergroupsExcluded)) OR
+            (excludeProcesses AND processesExcluded.ContainsCaseInsensitive(MWG.ClientProcessName)) OR
+            (excludeIPRanges AND 
+                ((useClientIP AND MWG.ClientIP.IsInRangeList(ipRangesExcluded) OR
+                (useEgressIP AND MWG.ClientEGressIP.IsInRangeList(ipRangesExcluded))))))
+        THEN {
+            END
+        }
+    } ELSE {
+        IF NOT ((NOT (excludeUsernames) OR usernamesExcluded.ContainsCaseInsensitive(MWG.Username)) AND
+            (NOT (excludeUserAgents) OR userAgentsExcluded.Matches(MWG.Request.Headers.Get("User-Agent"))) AND
+            (NOT (excludeUserGroups) OR MWG.UserGroups.OverlapsCaseInsensitive(usergroupsExcluded)) AND
+            (NOT (excludeProcesses) OR processesExcluded.ContainsCaseInsensitive(MWG.ClientProcessName)) AND
+            (NOT (excludeIPRanges) OR 
+                ((useClientIP AND MWG.ClientIP.IsInRangeList(ipRangesExcluded) OR
+                (useEgressIP AND MWG.ClientEGressIP.IsInRangeList(ipRangesExcluded))))))
+        THEN {
+            END
+        }
+    }
+    
+    // Check for content to be bypassed
+    IF (excludeHosts AND MWG.Url.SmartMatch(hostsExcluded)) OR
+        (excludeCategories AND categoriesExcluded.Overlaps(MWG.UrlCategories(gtiSetting))) OR
+        (excludeUncategorized AND MWG.UrlCategories(gtiSetting).Size == 0) OR
+        (excludeRisk AND
+            (excludeLowRisk AND MWG.UrlHasMinimalRisk(gtiSetting)) OR
+            (excludeMediumRisk AND MWG.UrlHasMediumRisk(gtiSetting)) OR
+            (excludeHighRisk AND MWG.UrlHasHighRisk(gtiSetting)) OR
+            (excludeUnknownRisk AND MWG.UrlHasUnverifiedRisk(gtiSetting)))
+    THEN {
+        END(URL_Filtering)
+    }
+}
