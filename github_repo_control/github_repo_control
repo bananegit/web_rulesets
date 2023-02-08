@@ -1,0 +1,54 @@
+ROUTINE Github_Repo_Control ON (Web.Request) [enabled="false",displayName="GitHub Repository Control"] {
+	IF NOT (MWG.Url.Domain == "github.com") THEN
+        END
+
+    // Ignore if not HTTP upload methods
+	VECTOR<STRING> HTTP_write_methods = "PUT", "POST", "PATCH"
+	IF NOT HTTP_write_methods.ContainsCaseInsensitive (MWG.CommandName) THEN
+		END
+
+	VECTOR<STRING> sanctioned_Repos = SanctionedGithubrepos
+	
+	BOOLEAN bypassSanctioned = TRUE
+	BOOLEAN blockCLI = TRUE
+	BOOLEAN blockEdit = TRUE
+	BOOLEAN blockNew = TRUE
+	BOOLEAN blockUpload = TRUE
+	BOOLEAN blockDelete = FALSE
+	
+	VECTOR<STRING> Blocked_actions
+	IF blockEdit THEN
+	    Blocked_actions = Blocked_actions.Add("edit")
+	IF blockNew THEN
+	    Blocked_actions = Blocked_actions.Add("new")
+	IF blockUpload THEN
+	    Blocked_actions = Blocked_actions.Add("upload")
+	IF blockDelete THEN
+	    Blocked_actions = Blocked_actions.Add("delete")
+
+	// Find org/user/repo name
+	STRING entity = MWG.Url.Path.Split("/").Get (1)
+	STRING repo = MWG.Url.Path.Split ("/").Get(2)
+	repo = RegExJSi.ReplaceFirstMatch(ToRegExJSi("(\\.git)$"), repo, "")
+	STRING action = MWG.Url.Path.Split ("/").Get(3)
+
+    STRING customBlockPage_Message = "Unsanctioned Github repository"
+    STRING customBlockPage_Reason = "Unsanctioned Github repository"
+    STRING customBlockPage_HTMLSection = "The Github repository you have accessed is not allowed by your organization.<br /><br />" +
+        "<b>Entity:</b> " + entity +
+        "<br /><b>Repository:</b> " + repo +
+        "<br /><b>Action:</b> " + action
+    VECTOR<MediaType> contentTypes = MediaType.Ensured.Add(MediaType.FromHeader)
+
+	// Handle unsanctioned Github repos
+	IF NOT (bypassSanctioned AND (sanctioned_Repos.ContainsCaseInsensitive (entity + "/" + repo) OR sanctioned_Repos.ContainsCaseInsensitive (entity))) THEN {
+	    // Block CLI
+	    IF blockCLI AND MWG.Request.Headers.Get("Content-Type") == "application/x-git-receive-pack-request" THEN {
+            MWG.Block (McAfee_Custom_Block_Page, "entity=" + entity + ",repo=" + repo + ",action=" + action, "URL Filtering Policy")
+	    }
+		// Block browser actions
+		IF Blocked_actions.ContainsCaseInsensitive (action) THEN {
+            MWG.Block (McAfee_Custom_Block_Page, "Block URLs manually", "URL Filtering Policy")
+		}
+	}
+}
