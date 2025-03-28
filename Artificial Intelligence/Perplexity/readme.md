@@ -6,3 +6,46 @@ This rulesets provides rules for the following actions for the Perplexity Webser
 - Block specific sources (web/scholar/social) (Web)
 - Enforce search mode (auto/pro/reasoning/deep research) (Web)
 - Block file upload (Web)
+
+<br/><br/>
+
+
+### Customizing Settings:
+
+Rule: Limit prompt length (WebApp)
+
+Adjust variable "maxPromptLength" based on your requirements
+
+<br/><br/>
+
+Rule: Ensure selected Sources (WebApp)
+
+Adjust variable "ensured_sources" to contain the sources you want to enforce (available sources are "web", "scholar" and "social"
+
+<br/><br/>
+
+Rule: Block selected Sources (WebApp)
+
+Adjust variable "blocked_sources" to contain the sources you want to block (available sources are "web", "scholar" and "social"
+
+<br/><br/>
+
+Rule: Enforce Search Mode (WebApp)
+
+Set the variable "paramsMode" and "paramsModelPreference" variables based on which mode you want to enforce, possible value combinations are described in comments in the policy code
+
+<br/><br/>
+
+Rule: Limit prompt length (API)
+
+Adjust variable "maxPromptLength" based on your requirements
+
+Remove entries for roles for that you do NOT want to limit the prompt length for from the "limitedRoles" variable
+
+<br/><br/>
+
+Rule: Replace prompt (API)
+
+Adjust variable "maxPromptLength" based on your requirements
+
+Remove entries for roles for that you do NOT want to replace the prompt for from the "limitedRoles" variable
