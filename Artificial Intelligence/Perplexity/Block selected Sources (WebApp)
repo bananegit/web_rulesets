@@ -1,0 +1,49 @@
+// Block selected Sources (WebApp)
+ROUTINE Block_selected_Sources_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
+    
+      // available sources: web, scholar, social, must
+        VECTOR<STRING> blocked_sources = "social", "web"
+    
+      IF MWG.SmartMatch (MWG.Url, "www.perplexity.ai/rest/sse/perplexity_ask") THEN {
+          
+        JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+        JSON params = JSON.Get(bodyJson, "params")
+        JSON sourcesArray = JSON.Get(params, "sources")
+          BOOLEAN wasModified = FALSE
+          STRING source
+        
+        IF NOT JSON.IsArray(sourcesArray) THEN {
+            STRING selectedSource = sourcesArray.ToString
+            
+            JSON tempArray = JSON.CreateEmptyArray
+            IF selectedSource != "" THEN {
+                selectedSource = selectedSource.Slice(1, selectedSource.Length-2)
+                sourcesArray = JSON.ArrayAppend(tempArray, selectedSource)
+            }
+        } 
+        
+        NUMBER counter = 0
+        
+        LOOP sourcesArray.Size {
+            
+            STRING currentSource = sourcesArray.At(counter).ToString
+            currentSource = currentSource.Slice(1, currentSource.Length-2)
+            
+            IF Contains(blocked_sources, currentSource) THEN {
+                sourcesArray = JSON.ArrayRemove(sourcesArray, counter)
+                counter = counter -1
+                wasModified = TRUE
+            }
+            counter = counter + 1
+        }
+        
+        IF wasModified THEN {
+            params = JSON.Set(params, "sources", sourcesArray)
+            bodyJson = JSON.Set(bodyJson, "params", params)
+            DATAREF newBody = bodyJson.ToString().ToDataRef()
+              MWG.SetBody(MWG.Request(), newBody)
+        }
+        
+      }
+    
+    }
