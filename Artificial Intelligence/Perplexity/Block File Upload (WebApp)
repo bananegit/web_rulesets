@@ -1,0 +1,4 @@
+// Block File Upload (WebApp)
+IF MWG.SmartMatch (MWG.Url, "www.perplexity.ai/rest/uploads/create_upload_url") THEN {
+  MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Upload (WebApp)", "Perplexity Controls")
+}
