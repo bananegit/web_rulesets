@@ -1,0 +1,40 @@
+// Limit prompt length (API)
+ROUTINE Limit_prompt_length_API_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
+  
+    // scoping
+      NUMBER maxPromptLength = 2
+      VECTOR<STRING> limitedRoles = "\"system\"", "\"user\"", "\"assistant\"", "\"tool\""
+  
+    // Deepseek
+    IF MWG.SmartMatch (MWG.Url, "api.deepseek.com/chat/completions") THEN {
+      JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+      JSON messages = JSON.Get(bodyJson, "messages")
+      
+      NUMBER counter = 0
+      
+      LOOP(JSON.Size(messages)) {
+          
+          STRING role = JSON.Get(messages.At(counter), "role").ToString()
+          
+          IF Contains(limitedRoles, role)  THEN {
+              STRING prompt = JSON.Get(messages.At(counter), "content").ToString()
+              STRING newPrompt = prompt.Slice(1,maxPromptLength)
+      
+              //remove trailing quotation mark if present
+              IF newPrompt.EndsWith("\"") THEN {
+                 newPrompt = newPrompt.Slice(0, newPrompt.Length()-1)
+              }
+              
+              JSON newmessage = JSON.Set(messages.At(counter), "content", newPrompt)
+              messages = JSON.ArrayReplaceAt(messages, counter, newmessage) 
+          }
+          
+          counter = counter +1
+      }
+      bodyJson = JSON.Set(bodyJson, "messages", messages)
+      DATAREF newBody = bodyJson.ToString().ToDataRef()
+        MWG.SetBody(MWG.Request(), newBody)
+    }
+  
+  
+  }
