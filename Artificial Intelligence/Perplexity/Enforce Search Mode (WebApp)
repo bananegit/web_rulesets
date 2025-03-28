@@ -1,0 +1,25 @@
+// Enforce Search Mode (WebApp)
+ROUTINE Enforce_Search_Mode_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
+    
+      // available modes: auto, pro, reasoning, deep search
+      //auto: params.mode="concise", params.model_preference="turbo"
+      //pro: params.mode="copilot", params.model_preference="pplx_pro"
+      //pro: params.mode="copilot", params.model_preference="pplx_reasoning"
+      //pro: params.mode="copilot", params.model_preference="pplx_alpha"
+        STRING paramsMode = "copilot"
+        STRING paramsModelPreference = "pplx_pro"
+    
+      IF MWG.SmartMatch (MWG.Url, "www.perplexity.ai/rest/sse/perplexity_ask") THEN {
+          
+        JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+        JSON params = JSON.Get(bodyJson, "params")
+        
+        params = JSON.Set(params, "mode", paramsMode)
+        params = JSON.Set(params, "model_preference", paramsModelPreference)
+        
+        bodyJson = JSON.Set(bodyJson, "params", params)
+        DATAREF newBody = bodyJson.ToString().ToDataRef()
+          MWG.SetBody(MWG.Request(), newBody)
+      }
+    
+    }
