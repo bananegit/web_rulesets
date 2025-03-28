@@ -1,3 +1,19 @@
+### Setup
+
+- In SSE go to Policy -> Web Policy -> Policy
+- Click on "New Ruleset" in the top right corner and select "Custom Ruleset"
+- Set the Ruleset name to whatever you like e.g. DeepSeek Controls
+- Select Criteria:
+  URL is "chat.deepseek.com"
+  OR
+  URL is "api.deepseek.com"
+- To import a Rule from this ruleset click on the 3-dot Menu of your ruleset and select "Add Custom Rule" - "Via Policy Code"
+- Name the rule like the github file you want to import
+- Click on "Edit" and copy and paste the code of the rule into the policy code view
+- Click on "Save" to save your rule
+  
+### Features
+
 This ruleset provides rules for the following actions for the DeepSeek Webservice and API:
 
 - Limit prompt Length to x characters by cutting off prompt (Web & API)
