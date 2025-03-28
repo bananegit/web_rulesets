@@ -1,0 +1,38 @@
+// Replace prompt (API)
+ROUTINE Replace_prompt_API_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
+  
+    // scoping
+      NUMBER maxPromptLength = 2
+      STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
+      VECTOR<STRING> limitedRoles = "\"system\"", "\"user\"", "\"assistant\"", "\"tool\""
+  
+    // Deepseek
+    IF MWG.SmartMatch (MWG.Url, "api.deepseek.com/chat/completions") THEN {
+      JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+      JSON messages = JSON.Get(bodyJson, "messages")
+      
+      NUMBER counter = 0
+      
+      LOOP(JSON.Size(messages)) {
+          
+          STRING role = JSON.Get(messages.At(counter), "role").ToString()
+          
+          IF Contains(limitedRoles, role)  THEN {
+              STRING prompt = JSON.Get(messages.At(counter), "content").ToString()
+      
+              IF prompt.Length()-2 > maxPromptLength THEN {
+              JSON newmessage = JSON.Set(messages.At(counter), "content", policyWarning)
+              messages = JSON.ArrayReplaceAt(messages, counter, newmessage) 
+              }
+              
+          }
+          
+          counter = counter +1
+      }
+      bodyJson = JSON.Set(bodyJson, "messages", messages)
+      DATAREF newBody = bodyJson.ToString().ToDataRef()
+        MWG.SetBody(MWG.Request(), newBody)
+    }
+  
+  
+  }
