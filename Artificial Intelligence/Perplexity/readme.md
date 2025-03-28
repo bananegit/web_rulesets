@@ -2,7 +2,7 @@
 
 - In SSE go to Policy -> Web Policy -> Policy
 - Click on "New Ruleset" in the top right corner and select "Custom Ruleset"
-- Set the Ruleset name to whatever you like e.g. DeepSeek Controls
+- Set the Ruleset name to whatever you like e.g. Perplexity Controls
 - Select Criteria:
   URL is "www.perplexity.ai"
   OR
