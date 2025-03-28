@@ -1,0 +1,4 @@
+//Block File Upload (WebApp)
+IF MWG.SmartMatch (MWG.Url, "chat.deepseek.com/api/v0/file/upload_file") THEN {
+  MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Uploads (WebApp)", "Deepseek Controls")
+}
