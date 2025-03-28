@@ -1,0 +1,43 @@
+// Ensure selected Sources (WebApp)
+ROUTINE Ensure_selected_Sources_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
+    
+      // available sources: web, scholar, social
+        VECTOR<STRING> ensured_sources = "web", "scholar"
+    
+      IF MWG.SmartMatch (MWG.Url, "www.perplexity.ai/rest/sse/perplexity_ask") THEN {
+          
+        JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+        JSON params = JSON.Get(bodyJson, "params")
+        JSON sourcesArray = JSON.Get(params, "sources")
+          BOOLEAN wasModified = FALSE
+          STRING source
+        
+        IF NOT JSON.IsArray(sourcesArray) THEN {
+            STRING selectedSource = sourcesArray.ToString
+            //selectedSource = selectedSource.Slice(1, selectedSource.Length-2)
+            
+            JSON tempArray = JSON.CreateEmptyArray
+            sourcesArray = JSON.ArrayAppend(tempArray, selectedSource)
+        } 
+        
+        VECTOR<STRING> sources = JSON.ToStringVector(sourcesArray)
+        
+        FOR source IN ensured_sources DO {
+            
+            IF NOT Contains(sources, source) THEN {
+                sourcesArray = JSON.ArrayAppend(sourcesArray, source)
+                wasModified = TRUE
+            }
+            
+        }
+        
+        IF wasModified THEN {
+            params = JSON.Set(params, "sources", sourcesArray)
+            bodyJson = JSON.Set(bodyJson, "params", params)
+            DATAREF newBody = bodyJson.ToString().ToDataRef()
+              MWG.SetBody(MWG.Request(), newBody)
+        }
+        
+      }
+    
+    }
