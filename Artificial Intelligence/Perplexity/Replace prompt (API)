@@ -4,6 +4,7 @@ ROUTINE Replace_prompt_API_ ON (Web.Request) [enabled="true",displayName="AI tes
     // scoping
       NUMBER maxPromptLength = 2
       STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
+      //available roles: "\"system\"", "\"user\"", "\"assistant\""
       VECTOR<STRING> limitedRoles = "\"system\"", "\"user\"", "\"assistant\""
   
     IF MWG.SmartMatch (MWG.Url, "api.perplexity.ai/chat/completions") THEN {
