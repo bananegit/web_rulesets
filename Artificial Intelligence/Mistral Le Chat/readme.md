@@ -22,7 +22,7 @@ This ruleset provides rules for the following actions for the DeepSeek Webservic
 - Ensure selected Tools (imagegen, web-search etc.) are enabled (Web)
 - Ensure selected Tools (imagegen, web-search etc.) are blocked (Web)
 - Block File Uploads (Web)
-- Block Link Sharing
+- Block Link Sharing (Web)
 - Prevent pasting from clipboard (Web)
 
 <br/><br/>
