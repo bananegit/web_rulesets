@@ -1,0 +1,4 @@
+// Block Link Sharing (WebApp)
+IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/trpc/chat.share") THEN {
+  MWG.Block (McAfee_Blocked_by_Application_Control, "Block Link Sharing (WebApp)", "Mistral Le Chat Controls")
+}
