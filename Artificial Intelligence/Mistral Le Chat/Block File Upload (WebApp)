@@ -1,0 +1,4 @@
+// Block File Upload (WebApp)
+IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/trpc/file.uploadFile") THEN {
+  MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Upload (WebApp)", "Mistral Le Chat Controls")
+}
