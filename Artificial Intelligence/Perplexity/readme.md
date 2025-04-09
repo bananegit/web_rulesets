@@ -7,7 +7,7 @@
   URL is "www.perplexity.ai"
   OR
   URL is "api.perplexity.ai"
-- Click on "Applies to: All" and unselect "Response" and "Embedded Objects"
+- Click on "Applies to: All" and unselect "Embedded Objects"
 - To import a Rule from this ruleset click on the 3-dot Menu of your ruleset and select "Add Custom Rule" - "Via Policy Code"
 - Name the rule like the github file you want to import
 - Click on "Edit" and copy and paste the code of the rule into the policy code view
@@ -24,6 +24,7 @@ This rulesets provides rules for the following actions for the Perplexity Webser
 - Enforce search mode (auto/pro/reasoning/deep research) (Web)
 - Block file upload (Web)
 - Block Link Sharing (Web)
+- Prevent pasting from Clipboard (Web)
 
 <br/><br/>
 
