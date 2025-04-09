@@ -3,6 +3,7 @@ ROUTINE Limit_prompt_length_API_ ON (Web.Request) [enabled="true",displayName="A
   
     // scoping
       NUMBER maxPromptLength = 2
+      //available roles "\"system\"", "\"user\"", "\"assistant\""
       VECTOR<STRING> limitedRoles = "\"system\"", "\"user\"", "\"assistant\""
   
     IF MWG.SmartMatch (MWG.Url, "api.perplexity.ai/chat/completions") THEN {
