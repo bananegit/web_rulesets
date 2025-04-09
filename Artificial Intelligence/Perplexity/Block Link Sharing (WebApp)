@@ -1,0 +1,4 @@
+// Block Link Sharing (WebApp)
+IF MWG.SmartMatch (MWG.Url, "www.perplexity.ai/rest/thread/update_thread_access") THEN {
+  MWG.Block (McAfee_Blocked_by_Application_Control, "Block Link Sharing (WebApp)", "Perplexity Controls")
+}
