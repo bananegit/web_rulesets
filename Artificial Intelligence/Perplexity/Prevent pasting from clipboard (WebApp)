@@ -1,0 +1,14 @@
+ROUTINE Prevent_pasting_from_clipboard_WebApp_ ON (Web.Response) [enabled="true",displayName="AI tests",prerun="false"] {
+
+  // scoping
+    
+  IF MWG.SmartMatch (MWG.Url, "www.perplexity.ai") THEN {
+    STRING body = MWG.BodyData(MWG.Response()).ToString()
+    
+    body = ReplaceFirst(body, "<head>", "<head><script>document.addEventListener ('paste', function(e){e.preventDefault();e.stopPropagation();}, true);</script>")
+    
+    DATAREF newBody = body.ToDataRef()
+      MWG.SetBody(MWG.Response(), newBody)
+  }
+
+}
