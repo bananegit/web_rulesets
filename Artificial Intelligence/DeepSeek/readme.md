@@ -7,7 +7,7 @@
   URL is "chat.deepseek.com"
   OR
   URL is "api.deepseek.com"
-- Click on "Applies to: All" and unselect "Response" and "Embedded Objects"
+- Click on "Applies to: All" and unselect "Embedded Objects"
 - To import a Rule from this ruleset click on the 3-dot Menu of your ruleset and select "Add Custom Rule" - "Via Policy Code"
 - Name the rule like the github file you want to import
 - Click on "Edit" and copy and paste the code of the rule into the policy code view
@@ -22,6 +22,7 @@ This ruleset provides rules for the following actions for the DeepSeek Webservic
 - Enforce DeepThink settings (Web)
 - Enforce Search settings (Web)
 - Block File Uploads (Web)
+- Prevent pasting from clipboard (Web)
 
 <br/><br/>
 
