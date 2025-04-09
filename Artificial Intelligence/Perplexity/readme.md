@@ -23,6 +23,7 @@ This rulesets provides rules for the following actions for the Perplexity Webser
 - Block specific sources (web/scholar/social) (Web)
 - Enforce search mode (auto/pro/reasoning/deep research) (Web)
 - Block file upload (Web)
+- Block Link Sharing (Web)
 
 <br/><br/>
 
