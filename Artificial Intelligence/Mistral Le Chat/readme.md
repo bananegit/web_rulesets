@@ -19,8 +19,8 @@ This ruleset provides rules for the following actions for the DeepSeek Webservic
 
 - Limit prompt Length to x characters by cutting off prompt (Web & API)
 - Limit prompt Length by replacing prompt with policy warning when max length is exceeded (Web & API)
-- Ensure selected Tools (image-gen, web-search etc.) are enabled (Web)
-- Ensure selected Tools (image-gen, web-search etc.) are blocked (Web)
+- Ensure selected Tools (imagegen, web-search etc.) are enabled (Web)
+- Ensure selected Tools (imagegen, web-search etc.) are blocked (Web)
 - Block File Uploads (Web)
 - Block Link Sharing
 - Prevent pasting from clipboard (Web)
