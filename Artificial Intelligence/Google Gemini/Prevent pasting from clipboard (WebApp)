@@ -7,7 +7,6 @@ ROUTINE Prevent_pasting_from_clipboard_WebApp_ ON (Web.Response) [enabled="true"
       
     IF MWG.SmartMatch (MWG.Url, "gemini.google.com") THEN {
       STRING body = MWG.BodyData(MWG.Response()).ToString()
-      MWG.HeaderMap headers = MWG.Headers(MWG.Response())
       VECTOR<STRING> cspHeaders = MWG.GetAll(MWG.Headers(MWG.Response()), "Content-Security-Policy")
       
       STRING header = ""
