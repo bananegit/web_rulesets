@@ -15,7 +15,7 @@
   
 ### Features
 
-This ruleset provides rules for the following actions for the DeepSeek Webservice and API:
+This ruleset provides rules for the following actions for the Mistral Le Chat Webservice and API:
 
 - Limit prompt Length to x characters by cutting off prompt (Web & API)
 - Limit prompt Length by replacing prompt with policy warning when max length is exceeded (Web & API)
