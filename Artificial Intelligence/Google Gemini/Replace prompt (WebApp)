@@ -1,0 +1,55 @@
+// Replace prompt (WebApp)
+ROUTINE Replace_prompt_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
+
+  // scoping
+    NUMBER maxPromptLength = 22
+    STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
+  
+
+  IF MWG.SmartMatch (MWG.Url, "gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate") THEN {
+      STRING body = MWG.BodyData(MWG.Request()).ToString()
+      body = Encoding.URLDecode(body)
+      body = body.Slice(6, body.Length-6)
+      STRING suffix = ""
+      NUMBER parameterIndex = FindLast(body, "&at")
+      IF parameterIndex != -1 THEN {
+          suffix = body.Slice(parameterIndex, body.Length-parameterIndex)
+          body = body.Slice(0, body.Length-suffix.Length)
+      }
+    JSON bodyJson = JSON.FromStringIgnoreErrors(body)
+    IF JSON.IsArray(bodyJson) THEN {
+        
+        STRING secondLevel = JSON.AsString(JSON.At(bodyJson, 1))
+        JSON secondLevelJson = JSON.FromStringIgnoreErrors(secondLevel)
+        
+        IF JSON.IsArray(secondLevelJson) THEN {
+            JSON thirdLevel = JSON.At(secondLevelJson, 0)
+            STRING prompt = JSON.AsString(JSON.At(thirdLevel, 0))
+            
+            IF prompt.Length > maxPromptLength THEN {
+                
+                JSON temp = JSON.CreateEmptyArray
+                temp = JSON.ArrayAppend(temp, policyWarning)
+                JSON newPromptJson = JSON.At(temp, 0)
+                thirdLevel = JSON.ArrayReplaceAt(thirdLevel, 0, newPromptJson)
+                secondLevelJson = JSON.ArrayReplaceAt(secondLevelJson, 0, thirdLevel)
+                temp = JSON.ArrayAppend(temp, secondLevelJson.ToString)
+                JSON newSecondLevel = JSON.At(temp, 1)
+                
+                bodyJson = JSON.ArrayReplaceAt(bodyJson, 1, newSecondLevel)
+                
+                body = bodyJson.ToString 
+                STRING encodedBody = "f.req=" +  Encoding.URLEncode(body) + suffix
+                  DATAREF newBody = encodedBody.ToDataRef()
+                  MWG.SetBody(MWG.Request(), newBody)
+                
+            }
+            
+        }
+        
+        
+    }
+  }
+
+
+}
