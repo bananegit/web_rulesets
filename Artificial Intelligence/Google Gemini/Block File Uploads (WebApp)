@@ -1,0 +1,4 @@
+// Block File Uploads (WebApp)
+IF MWG.SmartMatch (MWG.Url, "push.clients6.google.com/upload") THEN {
+  MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Uploads (WebApp)", "Google Gemini Controls")
+}
