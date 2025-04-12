@@ -23,6 +23,7 @@ This ruleset provides rules for the following actions for the Gemini Webservice:
 - Block File Uploads from Drive (Web)
 - Block Link Sharing (Web)
 - Prevent pasting from clipboard (Web)
+- Block microphone access (Web)
 
 <br/><br/>
 
