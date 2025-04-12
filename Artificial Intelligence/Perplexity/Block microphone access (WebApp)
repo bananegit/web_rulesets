@@ -1,0 +1,14 @@
+ROUTINE Block_microphone_access_WebApp_ ON (Web.Response) [enabled="true",displayName="AI tests",prerun="false"] {
+	
+		// scoping
+	    
+		IF MWG.SmartMatch (MWG.Url, "www.perplexity.ai") THEN {
+			STRING body = MWG.BodyData(MWG.Response()).ToString()
+			
+			body = ReplaceFirst(body, "<head>", "<head><script>navigator.mediaDevices.getUserMedia = navigator.webkitGetUserMedia = navigator.mozGetUserMedia = navigator.getUserMedia = webkitRTCPeerConnection = RTCPeerConnection = MediaStreamTrack = undefined;</script>")
+			
+			DATAREF newBody = body.ToDataRef()
+		    MWG.SetBody(MWG.Response(), newBody)
+		}
+	
+	}
