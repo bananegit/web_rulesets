@@ -20,6 +20,7 @@ This ruleset provides rules for the following actions for the Gemini Webservice:
 - Limit prompt Length to x characters by cutting off prompt (Web)
 - Limit prompt Length by replacing prompt with policy warning when max length is exceeded (Web)
 - Block File Uploads (Web)
+- Block File Uploads from Drive (Web)
 - Block Link Sharing (Web)
 - Prevent pasting from clipboard (Web)
 
