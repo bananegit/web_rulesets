@@ -25,6 +25,7 @@ This rulesets provides rules for the following actions for the Perplexity Webser
 - Block file upload (Web)
 - Block Link Sharing (Web)
 - Prevent pasting from Clipboard (Web)
+- Block microphone access (Web)
 
 <br/><br/>
 
