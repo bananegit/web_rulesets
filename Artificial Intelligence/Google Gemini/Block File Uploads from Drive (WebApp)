@@ -1,0 +1,6 @@
+//Block File Uploads from Drive (WebApp)
+ROUTINE Block_File_Uploads_from_Drive_WebApp_ ON (Web.Response) [enabled="true",displayName="AI tests",prerun="false"] {
+    IF (RegExJSi.Matches ("^.*gemini\.google\.com\/(?:u\/[0-9]\/){0,1}_\/BardChatUi\/data\/batchexecute.*$", MWG.ToString (MWG.Url)) AND MWG.HasParameter (MWG.Url, "rpcids") == TRUE AND EqualsCaseInsensitive (MWG.Parameter (MWG.Url, "rpcids"), "cYRIkd")) THEN {
+    		MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Uploads from Drive (WebApp)", "Google Gemini Controls")
+	}
+}
