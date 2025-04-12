@@ -1,4 +1,6 @@
 // Block Link Sharing (WebApp)
-IF (MWG.SmartMatch (MWG.Url, "gemini.google.com/_/BardChatUi/data/batchexecute") AND MWG.HasParameter (MWG.Url, "rpcids") == TRUE AND EqualsCaseInsensitive (MWG.Parameter (MWG.Url, "rpcids"), "fuVx7")) THEN {
-  MWG.Block (McAfee_Blocked_by_Application_Control, "Block Link Sharing (WebApp)", "Google Gemini Controls")
+ROUTINE Block_Link_Sharing_WebApp_ ON (Web.Response) [enabled="true",displayName="AI tests",prerun="false"] {
+    IF (RegExJSi.Matches ("^.*gemini\.google\.com\/(?:u\/[0-9]\/){0,1}_\/BardChatUi\/data\/batchexecute.*$", MWG.ToString (MWG.Url)) AND MWG.HasParameter (MWG.Url, "rpcids") == TRUE AND EqualsCaseInsensitive (MWG.Parameter (MWG.Url, "rpcids"), "fuVx7")) THEN {
+    		MWG.Block (McAfee_Blocked_by_Application_Control, "Block Link Sharing (WebApp)", "Google Gemini Controls")
+	}
 }
