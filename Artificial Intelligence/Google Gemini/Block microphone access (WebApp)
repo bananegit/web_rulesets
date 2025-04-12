@@ -1,0 +1,27 @@
+ROUTINE Block_microphone_access_WebApp_ ON (Web.Response) [enabled="true",displayName="AI tests",prerun="false"] {
+	
+		// scoping
+		RegExJSi noncePattern = ToRegExJSi("'nonce-([a-zA-Z0-9_-]*)'")
+		STRING nonce = ""
+	    
+		IF MWG.SmartMatch (MWG.Url, "gemini.google.com") THEN {
+			STRING body = MWG.BodyData(MWG.Response()).ToString()
+			MWG.HeaderMap headers = MWG.Headers(MWG.Response())
+			VECTOR<STRING> cspHeaders = MWG.GetAll(MWG.Headers(MWG.Response()), "Content-Security-Policy")
+			
+			STRING header = ""
+			FOR header IN cspHeaders DO {
+			    VECTOR<STRING> matches = RegExJSi.FindAll(noncePattern, header)
+			
+    			IF matches.Size > 0 THEN {
+    			    nonce = matches.Get(0)
+    			}
+			}
+			STRING scriptBody = "<head><script nonce='" + nonce + "'>navigator.mediaDevices.getUserMedia = navigator.webkitGetUserMedia = navigator.mozGetUserMedia = navigator.getUserMedia = webkitRTCPeerConnection = RTCPeerConnection = MediaStreamTrack = undefined;</script>"
+			body = ReplaceFirst(body, "<head>", scriptBody)
+			
+			DATAREF newBody = body.ToDataRef()
+		    MWG.SetBody(MWG.Response(), newBody)
+		}
+	
+	}
