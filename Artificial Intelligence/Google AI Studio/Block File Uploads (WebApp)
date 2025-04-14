@@ -1,0 +1,4 @@
+// Block File Uploads (WebApp)
+	IF (MWG.SmartMatch (MWG.Url, "content.googleapis.com/upload/drive/v3/files") AND MWG.HasParameter (MWG.Url, "uploadType") == TRUE AND MWG.HasMatchingHeader (MWG.Headers (MWG.CurrentRequestOrResponse), "referer", ToRegExJSi ("^https:\\/\\/aistudio\\.google\\.com\\/$")) == TRUE) THEN {
+		MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Uploads (WebApp)", "Google AI Studio Controls")
+	}
