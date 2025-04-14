@@ -1,7 +1,7 @@
 ROUTINE Block_microphone_access_WebApp_ ON (Web.Response) [enabled="true",displayName="AI tests",prerun="false"] {
 	
 		// scoping
-		RegExJSi noncePattern = ToRegExJSi("'nonce-([a-zA-Z0-9_-]*)'")
+		RegExJSi noncePattern = ToRegExJSi("'nonce-([a-zA-Z0-9_=\/+-]*)'")
 		STRING nonce = ""
 	    
 		IF MWG.SmartMatch (MWG.Url, "gemini.google.com") THEN {
