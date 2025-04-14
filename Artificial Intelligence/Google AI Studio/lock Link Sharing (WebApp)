@@ -1,0 +1,4 @@
+// Block Link Sharing (WebApp)
+	IF (RegExJSi.Matches ("^https:\\/\\/apis\\.google\\.com\\/.*drive_share.*$", MWG.ToString (MWG.Url)) AND MWG.HasMatchingHeader (MWG.Headers (MWG.CurrentRequestOrResponse), "referer", ToRegExJSi ("^https:\\/\\/aistudio\\.google\\.com\\/$")) == TRUE) THEN {
+		MWG.Block (McAfee_Blocked_by_Application_Control, "Block Link Sharing (WebApp)", "Google AI Studio Controls")
+	}
