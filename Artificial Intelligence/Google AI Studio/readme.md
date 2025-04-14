@@ -19,7 +19,7 @@
   
 ### Features
 
-This ruleset provides rules for the following actions for the Gemini Webservice:
+This ruleset provides rules for the following actions for the Google AI Studio Webservice:
 
 - Block prompts exceeding length limit (client-side) (Web)
 - Block File Uploads (Web)
