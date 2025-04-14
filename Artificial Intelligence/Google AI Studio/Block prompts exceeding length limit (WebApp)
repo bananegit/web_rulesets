@@ -6,7 +6,7 @@
 	    STRING policyWarning = "Your prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters"
 		
 	
-		RegExJSi noncePattern = ToRegExJSi("'nonce-([a-zA-Z0-9_-]*)'")
+		RegExJSi noncePattern = ToRegExJSi("'nonce-([a-zA-Z0-9_=\/+-]*)'")
 			STRING nonce = ""
 		    
 			IF MWG.SmartMatch (MWG.Url, "aistudio.google.com") THEN {
