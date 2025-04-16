@@ -1,0 +1,55 @@
+ROUTINE Block_prompts_exceeding_length_limit_WebApp_ ON (Web.Response) [enabled="true",displayName="AI tests",prerun="false"] {
+
+	// scoping
+    NUMBER maxPromptLength = 22
+    STRING policyWarning = "Your prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters"
+	
+
+	RegExJSi noncePattern = ToRegExJSi("'nonce-([a-zA-Z0-9_=\/+-]*)'")
+	STRING nonce = ""
+	STRING body
+	MWG.HeaderMap headers
+	VECTOR<STRING> cspHeaders
+	STRING header
+	STRING scriptBody
+	VECTOR<STRING> matches
+    
+	IF MWG.SmartMatch (MWG.Url, "copilot.microsoft.com") THEN {
+		body = MWG.BodyData(MWG.Response()).ToString()
+		headers = MWG.Headers(MWG.Response())
+		cspHeaders = MWG.GetAll(MWG.Headers(MWG.Response()), "Content-Security-Policy")
+		
+		header = ""
+		FOR header IN cspHeaders DO {
+		    matches = RegExJSi.FindAll(noncePattern, header)
+		
+			IF matches.Size > 0 THEN {
+			    nonce = matches.Get(0)
+			}
+		}
+		scriptBody = "<head><script nonce='" + nonce + "'>document.addEventListener('readystatechange', async event => {if(event.target.readyState ==='complete'){var shta=document.getElementById(\"userInput\"); while(shta == null){await new Promise(r => setTimeout(r,500)); shta=document.getElementById(\"userInput\");} shta.addEventListener(\"input\", (e) => {if(e.target.value.length>" + maxPromptLength.ToString + "){window.alert(\"" + policyWarning + "\"); e.target.value=\"\";e.target.value=\"\";e.target.value=\"\";}})}})</script>"
+		body = ReplaceFirst(body, "<head>", scriptBody)
+		
+	    MWG.SetBody(MWG.Response(), body.ToDataRef)
+	}
+    
+    IF RegExJSi.Matches ("^https:\\/\\/outlook\\.office\\.com\\/hosted\\/semanticoverview\\/Users\\('OID:[^']+?'\\).*$", MWG.ToString (MWG.Url)) THEN {
+        body = MWG.BodyData(MWG.Response()).ToString()
+		headers = MWG.Headers(MWG.Response())
+		cspHeaders = MWG.GetAll(MWG.Headers(MWG.Response()), "Content-Security-Policy")
+		
+		header = ""
+		FOR header IN cspHeaders DO {
+		    matches = RegExJSi.FindAll(noncePattern, header)
+		
+			IF matches.Size > 0 THEN {
+			    nonce = matches.Get(0)
+			}
+		}
+		scriptBody = "<head><script nonce='" + nonce + "'>window.addEventListener(\"paste\", (e) => {if(e.clipboardData.getData('Text').length>" + maxPromptLength.ToString + "){ e.preventDefault(); e.stopImmediatePropagation(); window.alert(\"" + policyWarning + "\"); } }, true); document.addEventListener('readystatechange', async event => {if(event.target.readyState ==='complete'){var shta=document.getElementById(\"m365-chat-editor-target-element\"); while(shta == null){await new Promise(r => setTimeout(r,500)); shta=document.getElementById(\"m365-chat-editor-target-element\");} shta.addEventListener(\"input\", (e) => {if(e.target.textContent.length>" + maxPromptLength.ToString + "){window.alert(\"" + policyWarning + "\"); e.target.textContent=\"\"}}); }})</script>"
+		body = ReplaceFirst(body, "<head>", scriptBody)
+		
+	    MWG.SetBody(MWG.Response(), body.ToDataRef)
+    }
+
+}
