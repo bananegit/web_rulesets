@@ -62,6 +62,8 @@ Powerpoint Online
 
 Teams Online (Web rules apply, not the InApp ones)
 
+<br/><br/>
+
 ### Customizing Settings:
 
 
