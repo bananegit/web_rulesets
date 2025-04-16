@@ -1,0 +1,33 @@
+ROUTINE Block_microphone_access_WebApp_ ON (Web.Response) [enabled="true",displayName="AI tests",prerun="false"] {
+	
+		// scoping
+		RegExJSi noncePattern = ToRegExJSi("'nonce-([a-zA-Z0-9_=\/+-]*)'")
+		STRING nonce = ""
+		STRING body
+		MWG.HeaderMap headers
+		VECTOR<STRING> cspHeaders
+		STRING header
+		STRING scriptBody
+		VECTOR<STRING> matches
+	    
+		IF MWG.SmartMatch (MWG.Url, "copilot.microsoft.com") OR MWG.SmartMatch (MWG.Url, "copilot.cloud.microsoft") OR (RegExJSi.Matches ("^https:\\/\\/outlook\\.office\\.com\\/hosted\\/semanticoverview\\/Users\\('OID:[^']+?'\\).*$", MWG.ToString (MWG.Url))) THEN {
+			body = MWG.BodyData(MWG.Response()).ToString()
+			headers = MWG.Headers(MWG.Response())
+			cspHeaders = MWG.GetAll(MWG.Headers(MWG.Response()), "Content-Security-Policy")
+			
+			header = ""
+			FOR header IN cspHeaders DO {
+			    matches = RegExJSi.FindAll(noncePattern, header)
+			
+    			IF matches.Size > 0 THEN {
+    			    nonce = matches.Get(0)
+    			}
+			}
+			scriptBody = "<head><script nonce='" + nonce + "'>navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getDisplayMedia = navigator.webkitGetUserMedia = navigator.mozGetUserMedia = navigator.getUserMedia = webkitRTCPeerConnection = RTCPeerConnection = MediaStreamTrack = undefined;</script>"
+			body = ReplaceFirst(body, "<head>", scriptBody)
+			
+			DATAREF newBody = body.ToDataRef()
+		    MWG.SetBody(MWG.Response(), newBody)
+		}
+	
+	}
