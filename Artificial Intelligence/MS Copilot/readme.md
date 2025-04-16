@@ -40,15 +40,25 @@ This ruleset provides rules for the following actions for the MS Copilot Webserv
 In some contexts file upload (for images) and file selection from drive go through a websocket rather than via api, these can not be blocked with this ruleset
 So far this ruleset has been tested in the following contexts, depending on how copilot is integrated it might or might not apply in other contexts:
 
+
 Web:
+
 copilot.cloud.microsoft
+
 copilot.microsoft.com
+
 m365.cloud.microsoft/chat
 
+
+
 InApp:
+
 Word Online
+
 Excel Online
+
 Powerpoint Online
+
 Teams Online (Web rules apply, not the InApp ones)
 
 ### Customizing Settings:
