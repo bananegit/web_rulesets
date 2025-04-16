@@ -1,0 +1,4 @@
+// Block Org-Internal Link Sharing (WebApp)
+	IF (MWG.SmartMatch (MWG.Url, "substrate.office.com/search/api/v1/prompts/link") AND MWG.HasParameter (MWG.Url, "scenario") == TRUE AND EqualsCaseInsensitive (MWG.Parameter (MWG.Url, "scenario"), "Harmony.Web.Copilot_Lib")) THEN {
+		MWG.Block (McAfee_Blocked_by_Application_Control, "Block Org-Internal Link Sharing", "MS Copilot Controls")
+	}
