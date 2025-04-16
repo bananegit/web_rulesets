@@ -1,0 +1,4 @@
+// Block File Uploads (WebApp)
+	IF (MWG.SmartMatch (MWG.Url, "copilot.microsoft.com/c/api/attachments") OR RegExJSi.Matches ("^https:\\/\\/graph\\.microsoft\\.com\\/v1\\.0\\/me\\/drive\\/special\\/copilotuploads:\\/[^\\/]*\\/createUploadSession$", MWG.ToString (MWG.Url)) OR MWG.SmartMatch (MWG.Url, "substrate.office.com/m365Copilot/UploadFile")) THEN {
+		MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Uploads (WebApp)", "MS Copilot Controls")
+	}
