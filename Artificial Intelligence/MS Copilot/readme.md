@@ -45,23 +45,18 @@ So far this ruleset has been tested in the following contexts, depending on how 
 
 Web:
 
-copilot.cloud.microsoft
-
-copilot.microsoft.com
-
-m365.cloud.microsoft/chat
+- copilot.cloud.microsoft
+- copilot.microsoft.com
+- m365.cloud.microsoft/chat
 
 
 
 InApp:
 
-Word Online
-
-Excel Online
-
-Powerpoint Online
-
-Teams Online (Web rules apply, not the InApp ones)
+- Word Online
+- Excel Online
+- Powerpoint Online
+- Teams Online (Web rules apply, not the InApp ones)
 
 <br/><br/>
 
