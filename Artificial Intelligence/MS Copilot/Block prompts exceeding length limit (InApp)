@@ -1,0 +1,36 @@
+ROUTINE Block_prompts_exceeding_length_limit_InApp_ ON (Web.Response) [enabled="true",displayName="AI tests",prerun="false"] {
+
+	// scoping
+    NUMBER maxPromptLength = 22
+    STRING policyWarning = "Your prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters"
+	
+
+	RegExJSi noncePattern = ToRegExJSi("'nonce-([a-zA-Z0-9_=\/+-]*)'")
+	STRING nonce = ""
+	STRING body
+	MWG.HeaderMap headers
+	VECTOR<STRING> cspHeaders
+	STRING header
+	STRING scriptBody
+	VECTOR<STRING> matches
+    
+    IF RegExJSi.Matches ("^https:\\/\\/[^.]*\\.resources\\.office\\.net\\/.*\\/taskpane\\.html$", MWG.ToString (MWG.Url)) THEN {
+        body = MWG.BodyData(MWG.Response()).ToString()
+		headers = MWG.Headers(MWG.Response())
+		cspHeaders = MWG.GetAll(MWG.Headers(MWG.Response()), "Content-Security-Policy")
+		
+		header = ""
+		FOR header IN cspHeaders DO {
+		    matches = RegExJSi.FindAll(noncePattern, header)
+		
+			IF matches.Size > 0 THEN {
+			    nonce = matches.Get(0)
+			}
+		}
+		scriptBody = "<head><script nonce='" + nonce + "'>window.addEventListener(\"paste\", (e) => {if(e.clipboardData.getData('Text').length>" + maxPromptLength.ToString + "){ e.preventDefault(); e.stopImmediatePropagation(); window.alert(\"" + policyWarning + "\"); } }, true); document.addEventListener('readystatechange', async event => {if(event.target.readyState ==='complete'){var shta=document.getElementsByClassName(\"fai-EditorInput__input r18fti29 r18aquq2 ___1ld5kid f16gbxbe ff9e3i1 fv5qcn6 f1a3p1vp\")[0]; while(shta == null){await new Promise(r => setTimeout(r,500)); shta=document.getElementsByClassName(\"fai-EditorInput__input r18fti29 r18aquq2 ___1ld5kid f16gbxbe ff9e3i1 fv5qcn6 f1a3p1vp\")[0];} shta.addEventListener(\"input\", (e) => {if(e.target.textContent.length>" + maxPromptLength.ToString + "){window.alert(\"" + policyWarning + "\"); e.target.textContent=\"\"}}); }})</script>"
+		body = ReplaceFirst(body, "<head>", scriptBody)
+		
+	    MWG.SetBody(MWG.Response(), body.ToDataRef)
+    }
+
+}
