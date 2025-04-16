@@ -23,7 +23,7 @@
   
 ### Features
 
-This ruleset provides rules for the following actions for the Gemini Webservice:
+This ruleset provides rules for the following actions for the MS Copilot Webservice and Online App Integrations:
 
 - Block prompts exceeding length limit (client-side) (Web, InApp)
 - Block File Uploads (Web, InApp)
