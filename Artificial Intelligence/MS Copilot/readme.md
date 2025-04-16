@@ -8,13 +8,13 @@
   OR
   URL is "substrate.office.com"
   OR
-  URL matches "^https:\/\/graph\.microsoft\.com\/v1\.0\/me\/drive\/special\/copilotuploads:\/[^\/]*\/createUploadSession$"
+  URL matches ```^https:\/\/graph\.microsoft\.com\/v1\.0\/me\/drive\/special\/copilotuploads:\/[^\/]*\/createUploadSession$```
   OR
-  URL matches "^https:\/\/outlook\.office\.com\/hosted\/semanticoverview\/Users\('OID:[^']+?'\).*$"
+  URL matches ```^https:\/\/outlook\.office\.com\/hosted\/semanticoverview\/Users\('OID:[^']+?'\).*$```
   OR
-  URL matches "^https:\/\/[^.]*\.resources\.office\.net\/.*\/(?:CloudFilePickerDialog\.html|taskpane\.html)$"
+  URL matches ```^https:\/\/[^.]*\.resources\.office\.net\/.*\/(?:CloudFilePickerDialog\.html|taskpane\.html)$```
   OR
-  URL matches "^https:\/\/[^.]*\.loki\.delve\.office\.com\/api\/v2\/graphql.*operationName=useLokiFileUploadMutation$"
+  URL matches ```^https:\/\/[^.]*\.loki\.delve\.office\.com\/api\/v2\/graphql.*operationName=useLokiFileUploadMutation$```
 - Click on "Applies to: All" and unselect "Embedded Objects"
 - To import a Rule from this ruleset click on the 3-dot Menu of your ruleset and select "Add Custom Rule" - "Via Policy Code"
 - Name the rule like the github file you want to import
