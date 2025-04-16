@@ -1,0 +1,4 @@
+// Block File Uploads (InApp)
+	IF RegExJSi.Matches ("^https:\\/\\/[^.]*\\.loki\\.delve\\.office\\.com\\/api\\/v2\\/graphql.*operationName=useLokiFileUploadMutation$", MWG.ToString (MWG.Url)) THEN {
+		MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Uploads (InApp)", "MS Copilot Controls")
+	}
