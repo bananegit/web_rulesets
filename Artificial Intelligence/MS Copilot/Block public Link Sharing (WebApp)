@@ -1,0 +1,4 @@
+// Block public Link Sharing (WebApp)
+	IF RegExJSi.Matches ("^.*copilot\\.microsoft\\.com.*\\/share$", MWG.ToString (MWG.Url)) THEN {
+		MWG.Block (McAfee_Blocked_by_Application_Control, "Block public Link Sharing (WebApp)", "MS Copilot Controls")
+	}
