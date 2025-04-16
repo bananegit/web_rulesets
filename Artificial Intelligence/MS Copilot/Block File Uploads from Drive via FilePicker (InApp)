@@ -1,0 +1,4 @@
+// Block File Uploads from Drive via FilePicker (InApp)
+	IF RegExJSi.Matches ("^https:\\/\\/[^.]*\\.resources\\.office\\.net\\/.*\\/CloudFilePickerDialog\\.html$", MWG.ToString (MWG.Url)) THEN {
+		MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Uploads from Drive via FilePicker (InApp)", "MS Copilot Controls")
+	}
