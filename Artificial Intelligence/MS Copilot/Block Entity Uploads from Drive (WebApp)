@@ -1,0 +1,42 @@
+ROUTINE Block_Entity_Uploads_from_Drive_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
+    
+    //available entities: File, Message, People, Event
+    VECTOR<STRING> blockedEntities = "File", "Message"
+    
+    IF (MWG.SmartMatch (MWG.Url, "substrate.office.com/search/api/v1/suggestions")) THEN {
+		STRING body = MWG.BodyData(MWG.Request()).ToString()
+		JSON bodyJson = JSON.FromStringIgnoreErrors(body)
+		
+		IF bodyJson.HasMember("Scenario") THEN {
+		    JSON scenario = bodyJson.Get("Scenario")
+		    STRING name = JSON.GetAsString(scenario, "Name")
+		    IF name == "Harmony.Web.Copilot_Peek" THEN {
+		        
+		        JSON entityRequestsArray = bodyJson.Get("EntityRequests")
+		        NUMBER counter = 0
+		        
+		        LOOP(entityRequestsArray.Size) {
+		            
+		            JSON entityRequest = entityRequestsArray.At(counter)
+		            STRING entityType = JSON.GetAsString(entityRequest, "EntityType")
+		            
+		            IF blockedEntities.Contains(entityType) THEN {
+		                entityRequestsArray = JSON.ArrayRemove(entityRequestsArray, counter)
+		                counter = counter -1
+		            }
+		            
+		            counter = counter +1
+		        }
+		        
+		        //if no requestable entity types are left then we can just block outright
+		        IF entityRequestsArray.Size == 0 THEN {
+		            MWG.Block (McAfee_Blocked_by_Application_Control, "Block Entity Uploads from Drive (WebApp)", "MS Copilot Controls")
+		        }
+		        
+		        bodyJson = bodyJson.Set("EntityRequests", entityRequestsArray)
+		        MWG.SetBody(MWG.Request(), bodyJson.ToString.ToDataRef)
+		    }
+		}
+		
+	}
+}
