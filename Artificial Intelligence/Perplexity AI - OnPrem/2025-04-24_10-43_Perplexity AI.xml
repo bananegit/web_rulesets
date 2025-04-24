@@ -1,0 +1,1092 @@
+<libraryContent>
+  <libraryObject>
+    <name>Perplexity AI</name>
+    <version>12.2.15-51390</version>
+    <description></description>
+  </libraryObject>
+  <lists>
+    <entry>
+      <string>com.scur.type.regex.5169</string>
+      <list version="1.0.3.46" mwg-version="12.2.15-51390" name="Perplexity AI URLs" id="com.scur.type.regex.5169" typeId="com.scur.type.regex" classifier="Other" systemList="false" structuralList="false" defaultRights="2">
+        <description></description>
+        <content>
+          <listEntry>
+            <entry>*.perplexity.ai*</entry>
+            <description>www.perplexity.ai</description>
+          </listEntry>
+          <listEntry>
+            <entry>*api.perplexity.ai*</entry>
+            <description></description>
+          </listEntry>
+          <listEntry>
+            <entry>*ppl-ai-file-upload.s3.amazonaws.com*</entry>
+            <description></description>
+          </listEntry>
+        </content>
+      </list>
+    </entry>
+  </lists>
+  <configurations>
+    <configuration version="1.6" mwg-version="12.2.15-51390" id="com.scur.mainaction.block.5194" defaultRights="2" templateId="com.scur.template.mainaction.block" name="AI Blocks" targetId="com.scur.mainaction.block">
+      <acElements/>
+      <configurationProperties>
+        <configurationProperty key="DirectoryName" type="com.scur.type.string" encrypted="false" value="default"/>
+        <configurationProperty key="TemplateName" type="com.scur.type.string" encrypted="false" value="AIBlocks"/>
+        <configurationProperty key="Language" type="com.scur.type.string" encrypted="false" value="auto"/>
+        <configurationProperty key="BlockReasonID" type="com.scur.type.number" encrypted="false" value="0"/>
+        <configurationProperty key="BlockReason" type="com.scur.type.string" encrypted="false" value="Blocked by AI Controls Rule Set"/>
+        <configurationProperty key="EnableRedirect" type="com.scur.type.boolean" encrypted="false" value="false"/>
+      </configurationProperties>
+      <description></description>
+    </configuration>
+    <configuration version="1.0.12" mwg-version="12.2.15-51390" id="com.scur.engine.dlpdict.5642" defaultRights="2" templateId="com.scur.template.dlpdict.conf" name="Test Company" targetId="com.scur.engine.dlpdict">
+      <acElements/>
+      <configurationProperties>
+        <configurationProperty key="dictlist" type="com.scur.type.inlineList" listType="com.scur.type.complex.dlpdict" encrypted="false" value="&lt;list version=&quot;1.0.3.46&quot; mwg-version=&quot;12.2.15-51390&quot; classifier=&quot;Other&quot; systemList=&quot;false&quot; structuralList=&quot;false&quot; defaultRights=&quot;2&quot;>&#xa;  &lt;description>&lt;/description>&#xa;  &lt;content>&#xa;    &lt;listEntry>&#xa;      &lt;complexEntry defaultRights=&quot;2&quot;>&#xa;        &lt;configurationProperties>&#xa;          &lt;configurationProperty key=&quot;typeword&quot; type=&quot;com.scur.type.boolean&quot; encrypted=&quot;false&quot; value=&quot;false&quot;/>&#xa;          &lt;configurationProperty key=&quot;typewildcard&quot; type=&quot;com.scur.type.boolean&quot; encrypted=&quot;false&quot; value=&quot;true&quot;/>&#xa;          &lt;configurationProperty key=&quot;regex&quot; type=&quot;com.scur.type.regex&quot; encrypted=&quot;false&quot; value=&quot;*STEAG*&quot;/>&#xa;          &lt;configurationProperty key=&quot;word-or-regex&quot; type=&quot;com.scur.type.string&quot; encrypted=&quot;false&quot; value=&quot;*STEAG*&quot;/>&#xa;          &lt;configurationProperty key=&quot;casesensitive&quot; type=&quot;com.scur.type.boolean&quot; encrypted=&quot;false&quot; value=&quot;false&quot;/>&#xa;          &lt;configurationProperty key=&quot;isstart&quot; type=&quot;com.scur.type.boolean&quot; encrypted=&quot;false&quot; value=&quot;false&quot;/>&#xa;          &lt;configurationProperty key=&quot;isend&quot; type=&quot;com.scur.type.boolean&quot; encrypted=&quot;false&quot; value=&quot;false&quot;/>&#xa;        &lt;/configurationProperties>&#xa;      &lt;/complexEntry>&#xa;      &lt;description>&lt;/description>&#xa;    &lt;/listEntry>&#xa;  &lt;/content>&#xa;&lt;/list>"/>
+        <configurationProperty key="TrackPolicy" type="com.scur.type.number" encrypted="false" value="0"/>
+        <configurationProperty key="ContextWidth" type="com.scur.type.number" encrypted="false" value="30"/>
+        <configurationProperty key="ContextListSize" type="com.scur.type.number" encrypted="false" value="20"/>
+      </configurationProperties>
+      <description></description>
+    </configuration>
+    <configuration version="1.6" mwg-version="12.2.15-51390" id="com.scur.mainaction.block.5053" defaultRights="2" templateId="com.scur.template.mainaction.block" name="DLP Classification Block" targetId="com.scur.mainaction.block">
+      <acElements/>
+      <configurationProperties>
+        <configurationProperty key="TemplateName" type="com.scur.type.string" encrypted="false" value="DLPClassificationBlock"/>
+        <configurationProperty key="BlockReasonID" type="com.scur.type.number" encrypted="false" value="15"/>
+        <configurationProperty key="BlockReason" type="com.scur.type.string" encrypted="false" value="DLP Classification Block"/>
+        <configurationProperty key="Language" type="com.scur.type.string" encrypted="false" value="auto"/>
+        <configurationProperty key="DirectoryName" type="com.scur.type.string" encrypted="false" value="default"/>
+        <configurationProperty key="EnableRedirect" type="com.scur.type.boolean" encrypted="false" value="false"/>
+      </configurationProperties>
+      <description>Block action for blocking on DLP classifications.</description>
+    </configuration>
+    <configuration version="1.0.12" mwg-version="12.2.15-51390" id="com.scur.engine.dlpdict.4750" defaultRights="2" templateId="com.scur.template.dlpdict.conf" name="Specific MSIP Label - Enabled is True" targetId="com.scur.engine.dlpdict">
+      <acElements/>
+      <configurationProperties>
+        <configurationProperty key="dictlist" type="com.scur.type.inlineList" listType="com.scur.type.complex.dlpdict" encrypted="false" value="&lt;list version=&quot;1.0.3.46&quot; mwg-version=&quot;12.2.15-51390&quot; classifier=&quot;Other&quot; systemList=&quot;false&quot; structuralList=&quot;false&quot; defaultRights=&quot;2&quot;>&#xa;  &lt;description>&lt;/description>&#xa;  &lt;content>&#xa;    &lt;listEntry>&#xa;      &lt;complexEntry defaultRights=&quot;2&quot;>&#xa;        &lt;acElements/>&#xa;        &lt;configurationProperties>&#xa;          &lt;configurationProperty key=&quot;typeword&quot; type=&quot;com.scur.type.boolean&quot; encrypted=&quot;false&quot; value=&quot;false&quot;/>&#xa;          &lt;configurationProperty key=&quot;typewildcard&quot; type=&quot;com.scur.type.boolean&quot; encrypted=&quot;false&quot; value=&quot;true&quot;/>&#xa;          &lt;configurationProperty key=&quot;regex&quot; type=&quot;com.scur.type.regex&quot; encrypted=&quot;false&quot; value=&quot;MSIP_Label_145e2a1c-3c10-4d31-9cb5-1c16fd227e26_Enabled*true&quot;/>&#xa;          &lt;configurationProperty key=&quot;word-or-regex&quot; type=&quot;com.scur.type.string&quot; encrypted=&quot;false&quot; value=&quot;MSIP_Label_145e2a1c-3c10-4d31-9cb5-1c16fd227e26_Enabled*true&quot;/>&#xa;          &lt;configurationProperty key=&quot;casesensitive&quot; type=&quot;com.scur.type.boolean&quot; encrypted=&quot;false&quot; value=&quot;true&quot;/>&#xa;          &lt;configurationProperty key=&quot;isstart&quot; type=&quot;com.scur.type.boolean&quot; encrypted=&quot;false&quot; value=&quot;false&quot;/>&#xa;          &lt;configurationProperty key=&quot;isend&quot; type=&quot;com.scur.type.boolean&quot; encrypted=&quot;false&quot; value=&quot;false&quot;/>&#xa;        &lt;/configurationProperties>&#xa;      &lt;/complexEntry>&#xa;      &lt;description>&lt;/description>&#xa;    &lt;/listEntry>&#xa;  &lt;/content>&#xa;&lt;/list>"/>
+        <configurationProperty key="TrackPolicy" type="com.scur.type.number" encrypted="false" value="0"/>
+        <configurationProperty key="ContextWidth" type="com.scur.type.number" encrypted="false" value="30"/>
+        <configurationProperty key="ContextListSize" type="com.scur.type.number" encrypted="false" value="20"/>
+      </configurationProperties>
+      <description></description>
+    </configuration>
+  </configurations>
+  <userDefinedPropertys>
+    <userDefinedProperty parentId="81" typeId="com.scur.type.string" name="User-Defined.PerplexityReplacePrompt" id="5243" scope="0" description="" defaultRights="2">
+      <stringValue value="" stringModifier="true" typeId="com.scur.type.string"/>
+    </userDefinedProperty>
+    <userDefinedProperty parentId="81" typeId="com.scur.type.string" name="User-Defined.PerplexityShortPrompt" id="5187" scope="0" description="" defaultRights="2">
+      <stringValue value="" stringModifier="true" typeId="com.scur.type.string"/>
+    </userDefinedProperty>
+    <userDefinedProperty parentId="81" typeId="com.scur.type.string" name="User-Defined.Perplexity_Prevent_Microphone_Body" id="5435" scope="0" description="" defaultRights="2">
+      <stringValue value="" stringModifier="true" typeId="com.scur.type.string"/>
+    </userDefinedProperty>
+    <userDefinedProperty parentId="81" typeId="com.scur.type.string" name="User-Defined.PerplexityJSONPromptString" id="5180" scope="0" description="" defaultRights="2">
+      <stringValue value="" stringModifier="true" typeId="com.scur.type.string"/>
+    </userDefinedProperty>
+    <userDefinedProperty parentId="81" typeId="com.scur.type.json" name="User-Defined.PerplexityBodyJSONTrimmed" id="5190" scope="0" description="" defaultRights="2">
+      <stringValue value="" stringModifier="false" typeId="com.scur.type.json"/>
+    </userDefinedProperty>
+    <userDefinedProperty parentId="81" typeId="com.scur.type.string" name="User-Defined.Perplexity_Prevent_Paste_Body" id="5357" scope="0" description="" defaultRights="2">
+      <stringValue value="" stringModifier="true" typeId="com.scur.type.string"/>
+    </userDefinedProperty>
+    <userDefinedProperty parentId="81" typeId="com.scur.type.json" name="User-Defined.PerplexityBodyJSON" id="5177" scope="0" description="" defaultRights="2">
+      <stringValue value="" stringModifier="false" typeId="com.scur.type.json"/>
+    </userDefinedProperty>
+    <userDefinedProperty parentId="81" typeId="com.scur.type.number" name="User-Defined.PerplexityPromptLength" id="5175" scope="0" description="" defaultRights="2">
+      <stringValue value="30" stringModifier="false" typeId="com.scur.type.number"/>
+    </userDefinedProperty>
+    <userDefinedProperty parentId="81" typeId="com.scur.type.string" name="User-Defined.Perplexity_Response_Body" id="5355" scope="0" description="" defaultRights="2">
+      <stringValue value="" stringModifier="true" typeId="com.scur.type.string"/>
+    </userDefinedProperty>
+    <userDefinedProperty parentId="81" typeId="com.scur.type.string" name="User-Defined.PerplexityShortBodyString" id="5192" scope="0" description="" defaultRights="2">
+      <stringValue value="" stringModifier="true" typeId="com.scur.type.string"/>
+    </userDefinedProperty>
+  </userDefinedPropertys>
+  <ruleGroup id="5144" defaultRights="2" name="Perplexity AI" enabled="true" cycleRequest="true" cycleResponse="true" cycleEmbeddedObject="true" cloudSynced="true">
+    <acElements/>
+    <condition always="false">
+      <expressions>
+        <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.matchesinlist">
+          <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+          <parameter valueTyp="1" typeId="com.scur.type.list" listTypeId="com.scur.type.regex">
+            <value>
+              <listValue id="com.scur.type.regex.5169"/>
+            </value>
+          </parameter>
+        </conditionExpression>
+      </expressions>
+    </condition>
+    <description></description>
+    <rules/>
+    <ruleGroups>
+      <ruleGroup id="5334" defaultRights="2" name="Limit Prompt Length - Silent" enabled="true" cycleRequest="true" cycleResponse="false" cycleEmbeddedObject="true" cloudSynced="true">
+        <acElements/>
+        <condition always="true">
+          <expressions/>
+        </condition>
+        <description></description>
+        <rules>
+          <rule id="5313" enabled="false" name="Limit Prompt Length - Silent">
+            <description>Rule simply trims the prompt to the configured length and submits it to the LLM</description>
+            <immediateActionContainers>
+              <setActionContainer propertyId="5175">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="3">
+                      <value>
+                        <stringValue value="160" stringModifier="false" typeId="com.scur.type.number"/>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5177">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.read">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.read.string</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.body.text"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5180">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.tostring">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.tostring.json</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.getbyname">
+                                    <parameters>
+                                      <entry>
+                                        <string>com.scur.engine.jsonfilter.getbyname.json</string>
+                                        <parameter valueTyp="2">
+                                          <value>
+                                            <propertyInstance useMostRecentConfiguration="false" propertyId="5177"/>
+                                          </value>
+                                        </parameter>
+                                      </entry>
+                                      <entry>
+                                        <string>com.scur.engine.jsonfilter.getbyname.name</string>
+                                        <parameter valueTyp="3">
+                                          <value>
+                                            <stringValue value="query_str" stringModifier="true" typeId="com.scur.type.string"/>
+                                          </value>
+                                        </parameter>
+                                      </entry>
+                                    </parameters>
+                                  </propertyInstance>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5187">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.stringfilter.string.substring">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.stringfilter.string.substring.string</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="5180"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.stringfilter.string.substring.position</string>
+                              <parameter valueTyp="3">
+                                <value>
+                                  <stringValue value="1" stringModifier="false" typeId="com.scur.type.number"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.stringfilter.string.substring.number</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="5175"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5190">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.storebyname">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.storebyname.json</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="5177"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.storebyname.name</string>
+                              <parameter valueTyp="3">
+                                <value>
+                                  <stringValue value="query_str" stringModifier="true" typeId="com.scur.type.string"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.storebyname.element</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.fromstring">
+                                    <parameters>
+                                      <entry>
+                                        <string>com.scur.engine.jsonfilter.fromstring.string</string>
+                                        <parameter valueTyp="2">
+                                          <value>
+                                            <propertyInstance useMostRecentConfiguration="false" propertyId="5187"/>
+                                          </value>
+                                        </parameter>
+                                      </entry>
+                                    </parameters>
+                                  </propertyInstance>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5192">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.tostring">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.tostring.json</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="5190"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <executeActionContainer>
+                <procedureValue procedureId="com.scur.engine.bodyfilter.replaceinbody">
+                  <parameters>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.position</string>
+                      <parameter valueTyp="3">
+                        <value>
+                          <stringValue value="0" stringModifier="false" typeId="com.scur.type.number"/>
+                        </value>
+                      </parameter>
+                    </entry>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.length</string>
+                      <parameter valueTyp="2">
+                        <value>
+                          <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.stringfilter.string.length">
+                            <parameters>
+                              <entry>
+                                <string>com.scur.engine.stringfilter.string.length.param</string>
+                                <parameter valueTyp="2">
+                                  <value>
+                                    <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.tostring">
+                                      <parameters>
+                                        <entry>
+                                          <string>com.scur.engine.jsonfilter.tostring.json</string>
+                                          <parameter valueTyp="2">
+                                            <value>
+                                              <propertyInstance useMostRecentConfiguration="false" propertyId="5177"/>
+                                            </value>
+                                          </parameter>
+                                        </entry>
+                                      </parameters>
+                                    </propertyInstance>
+                                  </value>
+                                </parameter>
+                              </entry>
+                            </parameters>
+                          </propertyInstance>
+                        </value>
+                      </parameter>
+                    </entry>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.pattern</string>
+                      <parameter valueTyp="2">
+                        <value>
+                          <propertyInstance useMostRecentConfiguration="false" propertyId="5192"/>
+                        </value>
+                      </parameter>
+                    </entry>
+                  </parameters>
+                </procedureValue>
+              </executeActionContainer>
+            </immediateActionContainers>
+            <actionContainer actionId="com.scur.mainaction.continue"/>
+            <condition always="false">
+              <expressions>
+                <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.equals">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.string">
+                    <value>
+                      <stringValue value="https://www.perplexity.ai/rest/sse/perplexity_ask" stringModifier="true" typeId="com.scur.type.string"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+              </expressions>
+            </condition>
+          </rule>
+        </rules>
+        <ruleGroups/>
+      </ruleGroup>
+      <ruleGroup id="5251" defaultRights="2" name="Limit Prompt Length - Block" enabled="true" cycleRequest="true" cycleResponse="false" cycleEmbeddedObject="false" cloudSynced="true">
+        <acElements/>
+        <condition always="true">
+          <expressions/>
+        </condition>
+        <description></description>
+        <rules>
+          <rule id="5259" enabled="false" name="Prepare Properties and JSON Body">
+            <description>Rule will block any prompt exceeding the configured length, a warning will be displayed from the LLM</description>
+            <immediateActionContainers>
+              <setActionContainer propertyId="5175">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="3">
+                      <value>
+                        <stringValue value="160" stringModifier="false" typeId="com.scur.type.number"/>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5177">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.read">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.read.string</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.body.text"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5180">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.tostring">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.tostring.json</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.getbyname">
+                                    <parameters>
+                                      <entry>
+                                        <string>com.scur.engine.jsonfilter.getbyname.json</string>
+                                        <parameter valueTyp="2">
+                                          <value>
+                                            <propertyInstance useMostRecentConfiguration="false" propertyId="5177"/>
+                                          </value>
+                                        </parameter>
+                                      </entry>
+                                      <entry>
+                                        <string>com.scur.engine.jsonfilter.getbyname.name</string>
+                                        <parameter valueTyp="3">
+                                          <value>
+                                            <stringValue value="query_str" stringModifier="true" typeId="com.scur.type.string"/>
+                                          </value>
+                                        </parameter>
+                                      </entry>
+                                    </parameters>
+                                  </propertyInstance>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+            </immediateActionContainers>
+            <actionContainer actionId="com.scur.mainaction.continue"/>
+            <condition always="false">
+              <expressions>
+                <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.equals">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.string">
+                    <value>
+                      <stringValue value="https://www.perplexity.ai/rest/sse/perplexity_ask" stringModifier="true" typeId="com.scur.type.string"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+              </expressions>
+            </condition>
+          </rule>
+          <rule id="5266" enabled="false" name="Replace the Body">
+            <description>Prompt Length needs to be set in the Rule criteria - default 160 characters</description>
+            <immediateActionContainers>
+              <setActionContainer propertyId="5243">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="3">
+                      <value>
+                        <stringValue value="Repeat the quoted part of this message without explanation or modification: &quot;Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " stringModifier="true" typeId="com.scur.type.string"/>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                  <setExpression operator="+" openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.stringfilter.number.tostring">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.stringfilter.number.tostring.number</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="5175"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                  <setExpression operator="+" openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="3">
+                      <value>
+                        <stringValue value=" characters&quot;" stringModifier="true" typeId="com.scur.type.string"/>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5190">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.storebyname">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.storebyname.json</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="5177"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.storebyname.name</string>
+                              <parameter valueTyp="3">
+                                <value>
+                                  <stringValue value="query_str" stringModifier="true" typeId="com.scur.type.string"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.storebyname.element</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.fromstring">
+                                    <parameters>
+                                      <entry>
+                                        <string>com.scur.engine.jsonfilter.fromstring.string</string>
+                                        <parameter valueTyp="2">
+                                          <value>
+                                            <propertyInstance useMostRecentConfiguration="false" propertyId="5243"/>
+                                          </value>
+                                        </parameter>
+                                      </entry>
+                                    </parameters>
+                                  </propertyInstance>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5192">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.tostring">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.jsonfilter.tostring.json</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="5190"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <executeActionContainer>
+                <procedureValue procedureId="com.scur.engine.bodyfilter.replaceinbody">
+                  <parameters>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.position</string>
+                      <parameter valueTyp="3">
+                        <value>
+                          <stringValue value="0" stringModifier="false" typeId="com.scur.type.number"/>
+                        </value>
+                      </parameter>
+                    </entry>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.length</string>
+                      <parameter valueTyp="2">
+                        <value>
+                          <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.stringfilter.string.length">
+                            <parameters>
+                              <entry>
+                                <string>com.scur.engine.stringfilter.string.length.param</string>
+                                <parameter valueTyp="2">
+                                  <value>
+                                    <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.jsonfilter.tostring">
+                                      <parameters>
+                                        <entry>
+                                          <string>com.scur.engine.jsonfilter.tostring.json</string>
+                                          <parameter valueTyp="2">
+                                            <value>
+                                              <propertyInstance useMostRecentConfiguration="false" propertyId="5177"/>
+                                            </value>
+                                          </parameter>
+                                        </entry>
+                                      </parameters>
+                                    </propertyInstance>
+                                  </value>
+                                </parameter>
+                              </entry>
+                            </parameters>
+                          </propertyInstance>
+                        </value>
+                      </parameter>
+                    </entry>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.pattern</string>
+                      <parameter valueTyp="2">
+                        <value>
+                          <propertyInstance useMostRecentConfiguration="false" propertyId="5192"/>
+                        </value>
+                      </parameter>
+                    </entry>
+                  </parameters>
+                </procedureValue>
+              </executeActionContainer>
+            </immediateActionContainers>
+            <actionContainer actionId="com.scur.mainaction.continue"/>
+            <condition always="false">
+              <expressions>
+                <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.equals">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.string">
+                    <value>
+                      <stringValue value="https://www.perplexity.ai/rest/sse/perplexity_ask" stringModifier="true" typeId="com.scur.type.string"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+                <conditionExpression prefix="AND" openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.greaterthanequals">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.stringfilter.string.length">
+                    <parameters>
+                      <entry>
+                        <string>com.scur.engine.stringfilter.string.length.param</string>
+                        <parameter valueTyp="2">
+                          <value>
+                            <propertyInstance useMostRecentConfiguration="false" propertyId="5180"/>
+                          </value>
+                        </parameter>
+                      </entry>
+                    </parameters>
+                  </propertyInstance>
+                  <parameter valueTyp="3" typeId="com.scur.type.number">
+                    <value>
+                      <stringValue value="160" stringModifier="false" typeId="com.scur.type.number"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+              </expressions>
+            </condition>
+          </rule>
+        </rules>
+        <ruleGroups/>
+      </ruleGroup>
+      <ruleGroup id="5317" defaultRights="2" name="Prevent Use of Browser Clipboard (Copy-Paste)" enabled="true" cycleRequest="false" cycleResponse="true" cycleEmbeddedObject="true" cloudSynced="true">
+        <acElements/>
+        <condition always="false">
+          <expressions>
+            <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.equals">
+              <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+              <parameter valueTyp="3" typeId="com.scur.type.string">
+                <value>
+                  <stringValue value="https://www.perplexity.ai/" stringModifier="true" typeId="com.scur.type.string"/>
+                </value>
+              </parameter>
+            </conditionExpression>
+          </expressions>
+        </condition>
+        <description></description>
+        <rules>
+          <rule id="5350" enabled="false" name="Prevent Copy - Paste">
+            <description></description>
+            <immediateActionContainers>
+              <setActionContainer propertyId="5355">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.bodyfilter.body.tostring">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.bodyfilter.body.tostring.startpos</string>
+                              <parameter valueTyp="3">
+                                <value>
+                                  <stringValue value="0" stringModifier="false" typeId="com.scur.type.number"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.bodyfilter.body.tostring.length</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.body.size"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5357">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.stringfilter.string.replacefirst">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.stringfilter.string.replacefirst.source</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="5355"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.stringfilter.string.replacefirst.search</string>
+                              <parameter valueTyp="3">
+                                <value>
+                                  <stringValue value="&lt;head>" stringModifier="true" typeId="com.scur.type.string"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.stringfilter.string.replacefirst.replace</string>
+                              <parameter valueTyp="3">
+                                <value>
+                                  <stringValue value="&lt;head>&lt;script>document.addEventListener ('paste', function(e){e.preventDefault();e.stopPropagation();}, true);&lt;/script>" stringModifier="true" typeId="com.scur.type.string"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <executeActionContainer>
+                <procedureValue procedureId="com.scur.engine.bodyfilter.replaceinbody">
+                  <parameters>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.position</string>
+                      <parameter valueTyp="3">
+                        <value>
+                          <stringValue value="0" stringModifier="false" typeId="com.scur.type.number"/>
+                        </value>
+                      </parameter>
+                    </entry>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.length</string>
+                      <parameter valueTyp="2">
+                        <value>
+                          <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.stringfilter.string.length">
+                            <parameters>
+                              <entry>
+                                <string>com.scur.engine.stringfilter.string.length.param</string>
+                                <parameter valueTyp="2">
+                                  <value>
+                                    <propertyInstance useMostRecentConfiguration="false" propertyId="5355"/>
+                                  </value>
+                                </parameter>
+                              </entry>
+                            </parameters>
+                          </propertyInstance>
+                        </value>
+                      </parameter>
+                    </entry>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.pattern</string>
+                      <parameter valueTyp="2">
+                        <value>
+                          <propertyInstance useMostRecentConfiguration="false" propertyId="5357"/>
+                        </value>
+                      </parameter>
+                    </entry>
+                  </parameters>
+                </procedureValue>
+              </executeActionContainer>
+            </immediateActionContainers>
+            <actionContainer actionId="com.scur.mainaction.continue"/>
+            <condition always="true">
+              <expressions>
+                <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.equals">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.string">
+                    <value>
+                      <stringValue value="https://www.perplexity.ai/rest/sse/perplexity_ask" stringModifier="true" typeId="com.scur.type.string"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+              </expressions>
+            </condition>
+          </rule>
+        </rules>
+        <ruleGroups/>
+      </ruleGroup>
+      <ruleGroup id="5395" defaultRights="2" name="Disable Microphone Access" enabled="true" cycleRequest="false" cycleResponse="true" cycleEmbeddedObject="true" cloudSynced="true">
+        <acElements/>
+        <condition always="true">
+          <expressions/>
+        </condition>
+        <description></description>
+        <rules>
+          <rule id="5397" enabled="false" name="Prevent Microphone Access">
+            <description></description>
+            <immediateActionContainers>
+              <setActionContainer propertyId="5355">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.bodyfilter.body.tostring">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.bodyfilter.body.tostring.startpos</string>
+                              <parameter valueTyp="3">
+                                <value>
+                                  <stringValue value="0" stringModifier="false" typeId="com.scur.type.number"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.bodyfilter.body.tostring.length</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.body.size"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <setActionContainer propertyId="5435">
+                <expressions>
+                  <setExpression openingBracketCount="0" closingBracketCount="0">
+                    <parameter valueTyp="2">
+                      <value>
+                        <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.stringfilter.string.replacefirst">
+                          <parameters>
+                            <entry>
+                              <string>com.scur.engine.stringfilter.string.replacefirst.source</string>
+                              <parameter valueTyp="2">
+                                <value>
+                                  <propertyInstance useMostRecentConfiguration="false" propertyId="5355"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.stringfilter.string.replacefirst.search</string>
+                              <parameter valueTyp="3">
+                                <value>
+                                  <stringValue value="&lt;head>" stringModifier="true" typeId="com.scur.type.string"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                            <entry>
+                              <string>com.scur.engine.stringfilter.string.replacefirst.replace</string>
+                              <parameter valueTyp="3">
+                                <value>
+                                  <stringValue value="&lt;head>&lt;script>navigator.mediaDevices.getUserMedia = navigator.webkitGetUserMedia = navigator.mozGetUserMedia = navigator.getUserMedia = webkitRTCPeerConnection = RTCPeerConnection = MediaStreamTrack = undefined;&lt;/script>" stringModifier="true" typeId="com.scur.type.string"/>
+                                </value>
+                              </parameter>
+                            </entry>
+                          </parameters>
+                        </propertyInstance>
+                      </value>
+                    </parameter>
+                  </setExpression>
+                </expressions>
+              </setActionContainer>
+              <executeActionContainer>
+                <procedureValue procedureId="com.scur.engine.bodyfilter.replaceinbody">
+                  <parameters>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.position</string>
+                      <parameter valueTyp="3">
+                        <value>
+                          <stringValue value="0" stringModifier="false" typeId="com.scur.type.number"/>
+                        </value>
+                      </parameter>
+                    </entry>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.length</string>
+                      <parameter valueTyp="2">
+                        <value>
+                          <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.stringfilter.string.length">
+                            <parameters>
+                              <entry>
+                                <string>com.scur.engine.stringfilter.string.length.param</string>
+                                <parameter valueTyp="2">
+                                  <value>
+                                    <propertyInstance useMostRecentConfiguration="false" propertyId="5355"/>
+                                  </value>
+                                </parameter>
+                              </entry>
+                            </parameters>
+                          </propertyInstance>
+                        </value>
+                      </parameter>
+                    </entry>
+                    <entry>
+                      <string>com.scur.engine.bodyfilter.replaceinbody.pattern</string>
+                      <parameter valueTyp="2">
+                        <value>
+                          <propertyInstance useMostRecentConfiguration="false" propertyId="5435"/>
+                        </value>
+                      </parameter>
+                    </entry>
+                  </parameters>
+                </procedureValue>
+              </executeActionContainer>
+            </immediateActionContainers>
+            <actionContainer actionId="com.scur.mainaction.continue"/>
+            <condition always="true">
+              <expressions>
+                <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.equals">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.string">
+                    <value>
+                      <stringValue value="https://www.perplexity.ai/rest/sse/perplexity_ask" stringModifier="true" typeId="com.scur.type.string"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+              </expressions>
+            </condition>
+          </rule>
+        </rules>
+        <ruleGroups/>
+      </ruleGroup>
+      <ruleGroup id="5172" defaultRights="2" name="Block Conversation Sharing" enabled="true" cycleRequest="true" cycleResponse="false" cycleEmbeddedObject="true" cloudSynced="true">
+        <acElements/>
+        <condition always="true">
+          <expressions/>
+        </condition>
+        <description></description>
+        <rules>
+          <rule id="5174" enabled="false" name="Block Conversation Sharing">
+            <description></description>
+            <immediateActionContainers/>
+            <actionContainer configurationId="com.scur.mainaction.block.5194" actionId="com.scur.mainaction.block"/>
+            <condition always="false">
+              <expressions>
+                <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.matches">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.regex">
+                    <value>
+                      <stringValue value="https://www.perplexity.ai/rest/thread/update_thread_access*" stringModifier="false" typeId="com.scur.type.regex"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+              </expressions>
+            </condition>
+          </rule>
+        </rules>
+        <ruleGroups/>
+      </ruleGroup>
+      <ruleGroup id="5182" defaultRights="2" name="Block File Upload" enabled="true" cycleRequest="true" cycleResponse="true" cycleEmbeddedObject="true" cloudSynced="true">
+        <acElements/>
+        <condition always="true">
+          <expressions/>
+        </condition>
+        <description></description>
+        <rules>
+          <rule id="5184" enabled="false" name="Block File Upload">
+            <description></description>
+            <immediateActionContainers/>
+            <actionContainer configurationId="com.scur.mainaction.block.5194" actionId="com.scur.mainaction.block"/>
+            <condition always="false">
+              <expressions>
+                <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.matches">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.regex">
+                    <value>
+                      <stringValue value="https://www.perplexity.ai/rest/uploads/create_upload_url*" stringModifier="false" typeId="com.scur.type.regex"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+              </expressions>
+            </condition>
+          </rule>
+        </rules>
+        <ruleGroups/>
+      </ruleGroup>
+      <ruleGroup id="5202" defaultRights="2" name="DLP Examples" enabled="true" cycleRequest="true" cycleResponse="true" cycleEmbeddedObject="true" cloudSynced="false">
+        <acElements/>
+        <condition always="true">
+          <expressions/>
+        </condition>
+        <description></description>
+        <rules>
+          <rule id="5632" enabled="false" name="Block Upload of MS Office Files which belong to the Company">
+            <description>This Rule will block uploads if the file is an MS Office File type and the "Company" string in the file metadata is set to the value configured in this rule</description>
+            <immediateActionContainers/>
+            <actionContainer configurationId="com.scur.mainaction.block.5053" actionId="com.scur.mainaction.block"/>
+            <condition always="false">
+              <expressions>
+                <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.matches">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.regex">
+                    <value>
+                      <stringValue value="https://ppl-ai-file-upload.s3.amazonaws.com*" stringModifier="false" typeId="com.scur.type.regex"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+                <conditionExpression prefix="AND" openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.equals">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.body.filename"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.string">
+                    <value>
+                      <stringValue value="docProps/app.xml" stringModifier="true" typeId="com.scur.type.string"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+                <conditionExpression prefix="AND" openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.equals">
+                  <propertyInstance useMostRecentConfiguration="false" configurationId="com.scur.engine.dlpdict.5642" propertyId="com.scur.engine.dlpdict.matched"/>
+                  <parameter valueTyp="3" valueId="com.scur.type.boolean.true" typeId="com.scur.type.boolean"/>
+                </conditionExpression>
+              </expressions>
+            </condition>
+          </rule>
+          <rule id="5993" enabled="false" name="Block Upload of MS Office Files which have a specific MSIP Label Enabled">
+            <description>This Rule will block uploads if the file is an MS Office File type and the specific MSIP Label in the file metadata is set to the value configured in this rule</description>
+            <immediateActionContainers/>
+            <actionContainer configurationId="com.scur.mainaction.block.5053" actionId="com.scur.mainaction.block"/>
+            <condition always="false">
+              <expressions>
+                <conditionExpression openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.matches">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.url"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.regex">
+                    <value>
+                      <stringValue value="https://ppl-ai-file-upload.s3.amazonaws.com*" stringModifier="false" typeId="com.scur.type.regex"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+                <conditionExpression prefix="AND" openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.equals">
+                  <propertyInstance useMostRecentConfiguration="false" propertyId="com.scur.engine.system.body.filename"/>
+                  <parameter valueTyp="3" typeId="com.scur.type.string">
+                    <value>
+                      <stringValue value="docProps/custom.xml" stringModifier="true" typeId="com.scur.type.string"/>
+                    </value>
+                  </parameter>
+                </conditionExpression>
+                <conditionExpression prefix="AND" openingBracketCount="0" closingBracketCount="0" operatorId="com.scur.operator.equals">
+                  <propertyInstance useMostRecentConfiguration="false" configurationId="com.scur.engine.dlpdict.4750" propertyId="com.scur.engine.dlpdict.matched"/>
+                  <parameter valueTyp="3" valueId="com.scur.type.boolean.true" typeId="com.scur.type.boolean"/>
+                </conditionExpression>
+              </expressions>
+            </condition>
+          </rule>
+        </rules>
+        <ruleGroups/>
+      </ruleGroup>
+    </ruleGroups>
+  </ruleGroup>
+</libraryContent>
