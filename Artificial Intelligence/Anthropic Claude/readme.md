@@ -45,6 +45,12 @@ Remove entries for roles for that you do NOT want to limit the prompt length for
 
 <br/><br/>
 
+Rule: Replace prompt (WebApp)
+
+Adjust variable "maxPromptLength" based on your requirements
+
+<br/><br/>
+
 Rule: Replace prompt (API)
 
 Adjust variable "maxPromptLength" based on your requirements
