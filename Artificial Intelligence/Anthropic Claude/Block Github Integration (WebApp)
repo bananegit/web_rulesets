@@ -1,0 +1,4 @@
+// Block Github Integration (WebApp)
+IF RegExJSi.Matches ("^https:\\/\\/claude\\.ai\\/api.*\\/sync\\/github\\/auth.*$", MWG.ToString (MWG.Url)) THEN {
+  MWG.Block (McAfee_Blocked_by_Application_Control, "Block Github Integration (WebApp)", "Anthropic Claude Controls")
+}
