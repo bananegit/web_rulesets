@@ -1,0 +1,4 @@
+// Block Link sharing (WebApp)
+IF RegExJSi.Matches ("^https:\\/\\/claude\\.ai\\/.*\\/chat_conversations\\/.*\\/share$", MWG.ToString (MWG.Url)) THEN {
+  MWG.Block (McAfee_Blocked_by_Application_Control, "Block Link sharing (WebApp)", "Anthropic Claude Controls")
+}
