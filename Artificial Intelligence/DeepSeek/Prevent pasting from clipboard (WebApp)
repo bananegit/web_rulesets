@@ -2,7 +2,7 @@ ROUTINE Prevent_pasting_from_clipboard_WebApp_ ON (Web.Response) [enabled="true"
 	
 		// scoping
 	    
-		IF MWG.Url.ToString == "https://chat.deepseek.com/" THEN {
+		IF RegExJSi.Matches ("^https:\\/\\/chat\\.deepseek\\.com\\/(?:a\\/chat\\/s\\/[a-zA-Z0-9-]*)?$", MWG.ToString (MWG.Url)) THEN {
 			STRING body = MWG.BodyData(MWG.Response()).ToString()
 			
 			body = ReplaceFirst(body, "<head>", "<head><script>document.addEventListener ('paste', function(e){e.preventDefault();e.stopPropagation();}, true);</script>")
