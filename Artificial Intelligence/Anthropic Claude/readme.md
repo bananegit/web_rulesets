@@ -24,6 +24,7 @@ This ruleset provides rules for the following actions for Anthropics Claude Webs
 - Block Link Sharing (Web)
 - Prevent pasting from clipboard (Web)
 - Block Screen access (Web)
+- Block unauthorized orgs (Web) (will not block login to other orgs but will block any prompts)
 
 <br/><br/>
 
@@ -49,4 +50,10 @@ Rule: Replace prompt (API)
 Adjust variable "maxPromptLength" based on your requirements
 
 Remove entries for roles for that you do NOT want to replace the prompt for from the "limitedRoles" variable
+
+<br/><br/>
+
+Rule: Block unauthorized Orgs (WebApp)
+
+Replace the example tenant id in the variable authorized_orgs with your own, to add multiple values separate entries by comma
 
