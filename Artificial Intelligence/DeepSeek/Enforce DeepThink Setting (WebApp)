@@ -1,23 +1,26 @@
 // Enforce Deepthink Setting (WebApp)
 ROUTINE Enforce_Deepthink_Setting_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
-  
-    // scoping
-      BOOLEAN deepThink = TRUE
-  
-    // Deepseek
-    IF MWG.SmartMatch (MWG.Url, "chat.deepseek.com/api/v0/chat/completion") THEN {
-        
-      JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
-      JSON thinkFlag = JSON.Get(bodyJson, "thinking_enabled")
-      
-      IF NOT JSON.AsBool(thinkFlag) == deepThink THEN {
-          
-          bodyJson = JSON.Set(bodyJson, "thinking_enabled", deepThink)
-          
-            DATAREF newBody = bodyJson.ToString().ToDataRef()
-            MWG.SetBody(MWG.Request(), newBody)
-      }
-      
-    }
-  
-  }
+	
+		// scoping
+	    BOOLEAN deepThink = TRUE
+	
+		// Deepseek
+		IF MWG.SmartMatch (MWG.Url, "chat.deepseek.com/api/v0/chat/completion") THEN {
+		    
+			JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+			IF JSON.HasMember(bodyJson, "thinking_enabled") THEN {
+    			JSON thinkFlag = JSON.Get(bodyJson, "thinking_enabled")
+    			
+    			IF NOT JSON.AsBool(thinkFlag) == deepThink THEN {
+    			    
+    			    bodyJson = JSON.Set(bodyJson, "thinking_enabled", deepThink)
+    			    
+    		        DATAREF newBody = bodyJson.ToString().ToDataRef()
+    		        MWG.SetBody(MWG.Request(), newBody)
+    			}
+			    
+			}
+			
+		}
+	
+	}
