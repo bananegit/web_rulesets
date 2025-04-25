@@ -1,23 +1,26 @@
 // Replace prompt (WebApp)
 ROUTINE Replace_prompt_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
-  
-    // scoping
-      NUMBER maxPromptLength = 22
-      STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
-  
-    IF MWG.SmartMatch (MWG.Url, "www.perplexity.ai/rest/sse/perplexity_ask") THEN {
-        
-      JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
-      JSON prompt = JSON.Get(bodyJson, "query_str")
-      
-      
-      IF prompt.ToString().Length()-2 > maxPromptLength THEN {
-          
-            bodyJson = JSON.Set(bodyJson, "query_str", policyWarning)
-            DATAREF newBody = bodyJson.ToString().ToDataRef()
-            MWG.SetBody(MWG.Request(), newBody)
-      }
-      
-    }
-  
-  }
+	
+		// scoping
+	    NUMBER maxPromptLength = 22
+	    STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
+	
+		IF MWG.SmartMatch (MWG.Url, "www.perplexity.ai/rest/sse/perplexity_ask") THEN {
+		    
+			JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+			
+			IF JSON.HasMember(bodyJson, "query_str") THEN {
+			JSON prompt = JSON.Get(bodyJson, "query_str")
+			
+			IF JSON.AsString(prompt).Length > maxPromptLength THEN {
+			    
+		        bodyJson = JSON.Set(bodyJson, "query_str", policyWarning)
+		        DATAREF newBody = bodyJson.ToString().ToDataRef()
+		        MWG.SetBody(MWG.Request(), newBody)
+			}
+			    
+			}
+			
+		}
+	
+	}
