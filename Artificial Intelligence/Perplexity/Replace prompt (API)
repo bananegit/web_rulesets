@@ -1,37 +1,49 @@
 // Replace prompt (API)
 ROUTINE Replace_prompt_API_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
-  
-    // scoping
-      NUMBER maxPromptLength = 2
-      STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
-      //available roles: "\"system\"", "\"user\"", "\"assistant\""
-      VECTOR<STRING> limitedRoles = "\"system\"", "\"user\"", "\"assistant\""
-  
-    IF MWG.SmartMatch (MWG.Url, "api.perplexity.ai/chat/completions") THEN {
-      JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
-      JSON messages = JSON.Get(bodyJson, "messages")
-      
-      NUMBER counter = 0
-      
-      LOOP(JSON.Size(messages)) {
-          
-          STRING role = JSON.Get(messages.At(counter), "role").ToString()
-          
-          IF Contains(limitedRoles, role)  THEN {
-              STRING prompt = JSON.Get(messages.At(counter), "content").ToString()
-      
-              IF prompt.Length()-2 > maxPromptLength THEN {
-              JSON newmessage = JSON.Set(messages.At(counter), "content", policyWarning)
-              messages = JSON.ArrayReplaceAt(messages, counter, newmessage) 
-              }
-              
-          }
-          
-          counter = counter +1
-      }
-      bodyJson = JSON.Set(bodyJson, "messages", messages)
-      DATAREF newBody = bodyJson.ToString().ToDataRef()
-        MWG.SetBody(MWG.Request(), newBody)
-    }
-  
-  }
+	
+		// scoping
+	    NUMBER maxPromptLength = 2
+	    STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
+	    //available roles are system, user, assistant
+	    VECTOR<STRING> limitedRoles = "system", "user", "assistant"
+	
+		IF MWG.SmartMatch (MWG.Url, "api.perplexity.ai/chat/completions") THEN {
+			JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+			
+			IF JSON.HasMember(bodyJson, "messages") THEN {
+			    
+			    JSON messages = JSON.Get(bodyJson, "messages")
+			    BOOLEAN wasModified = FALSE
+			
+    			NUMBER counter = 0
+    			
+    			LOOP(JSON.Size(messages)) {
+    			    
+    			    STRING role = JSON.AsString(JSON.Get(messages.At(counter), "role"))
+    			    
+    			    IF Contains(limitedRoles, role)  THEN {
+    			        STRING prompt = JSON.AsString(JSON.Get(messages.At(counter), "content"))
+    			
+            			IF prompt.Length() > maxPromptLength THEN {
+            			JSON newmessage = JSON.Set(messages.At(counter), "content", policyWarning)
+            			messages = JSON.ArrayReplaceAt(messages, counter, newmessage) 
+            			wasModified = TRUE
+            			}
+            			
+    			    }
+    			    
+    			    counter = counter +1
+    			}
+    			
+    			IF wasModified THEN {
+    			    bodyJson = JSON.Set(bodyJson, "messages", messages)
+        			DATAREF newBody = bodyJson.ToString().ToDataRef()
+        		    MWG.SetBody(MWG.Request(), newBody)
+    			}
+			    
+			}
+			
+			
+		}
+	
+	}
