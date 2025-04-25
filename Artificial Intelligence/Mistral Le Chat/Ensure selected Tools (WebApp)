@@ -1,91 +1,93 @@
 ROUTINE Ensure_selected_Tools_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
-  
-      // scoping
-      NUMBER maxPromptLength = 22
-    // available tools: beta-imagegen, beta-websearch, beta-code-interpreter, beta-trampoline (canvas)
-      VECTOR<STRING> ensured_tools = "beta-websearch", "beta-code-interpreter"
-        JSON bodyJson
-        JSON toolsArray
-        DATAREF newBody
-        JSON firstLevel
-        JSON secondLevel
-      STRING selectedTool
-      JSON tempArray
-      VECTOR<STRING> tools
-      STRING tool
-      BOOLEAN wasModified = FALSE
-    
-        //initial chat request
-      IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/trpc/message.newChat") THEN {
-        bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
-        firstLevel = JSON.Get(bodyJson, "0")
-        secondLevel = JSON.Get(firstLevel, "json")
-        toolsArray = JSON.Get(secondLevel, "features")
-        
-        IF NOT JSON.IsArray(toolsArray) THEN {
-          selectedTool = toolsArray.ToString
-          
-          tempArray = JSON.CreateEmptyArray
-          IF selectedTool != "" THEN
-          toolsArray = JSON.ArrayAppend(tempArray, selectedTool)
-      } 
-      
-      tools = JSON.ToStringVector(toolsArray)
-      
-      FOR tool IN ensured_tools DO {
-          
-          IF NOT Contains(tools, tool) THEN {
-              toolsArray = JSON.ArrayAppend(toolsArray, tool)
-              wasModified = TRUE
-          }
-          
-      }
-      
-      IF wasModified THEN {
-          secondLevel = JSON.Set(secondLevel, "features", toolsArray)
-                firstLevel = JSON.Set(firstLevel, "json", secondLevel)
-                bodyJson = JSON.Set(bodyJson, "0", firstLevel)
-          newBody = bodyJson.ToString().ToDataRef()
-            MWG.SetBody(MWG.Request(), newBody)
-            MWG.Add(MWG.Headers(MWG.Request), "test", newBody.ToString)
-      }
-        
-          
-      }
-      
-      
-        //subsequent request
-      IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/chat") THEN {
-        bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
-        
-        IF JSON.HasMember(bodyJson, "features") THEN {
-            toolsArray = JSON.Get(bodyJson, "features")
-        
-          IF NOT JSON.IsArray(toolsArray) THEN {
-              selectedTool = toolsArray.ToString
-              
-              tempArray = JSON.CreateEmptyArray
-              toolsArray = JSON.ArrayAppend(tempArray, selectedTool)
-          } 
-          
-          tools = JSON.ToStringVector(toolsArray)
-          
-          FOR tool IN ensured_tools DO {
-              
-              IF NOT Contains(tools, tool) THEN {
-                  toolsArray = JSON.ArrayAppend(toolsArray, tool)
-                  wasModified = TRUE
-              }
-              
-          }
-          
-          IF wasModified THEN {
-              bodyJson = JSON.Set(bodyJson, "features", toolsArray)
-              newBody = bodyJson.ToString().ToDataRef()
-                MWG.SetBody(MWG.Request(), newBody)
-          }
-        }
-        
-      }
-  
-  }
+		
+		    // scoping
+		    NUMBER maxPromptLength = 22
+			// available tools: beta-imagegen, beta-websearch, beta-code-interpreter, beta-trampoline (canvas)
+		    VECTOR<STRING> ensured_tools = "beta-websearch", "beta-code-interpreter"
+	        JSON bodyJson
+	        JSON toolsArray
+	        DATAREF newBody
+	        JSON firstLevel
+	        JSON secondLevel
+		    STRING selectedTool
+		    JSON tempArray
+		    VECTOR<STRING> tools
+		    STRING tool
+		    BOOLEAN wasModified = FALSE
+	    
+	        //initial chat request
+	    	IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/trpc/message.newChat") THEN {
+	    		bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+	    		
+	    		IF JSON.HasMember(bodyJson, "0") THEN {
+	    		    firstLevel = JSON.Get(bodyJson, "0")
+    	    		secondLevel = JSON.Get(firstLevel, "json")
+    	    		toolsArray = JSON.Get(secondLevel, "features")
+    	    		
+    	    		IF NOT JSON.IsArray(toolsArray) THEN {
+    				    selectedTool = JSON.AsString(toolsArray)
+    				    
+    				    tempArray = JSON.CreateEmptyArray
+    				    IF selectedTool != "" THEN
+    				    toolsArray = JSON.ArrayAppend(tempArray, selectedTool)
+    				} 
+    				
+    				tools = JSON.ToStringVector(toolsArray)
+    				
+    				FOR tool IN ensured_tools DO {
+    				    
+    				    IF NOT Contains(tools, tool) THEN {
+    				        toolsArray = JSON.ArrayAppend(toolsArray, tool)
+    				        wasModified = TRUE
+    				    }
+    				    
+    				}
+    				
+    				IF wasModified THEN {
+    				    secondLevel = JSON.Set(secondLevel, "features", toolsArray)
+                	    firstLevel = JSON.Set(firstLevel, "json", secondLevel)
+                	    bodyJson = JSON.Set(bodyJson, "0", firstLevel)
+        				newBody = bodyJson.ToString().ToDataRef()
+        			    MWG.SetBody(MWG.Request(), newBody)
+        			    MWG.Add(MWG.Headers(MWG.Request), "test", newBody.ToString)
+    				}
+	    		}
+	    	    
+	    	}
+	    	
+	    	
+	        //subsequent request
+	    	IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/chat") THEN {
+	    		bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+	    		
+	    		IF JSON.HasMember(bodyJson, "features") THEN {
+	    		    toolsArray = JSON.Get(bodyJson, "features")
+	    		
+    				IF NOT JSON.IsArray(toolsArray) THEN {
+    				    selectedTool = JSON.AsString(toolsArray)
+    				    
+    				    tempArray = JSON.CreateEmptyArray
+    				    toolsArray = JSON.ArrayAppend(tempArray, selectedTool)
+    				} 
+    				
+    				tools = JSON.ToStringVector(toolsArray)
+    				
+    				FOR tool IN ensured_tools DO {
+    				    
+    				    IF NOT Contains(tools, tool) THEN {
+    				        toolsArray = JSON.ArrayAppend(toolsArray, tool)
+    				        wasModified = TRUE
+    				    }
+    				    
+    				}
+    				
+    				IF wasModified THEN {
+        				bodyJson = JSON.Set(bodyJson, "features", toolsArray)
+        				newBody = bodyJson.ToString().ToDataRef()
+        			    MWG.SetBody(MWG.Request(), newBody)
+    				}
+	    		}
+	    		
+	    	}
+		
+		}
