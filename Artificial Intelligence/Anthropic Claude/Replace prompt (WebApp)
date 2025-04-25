@@ -1,0 +1,21 @@
+// Replace prompt (WebApp)
+ROUTINE Replace_prompt_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
+    
+    NUMBER maxPromptLength = 22
+    STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
+
+  IF RegExJSi.Matches ("^https:\/\/claude\.ai\/.*\/chat_conversations\/.*\/completion", MWG.ToString (MWG.Url)) THEN {
+        JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+        
+        IF JSON.HasMember(bodyJson, "prompt") THEN {
+            
+            IF JSON.AsString(JSON.Get(bodyJson, "prompt")).Length > maxPromptLength THEN {
+                bodyJson = JSON.Set(bodyJson, "prompt", policyWarning)
+                MWG.SetBody(MWG.Request(), bodyJson.ToString.ToDataRef)
+            }
+            
+        }
+          
+    }
+
+}
