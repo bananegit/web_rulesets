@@ -1,0 +1,57 @@
+// Replace prompt (API)
+ROUTINE Replace_prompt_API_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
+    
+    NUMBER maxPromptLength = 22
+    STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
+    //available roles are user, assistant
+    VECTOR<STRING> limitedRoles = "user", "assistant"
+    JSON bodyJson
+    STRING prompt
+
+  IF MWG.SmartMatch (MWG.Url, "api.anthropic.com/v1/complete") THEN {
+        bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+        
+        IF JSON.HasMember(bodyJson, "prompt") THEN {
+            prompt = JSON.AsString(JSON.Get(bodyJson, "prompt"))
+            IF prompt.Length > maxPromptLength THEN {
+                bodyJson = JSON.Set(bodyJson, "prompt", policyWarning)
+                MWG.SetBody(MWG.Request(), bodyJson.ToString.ToDataRef)
+            }
+            
+        }
+          
+    }
+    
+    IF MWG.SmartMatch (MWG.Url, "api.anthropic.com/v1/messages") THEN {
+        bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+        
+        IF JSON.HasMember(bodyJson, "messages") THEN {
+            JSON messages = JSON.Get(bodyJson, "messages")
+      
+      NUMBER counter = 0
+      
+      LOOP(JSON.Size(messages)) {
+          
+          STRING role = JSON.AsString(JSON.Get(messages.At(counter), "role"))
+          
+          IF Contains(limitedRoles, role)  THEN {
+              prompt = JSON.AsString(JSON.Get(messages.At(counter), "content"))
+      
+              IF prompt.Length > maxPromptLength THEN {
+              JSON newmessage = JSON.Set(messages.At(counter), "content", policyWarning)
+              messages = JSON.ArrayReplaceAt(messages, counter, newmessage) 
+              }
+              
+          }
+          
+          counter = counter +1
+      }
+      bodyJson = JSON.Set(bodyJson, "messages", messages)
+      DATAREF newBody = bodyJson.ToString().ToDataRef()
+        MWG.SetBody(MWG.Request(), newBody)
+            
+        }
+          
+    }
+
+}
