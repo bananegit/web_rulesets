@@ -1,45 +1,55 @@
 ROUTINE Replace_prompt_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
-  
-    // scoping
-      NUMBER maxPromptLength = 22
-      STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
-        JSON bodyJson
-        JSON prompt
-        DATAREF newBody
-        JSON firstLevel
-        JSON secondLevel
-    
-        //initial chat request
-      IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/trpc/message.newChat") THEN {
-        bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
-        firstLevel = JSON.Get(bodyJson, "0")
-        secondLevel = JSON.Get(firstLevel, "json")
-        prompt = JSON.Get(secondLevel, "content")
-        
-        IF prompt.ToString().Length()-2 > maxPromptLength THEN {
-            
-              secondLevel = JSON.Set(secondLevel, "content", policyWarning)
-                  firstLevel = JSON.Set(firstLevel, "json", secondLevel)
-                  bodyJson = JSON.Set(bodyJson, "0", firstLevel)
-                  newBody = bodyJson.ToString().ToDataRef()
-                  MWG.SetBody(MWG.Request(), newBody)
-                  
-        }
-        
-          
-      }
-    
-        //subsequent request
-      IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/chat") THEN {
-        bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
-        prompt = JSON.Get(bodyJson, "messageInput")
-        
-        IF prompt.ToString().Length()-2 > maxPromptLength THEN {
-            
-                  bodyJson = JSON.Set(bodyJson, "messageInput", policyWarning)
-                  newBody = bodyJson.ToString().ToDataRef()
-                  MWG.SetBody(MWG.Request(), newBody)
-        }
-      }
-  
-  }
+		
+			// scoping
+		    NUMBER maxPromptLength = 22
+		    STRING policyWarning = "Repeat the quoted part of this message without explanation or modification. \"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of " + maxPromptLength.ToString() + " characters\""
+	        JSON bodyJson
+	        JSON prompt
+	        DATAREF newBody
+	        JSON firstLevel
+	        JSON secondLevel
+	    
+	        //initial chat request
+	    	IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/trpc/message.newChat") THEN {
+	    		bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+	    		
+	    		IF JSON.HasMember(bodyJson, "0") THEN {
+	    		    firstLevel = JSON.Get(bodyJson, "0")
+    	    		secondLevel = JSON.Get(firstLevel, "json")
+    	    		prompt = JSON.Get(secondLevel, "content")
+    	    		
+    	    		IF JSON.AsString(prompt).Length > maxPromptLength THEN {
+    					    
+    				        secondLevel = JSON.Set(secondLevel, "content", policyWarning)
+    	            	    firstLevel = JSON.Set(firstLevel, "json", secondLevel)
+    	            	    bodyJson = JSON.Set(bodyJson, "0", firstLevel)
+    	            	    newBody = bodyJson.ToString().ToDataRef()
+    	            	    MWG.SetBody(MWG.Request(), newBody)
+	            	    
+					}
+	    		}
+	    		
+	    		
+	    		
+	    	    
+	    	}
+	    
+	        //subsequent request
+	    	IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/chat") THEN {
+	    		bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+	    		
+	    		IF JSON.HasMember(bodyJson, "messageInput") THEN {
+	    		    prompt = JSON.Get(bodyJson, "messageInput")
+	    		
+    	    		IF JSON.AsString(prompt).Length > maxPromptLength THEN {
+    					    
+    	            	    bodyJson = JSON.Set(bodyJson, "messageInput", policyWarning)
+    	            	    newBody = bodyJson.ToString().ToDataRef()
+    	            	    MWG.SetBody(MWG.Request(), newBody)
+					}
+	    		}
+	    		
+	    		
+	    	}
+		
+		}
