@@ -1,25 +1,27 @@
-// Limit prompt length (WebApp)
 ROUTINE Limit_prompt_length_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
 
-  // scoping
+	// scoping
     NUMBER maxPromptLength = 22
 
-  // Deepseek
-  IF MWG.SmartMatch (MWG.Url, "chat.deepseek.com/api/v0/chat/completion") THEN {
-    JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
-    JSON prompt = JSON.Get(bodyJson, "prompt")
-    
-    //start from index 1 because string var contains quotation marks as well
-    STRING newPrompt = prompt.ToString().Slice(1,maxPromptLength)
-    
-    //remove trailing quotation mark if present
-    IF newPrompt.EndsWith("\"") THEN {
-       newPrompt = newPrompt.Slice(0, newPrompt.Length()-1)
-    }
-    
-      bodyJson = JSON.Set(bodyJson, "prompt", newPrompt)
-      DATAREF newBody = bodyJson.ToString().ToDataRef()
-      MWG.SetBody(MWG.Request(), newBody)
-  }
+	// Deepseek
+	IF MWG.SmartMatch (MWG.Url, "chat.deepseek.com/api/v0/chat/completion") THEN {
+		JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+		
+		IF JSON.HasMember(bodyJson, "prompt") THEN {
+		    
+    		JSON promptJson = JSON.Get(bodyJson, "prompt")
+    		STRING prompt = JSON.AsString(promptJson)
+    		
+    		IF (prompt.Length > maxPromptLength) THEN 
+    		{
+    		    STRING newPrompt = prompt.Slice(0,maxPromptLength)
+    		    
+    	        bodyJson = JSON.Set(bodyJson, "prompt", newPrompt)
+    	        DATAREF newBody = bodyJson.ToString().ToDataRef()
+    	        MWG.SetBody(MWG.Request(), newBody)
+    		}
+		}
+		
+	}
 
 }
