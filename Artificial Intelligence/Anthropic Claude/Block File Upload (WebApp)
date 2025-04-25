@@ -1,0 +1,22 @@
+// Block File Upload (WebApp)
+ROUTINE Block_File_Upload_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
+    
+      IF RegExJSi.Matches ("^https:\\/\\/claude\\.ai\\/api\\/.*\\/(?:upload|convert_document)$", MWG.ToString (MWG.Url)) THEN {
+        MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Upload (WebApp)", "Anthropic Claude Controls")
+      }
+      ELSE {
+          
+          IF RegExJSi.Matches ("^https:\/\/claude\.ai\/.*\/chat_conversations\/.*\/completion", MWG.ToString (MWG.Url)) THEN {
+              JSON bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+              
+              IF JSON.HasMember(bodyJson, "attachments") THEN {
+                  JSON att = JSON.Get(bodyJson, "attachments")
+                  IF JSON.IsArray(att) AND att.Size > 0 THEN {
+                      MWG.Block (McAfee_Blocked_by_Application_Control, "Block File Upload (WebApp)", "Anthropic Claude Controls")
+                  }
+              }
+              
+          }
+      }
+  
+  }
