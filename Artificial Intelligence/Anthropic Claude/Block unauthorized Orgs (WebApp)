@@ -2,7 +2,7 @@
 ROUTINE Block_unauthorized_Orgs_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
     
     //you can add multiple orgs by separating values with commas
-    VECTOR<STRING> authorized_orgs = "b41196c4-e6d7-4916-849f-13ea561d4cf3", "5121d773-f077-4984-a706-13951a3bd25a"
+    VECTOR<STRING> authorized_orgs = "b41196c4-e6d7-4916-849f-13ea561d4cf1"
     
       IF MWG.SmartMatch (MWG.Url, "claude.ai/api/organizations") THEN {
           STRING url = MWG.Url.ToString
