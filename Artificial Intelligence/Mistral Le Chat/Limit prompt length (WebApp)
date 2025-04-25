@@ -1,48 +1,47 @@
 ROUTINE Limit_prompt_length_WebApp_ ON (Web.Request) [enabled="true",displayName="AI tests",prerun="false"] {
-   // scoping
-   NUMBER maxPromptLength = 22
-   JSON bodyJson
-   JSON prompt
-   STRING newPrompt
-   DATAREF newBody
-  
-   //initial chat request
-   IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/trpc/message.newChat") THEN {
-    bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
-    JSON firstLevel = JSON.Get(bodyJson, "0")
-    JSON secondLevel = JSON.Get(firstLevel, "json")
-    prompt = JSON.Get(secondLevel, "content")
+     // scoping
+     NUMBER maxPromptLength = 22
+     JSON bodyJson
+     JSON prompt
+     STRING newPrompt
+     DATAREF newBody
     
-    //start from index 1 because string var contains quotation marks as well
-    newPrompt = prompt.ToString().Slice(1,maxPromptLength)
+     //initial chat request
+     IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/trpc/message.newChat") THEN {
+     	bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+     	
+     	IF JSON.HasMember(bodyJson, "0") THEN {
+     	    JSON firstLevel = JSON.Get(bodyJson, "0")
+         	JSON secondLevel = JSON.Get(firstLevel, "json")
+         	prompt = JSON.Get(secondLevel, "content")
+         	
+         	newPrompt = JSON.AsString(prompt).Slice(0,maxPromptLength)
+         	
+             secondLevel = JSON.Set(secondLevel, "content", newPrompt)
+             firstLevel = JSON.Set(firstLevel, "json", secondLevel)
+             bodyJson = JSON.Set(bodyJson, "0", firstLevel)
+             newBody = bodyJson.ToString().ToDataRef()
+             MWG.SetBody(MWG.Request(), newBody)
+             MWG.Add(MWG.Headers(MWG.Request), "initial", newPrompt)
+     	}
+     	
+     	
+     }
     
-    //remove trailing quotation mark if present
-    IF newPrompt.EndsWith("\"") THEN {
-       newPrompt = newPrompt.Slice(0, newPrompt.Length()-1)
+     //subsequent request
+     IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/chat") THEN {
+     	bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
+     	
+     	IF JSON.HasMember(bodyJson, "messageInput") THEN {
+     	    prompt = JSON.Get(bodyJson, "messageInput")
+     	
+         	newPrompt = JSON.AsString(prompt).Slice(0,maxPromptLength)
+        	
+            bodyJson = JSON.Set(bodyJson, "messageInput", newPrompt)
+            newBody = bodyJson.ToString().ToDataRef()
+            MWG.SetBody(MWG.Request(), newBody)
+            MWG.Add(MWG.Headers(MWG.Request), "subsequent", newPrompt)
+     	}
+     	
     }
-    
-       secondLevel = JSON.Set(secondLevel, "content", newPrompt)
-       firstLevel = JSON.Set(firstLevel, "json", secondLevel)
-       bodyJson = JSON.Set(bodyJson, "0", firstLevel)
-       newBody = bodyJson.ToString().ToDataRef()
-       MWG.SetBody(MWG.Request(), newBody)
-   }
-  
-   //subsequent request
-   IF MWG.SmartMatch (MWG.Url, "chat.mistral.ai/api/chat") THEN {
-    bodyJson = JSON.FromStringIgnoreErrors(MWG.BodyData(MWG.Request()).ToString())
-    prompt = JSON.Get(bodyJson, "messageInput")
-    
-    //start from index 1 because string var contains quotation marks as well
-    newPrompt = prompt.ToString().Slice(1,maxPromptLength)
-    
-    //remove trailing quotation mark if present
-    IF newPrompt.EndsWith("\"") THEN {
-       newPrompt = newPrompt.Slice(0, newPrompt.Length()-1)
-    }
-    
-      bodyJson = JSON.Set(bodyJson, "messageInput", newPrompt)
-      newBody = bodyJson.ToString().ToDataRef()
-      MWG.SetBody(MWG.Request(), newBody)
-  }
 }
