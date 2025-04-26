@@ -54,6 +54,7 @@ jobs:
     - name: Test
       run: dotnet test "Artificial Intelligence/Tests/DeepSeekTests/DeepSeekTests.csproj" --no-build --verbosity normal --logger:nunit
     - name: cat testresults
+      if: always()
       shell: pwsh
       run: |
         cat "Artificial Intelligence/Tests/DeepSeekTests/TestResults/TestResults.xml"
