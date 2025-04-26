@@ -9,6 +9,7 @@ namespace DeepSeekTests
         private String baseUrl = "https://chat.deepseek.com";
         private String shortTestString = "short";
         private String longTestString = "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
+        private String policyWarning = "\"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 22 characters\"";
         private String inputId = "chat-input";
         private String username = "aitest068@gmail.com";
         private String password = "testPassword";
@@ -77,8 +78,34 @@ namespace DeepSeekTests
                     var errorElement = driver.FindElement(By.ClassName("_5119742"));
 
                     Assert.That(errorElement.Text, Is.EqualTo("Upload failed"));
+                }
+                catch (Exception)
+                {
+                    var ss = driver.GetScreenshot();
+                    Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
+                    throw;
+                }
+            }
+        }
 
-                    Console.WriteLine(baseDir);
+        [Test]
+        public async Task ReplacePromptTest()
+        {
+
+            using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+            {
+
+                authenticate(driver);
+
+                try
+                {
+                    var textArea = driver.FindElement(By.Id(inputId));
+                    textArea.SendKeys(longTestString);
+                    var sendButton = driver.FindElement(By.ClassName("_7436101"));
+                    sendButton.Click();
+
+                    var reply = driver.FindElement(By.ClassName("ds-markdown-paragraph"));
+                    Assert.That(reply.Text, Is.EqualTo(policyWarning));
                 }
                 catch (Exception)
                 {
@@ -93,7 +120,7 @@ namespace DeepSeekTests
         {
             try
             {
-                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(30000);
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(60000);
 
                 driver.Navigate().GoToUrl(baseUrl);
 
