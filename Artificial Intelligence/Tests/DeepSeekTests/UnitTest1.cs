@@ -12,32 +12,93 @@ namespace DeepSeekTests
         private String inputId = "chat-input";
         private String username = "aitest068@gmail.com";
         private String password = "testPassword";
+        ChromeOptions options = new ChromeOptions();
+        Dictionary<string, object> prefs = new Dictionary<string, object>();
 
         [SetUp]
         public void Setup()
         {
-        }
-
-        [Test]
-        public async Task Test1()
-        {
-            ChromeOptions options = new ChromeOptions();
+            options = new ChromeOptions();
+            prefs = new Dictionary<string, object>();
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
             options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
-            Dictionary<string, object> prefs = new Dictionary<string, object>();
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
-            prefs.Add("profile.content_settings.exceptions.clipboard", new Dictionary<string, object>() { { "[*.]deepseek.com,*", new Dictionary<string, object> { { "last_modfied", (int)t.TotalSeconds*1000 }, { "setting", 1 } } } });
+            prefs.Add("profile.content_settings.exceptions.clipboard", new Dictionary<string, object>() { { "[*.]deepseek.com,*", new Dictionary<string, object> { { "last_modfied", (int)t.TotalSeconds * 1000 }, { "setting", 1 } } } });
+        }
+
+        [Test]
+        public async Task PreventPastingFromClipBoardTest()
+        {
+            
             using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
                 {
 
-                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(10000);
+                authenticate(driver);
+                
+                try
+                {
+                    driver.ExecuteScript("navigator.clipboard.writeText(\"" + shortTestString + "\");");
+                    var clipboardContent = driver.ExecuteScript("return await navigator.clipboard.readText();");
+                    
+                    var textArea = driver.FindElement(By.Id(inputId));
+                    textArea.SendKeys(Keys.Control + "v");
+
+                    Assert.That(clipboardContent, Is.EqualTo(shortTestString));
+                    Assert.That(textArea.Text, Is.EqualTo(String.Empty));
+                }
+                catch (Exception)
+                {
+                    var ss = driver.GetScreenshot();
+                    Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
+                    throw;
+                }
+            }
+        }
+
+        [Test]
+        public async Task BlockFileUploadsTest()
+        {
+
+            using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+            {
+
+                authenticate(driver);
+
+                try
+                {
+                    var baseDir = AppContext.BaseDirectory;
+                    var bitmapFilePath = baseDir + "BitmapFile.bmp";
+
+                    var fileInput = driver.FindElement(By.CssSelector("input[type=file]"));
+                    fileInput.SendKeys(bitmapFilePath);
+                    await Task.Delay(5000);
+                    var errorElement = driver.FindElement(By.ClassName("_5119742"));
+
+                    Assert.That(errorElement.Text, Is.EqualTo("Upload failed"));
+
+                    Console.WriteLine(baseDir);
+                }
+                catch (Exception)
+                {
+                    var ss = driver.GetScreenshot();
+                    Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
+                    throw;
+                }
+            }
+        }
+
+        private void authenticate(UndetectedChromeDriver? driver)
+        {
+            try
+            {
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(30000);
 
                 driver.Navigate().GoToUrl(baseUrl);
 
                 var inputs = driver.FindElements(By.ClassName("ds-input__input"));
-                
+
                 foreach (var input in inputs)
                 {
                     if (input.GetAttribute("type") == "text")
@@ -49,30 +110,22 @@ namespace DeepSeekTests
                         input.SendKeys(password);
                     }
                 }
-                
-                try
-                {
-                    var loginButton = driver.FindElement(By.ClassName("ds-sign-up-form__register-button"));
-                    loginButton.Click();
 
-                    //TextCopy.ClipboardService.SetText(shortTestString);
-                    driver.ExecuteScript("navigator.clipboard.writeText(\"" + shortTestString + "\");");
-                    var clipboardContent = driver.ExecuteScript("return await navigator.clipboard.readText();");
-                    
-                    var textArea = driver.FindElement(By.Id(inputId));
-                    textArea.SendKeys(Keys.Control + "v");
-                    Assert.That(clipboardContent, Is.EqualTo(shortTestString));
-                    Assert.That(textArea.Text, Is.EqualTo(String.Empty));
-                }
-                catch (Exception)
-                {
-                    var ss = driver.GetScreenshot();
-                    Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
-                    throw;
-                }
+                var loginButton = driver.FindElement(By.ClassName("ds-sign-up-form__register-button"));
+                loginButton.Click();
+            }
+            catch (Exception)
+            {
+                var ss = driver.GetScreenshot();
+                Console.WriteLine("Error Screenshot: \r\n'" + ss.AsBase64EncodedString +"'");
+                throw;
             }
 
-            //driver.Quit();
+            
+
         }
+
+
+
     }
 }
