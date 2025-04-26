@@ -45,6 +45,8 @@ jobs:
         Start-Process msiexec -ArgumentList "/i ScpInstaller.x64.msi /quiet" -wait
         Write-Host "Copying OPG"
         Copy-Item -Path .\ScpPolicy.opg -Destination "C:\ProgramData\Skyhigh\SCP\Policy\Temp"
+        Write-Host "Installing Cert"
+        Import-Certificate .\ca.pem -CertStoreLocation Cert:\LocalMachine\Root\ -Confirm:$false
         
     - name: Test
       run: dotnet test "Artificial Intelligence/Tests/DeepSeekTests/DeepSeekTests.csproj" --no-build --verbosity normal
