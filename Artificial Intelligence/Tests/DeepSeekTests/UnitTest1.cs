@@ -26,8 +26,6 @@ namespace DeepSeekTests
             options.AddArguments("--disable-dev-shm-usage");
             options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
-            options.AddArguments("--ignore-certificate-errors");
-            options.AcceptInsecureCertificates = true;
             using (var driver = UndetectedChromeDriver.Create(options, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
                 {
 
@@ -58,13 +56,13 @@ namespace DeepSeekTests
                     driver.ExecuteScript("navigator.clipboard.writeText(\"" + shortTestString + "\");");
                     var textArea = driver.FindElement(By.Id(inputId));
                     textArea.SendKeys(Keys.Control + "v");
-
-                    Assert.That(textArea.Text, Is.EqualTo(shortTestString));
+                    Assert.That(TextCopy.ClipboardService.GetText(), Is.EqualTo(shortTestString));
+                    Assert.That(textArea.Text, Is.EqualTo(String.Empty));
                 }
                 catch (Exception)
                 {
                     var ss = driver.GetScreenshot();
-                    Console.WriteLine(ss.AsBase64EncodedString);
+                    Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                     throw;
                 }
             }
