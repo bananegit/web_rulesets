@@ -31,8 +31,8 @@ namespace DeepSeekTests
             prefs.Add("profile.content_settings.exceptions.clipboard", new Dictionary<string, object>() { { "[*.]deepseek.com,*", new Dictionary<string, object> { { "last_modfied", (int)t.TotalSeconds * 1000 }, { "setting", 1 } } } });
         }
 
-        [Test]
-        public async Task EnforceDeepThinkAndSearchSettingsTest()
+        [TestCase(null, TestName ="Enforce DeepThink Setting (WebApp)")]
+        public async Task EnforceDeepThinkSettingsTest(object? param)
         {
 
             using (var driver = UndetectedChromeDriver.Create(options, commandTimeout:commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
@@ -49,7 +49,6 @@ namespace DeepSeekTests
                     var reply = driver.FindElement(By.ClassName("ds-markdown-paragraph"));
                     var thinkContainer = driver.FindElement(By.ClassName("_19db599"));
 
-                    StringAssert.IsMatch(".*can't.*search.*", reply.Text);
                     StringAssert.IsMatch("Thought for [0-9]* seconds", thinkContainer.Text);
                 }
                 catch (Exception)
@@ -61,8 +60,37 @@ namespace DeepSeekTests
             }
         }
 
-        [Test]
-        public async Task PreventPastingFromClipBoardTest()
+        [TestCase(null, TestName = "Enforce Search Setting (WebApp)")]
+        public async Task EnforceSearchSettingsTest(object? param)
+        {
+
+            using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+            {
+                try
+                {
+                    authenticate(driver);
+
+                    var textArea = driver.FindElement(By.Id(inputId));
+                    textArea.SendKeys(searchPrompt);
+                    var sendButton = driver.FindElement(By.ClassName("_7436101"));
+                    sendButton.Click();
+
+                    var reply = driver.FindElement(By.ClassName("ds-markdown-paragraph"));
+                    var thinkContainer = driver.FindElement(By.ClassName("_19db599"));
+
+                    StringAssert.IsMatch(".*can't.*search.*", reply.Text);
+                }
+                catch (Exception)
+                {
+                    var ss = driver.GetScreenshot();
+                    Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
+                    throw;
+                }
+            }
+        }
+
+        [TestCase(null, TestName = "Prevent pasting from clipboard (WebApp)")]
+        public async Task PreventPastingFromClipBoardTest(object? param)
         {
             
             using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
@@ -89,8 +117,8 @@ namespace DeepSeekTests
             }
         }
 
-        [Test]
-        public async Task BlockFileUploadsTest()
+        [TestCase(null, TestName = "Block File Upload (WebApp)")]
+        public async Task BlockFileUploadsTest(object? param)
         {
 
             using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
@@ -118,8 +146,8 @@ namespace DeepSeekTests
             }
         }
 
-        [Test]
-        public async Task ReplacePromptTest()
+        [TestCase(null, TestName = "Replace prompt (WebApp)")]
+        public async Task ReplacePromptTest(object? param)
         {
 
             using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
