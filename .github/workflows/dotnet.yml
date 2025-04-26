@@ -60,6 +60,11 @@ jobs:
     - name: cat testresults
       if: always()
       shell: pwsh
+      env:
+        ghMail: ${{ secrets.GHMAIL }}
       run: |
         $replaceRegex = "<!--Tests:Start-->[\s\S]*<!--Tests:End-->";$markdown = @("<!--Tests:Start-->", "| Test case | Result |", "| --- | --- |");[XML]$testResults = Get-Content "Artificial Intelligence/Tests/DeepSeekTests/TestResults/TestResults.xml";$testCases = $testResults.'test-run'.'test-suite'.'test-suite'.'test-suite'.'test-case';foreach($testcase in $testCases){$markdown += "| " + $testcase.name + " | " + (&{If($testcase.result -eq "Passed"){":white_check_mark:"}else{":x:"}}) + " |";};$markdown+="<!--Tests:End-->";$readme=Get-content "Artificial Intelligence/DeepSeek/readme.md" -raw;$readme= $readme -replace $replaceRegex, ($markdown -join "`n");$readme | Out-File "Artificial Intelligence/DeepSeek/readme.md";
-        git show-index
+        git config --global user.email $env:ghMail
+        git config --global user.name "bananegit"
+        git commit -m "Automated Update by Test Workflow" "Artificial Intelligence/DeepSeek/readme.md"
+        git push
