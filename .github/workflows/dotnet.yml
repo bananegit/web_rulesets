@@ -38,7 +38,8 @@ jobs:
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/bananegit/scpinstaller/main/scp.z02 -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.z02
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/bananegit/scpinstaller/main/scp.zip -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.zip
         7z x .\scp.zip
-        Start-Process msiexec -ArgumentList "/i .\ScpInstaller.x64.msi /quiet /L*V" -wait
+        Start-Process msiexec -ArgumentList "/i ScpInstaller.x64.msi /quiet /lv package.log" -wait
+        cat package.log
         Copy-Item -Path .\ScpPolicy.opg -Destination "C:\ProgramData\Skyhigh\SCP\Policy\Temp"
         
     - name: Test
