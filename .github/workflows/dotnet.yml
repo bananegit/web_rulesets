@@ -53,3 +53,7 @@ jobs:
         
     - name: Test
       run: dotnet test "Artificial Intelligence/Tests/DeepSeekTests/DeepSeekTests.csproj" --no-build --verbosity normal
+    - name: cat testresults
+      shell: pwsh
+      run: |
+        cat "Artificial Intelligence/Tests/DeepSeekTests/TestResults/TestResults.xml"
