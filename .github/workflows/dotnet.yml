@@ -52,12 +52,12 @@ jobs:
         Write-Host "Installing Cert"
         Import-Certificate .\ca.pem -CertStoreLocation Cert:\LocalMachine\Root\ -Confirm:$false
         
-    - name: Test
+    - name: Run Tests
       env:
         dsUsername: ${{ secrets.DSUSERNAME }}
         dsPassword: ${{ secrets.DSPASSWORD }}
       run: dotnet test "Artificial Intelligence/Tests/DeepSeekTests/DeepSeekTests.csproj" --no-build --verbosity normal --logger:nunit
-    - name: cat testresults
+    - name: Parse Testresults and update readme
       if: always()
       shell: pwsh
       env:
