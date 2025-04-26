@@ -7,8 +7,11 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    paths:
+      - "Artificial Intelligence/DeepSeek/**"
+      - "Artificial Intelligence/Tests/**"
+      - "!**/README.md"
+    
 
 jobs:
   build:
@@ -29,7 +32,7 @@ jobs:
       run: dotnet restore "Artificial Intelligence/Tests/DeepSeekTests/DeepSeekTests.csproj"
     - name: Build
       run: dotnet build "Artificial Intelligence/Tests/DeepSeekTests/DeepSeekTests.csproj" --no-restore
-    - name: Download SCP Installer
+    - name: Download and install SCP
       shell: pwsh
       env:
         PAT: ${{ secrets.SCP_REPO_PAT }}
