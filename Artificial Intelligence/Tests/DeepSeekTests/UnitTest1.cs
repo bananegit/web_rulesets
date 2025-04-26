@@ -7,9 +7,9 @@ namespace DeepSeekTests
     public class Tests
     {
         private String baseUrl = "https://chat.deepseek.com";
-        private String shortTestString = "short";
         private String longTestString = "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
-        private String policyWarning = "\"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 22 characters\"";
+        private String searchPrompt = "do a web search for tomorrows weather in berlin";
+        private String policyWarning = "\"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 55 characters\"";
         private String inputId = "chat-input";
         private String username = "aitest068@gmail.com";
         private String password = "testPassword";
@@ -30,24 +30,25 @@ namespace DeepSeekTests
         }
 
         [Test]
-        public async Task PreventPastingFromClipBoardTest()
+        public async Task EnforceDeepThinkAndSearchSettingsTest()
         {
-            
-            using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
-                {
 
-                authenticate(driver);
-                
+            using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+            {
                 try
                 {
-                    driver.ExecuteScript("navigator.clipboard.writeText(\"" + shortTestString + "\");");
-                    var clipboardContent = driver.ExecuteScript("return await navigator.clipboard.readText();");
-                    
-                    var textArea = driver.FindElement(By.Id(inputId));
-                    textArea.SendKeys(Keys.Control + "v");
+                    authenticate(driver);
 
-                    Assert.That(clipboardContent, Is.EqualTo(shortTestString));
-                    Assert.That(textArea.Text, Is.EqualTo(String.Empty));
+                    var textArea = driver.FindElement(By.Id(inputId));
+                    textArea.SendKeys(searchPrompt);
+                    var sendButton = driver.FindElement(By.ClassName("_7436101"));
+                    sendButton.Click();
+
+                    var reply = driver.FindElement(By.ClassName("ds-markdown-paragraph"));
+                    var thinkContainer = driver.FindElement(By.ClassName("_19db599"));
+
+                    StringAssert.IsMatch(".*can't.*search.*", reply.Text);
+                    StringAssert.IsMatch("Thought for [0-9]* seconds", thinkContainer.Text);
                 }
                 catch (Exception)
                 {
@@ -59,16 +60,43 @@ namespace DeepSeekTests
         }
 
         [Test]
+        public async Task PreventPastingFromClipBoardTest()
+        {
+            
+            using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+                {
+                    try
+                    {
+                        authenticate(driver);
+                    
+                        driver.ExecuteScript("navigator.clipboard.writeText(\"" + longTestString + "\");");
+                        var clipboardContent = driver.ExecuteScript("return await navigator.clipboard.readText();");
+                    
+                        var textArea = driver.FindElement(By.Id(inputId));
+                        textArea.SendKeys(Keys.Control + "v");
+
+                        Assert.That(clipboardContent, Is.EqualTo(longTestString));
+                        Assert.That(textArea.Text, Is.EqualTo(String.Empty));
+                    }
+                    catch (Exception)
+                    {
+                        var ss = driver.GetScreenshot();
+                        Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
+                        throw;
+                    }
+            }
+        }
+
+        [Test]
         public async Task BlockFileUploadsTest()
         {
 
             using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
             {
-
-                authenticate(driver);
-
                 try
                 {
+                    authenticate(driver);
+
                     var baseDir = AppContext.BaseDirectory;
                     var bitmapFilePath = baseDir + "BitmapFile.bmp";
 
@@ -94,11 +122,10 @@ namespace DeepSeekTests
 
             using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
             {
-
-                authenticate(driver);
-
                 try
                 {
+                    authenticate(driver);
+
                     var textArea = driver.FindElement(By.Id(inputId));
                     textArea.SendKeys(longTestString);
                     var sendButton = driver.FindElement(By.ClassName("_7436101"));
@@ -118,38 +145,26 @@ namespace DeepSeekTests
 
         private void authenticate(UndetectedChromeDriver? driver)
         {
-            try
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(60000);
+
+            driver.Navigate().GoToUrl(baseUrl);
+
+            var inputs = driver.FindElements(By.ClassName("ds-input__input"));
+
+            foreach (var input in inputs)
             {
-                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(60000);
-
-                driver.Navigate().GoToUrl(baseUrl);
-
-                var inputs = driver.FindElements(By.ClassName("ds-input__input"));
-
-                foreach (var input in inputs)
+                if (input.GetAttribute("type") == "text")
                 {
-                    if (input.GetAttribute("type") == "text")
-                    {
-                        input.SendKeys(username);
-                    }
-                    else if (input.GetAttribute("type") == "password")
-                    {
-                        input.SendKeys(password);
-                    }
+                    input.SendKeys(username);
                 }
-
-                var loginButton = driver.FindElement(By.ClassName("ds-sign-up-form__register-button"));
-                loginButton.Click();
-            }
-            catch (Exception)
-            {
-                var ss = driver.GetScreenshot();
-                Console.WriteLine("Error Screenshot: \r\n'" + ss.AsBase64EncodedString +"'");
-                throw;
+                else if (input.GetAttribute("type") == "password")
+                {
+                    input.SendKeys(password);
+                }
             }
 
-            
-
+            var loginButton = driver.FindElement(By.ClassName("ds-sign-up-form__register-button"));
+            loginButton.Click();
         }
 
 
