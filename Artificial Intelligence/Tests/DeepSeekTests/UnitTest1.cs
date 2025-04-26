@@ -26,7 +26,10 @@ namespace DeepSeekTests
             options.AddArguments("--disable-dev-shm-usage");
             options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
-            using (var driver = UndetectedChromeDriver.Create(options, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+            Dictionary<string, object> prefs = new Dictionary<string, object>();
+            var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
+            prefs.Add("profile.content_settings.exceptions.clipboard", new Dictionary<string, object>() { { "[*.]deepseek.com,*", new Dictionary<string, object> { { "last_modfied", (int)t.TotalSeconds*1000 }, { "setting", 1 } } } });
+            using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
                 {
 
                 driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(10000);
@@ -54,9 +57,11 @@ namespace DeepSeekTests
 
                     //TextCopy.ClipboardService.SetText(shortTestString);
                     driver.ExecuteScript("navigator.clipboard.writeText(\"" + shortTestString + "\");");
+                    var clipboardContent = driver.ExecuteScript("return await navigator.clipboard.readText();");
+                    
                     var textArea = driver.FindElement(By.Id(inputId));
                     textArea.SendKeys(Keys.Control + "v");
-                    Assert.That(TextCopy.ClipboardService.GetText(), Is.EqualTo(shortTestString));
+                    Assert.That(clipboardContent, Is.EqualTo(shortTestString));
                     Assert.That(textArea.Text, Is.EqualTo(String.Empty));
                 }
                 catch (Exception)
