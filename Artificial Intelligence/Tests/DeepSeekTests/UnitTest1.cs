@@ -15,6 +15,7 @@ namespace DeepSeekTests
         private String password = "testPassword";
         ChromeOptions options = new ChromeOptions();
         Dictionary<string, object> prefs = new Dictionary<string, object>();
+        TimeSpan commandTimeout = TimeSpan.FromSeconds(300);
 
         [SetUp]
         public void Setup()
@@ -26,6 +27,7 @@ namespace DeepSeekTests
             options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
+            
             prefs.Add("profile.content_settings.exceptions.clipboard", new Dictionary<string, object>() { { "[*.]deepseek.com,*", new Dictionary<string, object> { { "last_modfied", (int)t.TotalSeconds * 1000 }, { "setting", 1 } } } });
         }
 
@@ -33,7 +35,7 @@ namespace DeepSeekTests
         public async Task EnforceDeepThinkAndSearchSettingsTest()
         {
 
-            using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+            using (var driver = UndetectedChromeDriver.Create(options, commandTimeout:commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
             {
                 try
                 {
@@ -63,7 +65,7 @@ namespace DeepSeekTests
         public async Task PreventPastingFromClipBoardTest()
         {
             
-            using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+            using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
                 {
                     try
                     {
@@ -91,7 +93,7 @@ namespace DeepSeekTests
         public async Task BlockFileUploadsTest()
         {
 
-            using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+            using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
             {
                 try
                 {
@@ -120,7 +122,7 @@ namespace DeepSeekTests
         public async Task ReplacePromptTest()
         {
 
-            using (var driver = UndetectedChromeDriver.Create(options, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+            using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
             {
                 try
                 {
