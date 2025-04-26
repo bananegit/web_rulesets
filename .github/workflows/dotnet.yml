@@ -4,6 +4,8 @@
 name: DeepSeek Tests
 
 on:
+  schedule:
+    - cron: "0 */6 * * *"
   workflow_dispatch:
   push:
     branches: [ "main" ]
@@ -15,7 +17,7 @@ on:
     
 
 jobs:
-  build:
+  BuildAndTest:
 
     runs-on: windows-latest
 
