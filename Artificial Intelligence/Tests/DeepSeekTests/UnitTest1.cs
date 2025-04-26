@@ -147,7 +147,7 @@ namespace DeepSeekTests
 
         private void authenticate(UndetectedChromeDriver? driver)
         {
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(60000);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(300000);
 
             driver.Navigate().GoToUrl(baseUrl);
 
