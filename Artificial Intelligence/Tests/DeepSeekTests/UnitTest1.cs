@@ -11,8 +11,8 @@ namespace DeepSeekTests
         private String searchPrompt = "do a web search for tomorrows weather in berlin";
         private String policyWarning = "\"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 55 characters\"";
         private String inputId = "chat-input";
-        private String username = "aitest068@gmail.com";
-        private String password = "testPassword";
+        private String username = Environment.GetEnvironmentVariable("dsUsername");
+        private String password = Environment.GetEnvironmentVariable("dsPassword");
         ChromeOptions options = new ChromeOptions();
         Dictionary<string, object> prefs = new Dictionary<string, object>();
         TimeSpan commandTimeout = TimeSpan.FromSeconds(300);
