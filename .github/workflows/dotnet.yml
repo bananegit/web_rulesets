@@ -11,6 +11,7 @@ on:
       - "Artificial Intelligence/DeepSeek/**"
       - "Artificial Intelligence/Tests/**"
       - "!**/README.md"
+      - "!**/readme.md"
     
 
 jobs:
