@@ -52,6 +52,9 @@ jobs:
         Import-Certificate .\ca.pem -CertStoreLocation Cert:\LocalMachine\Root\ -Confirm:$false
         
     - name: Test
+      env:
+        dsUsername: ${{ secrets.DSUSERNAME }}
+        dsPassword: ${{ secrets.DSPASSWORD }}
       run: dotnet test "Artificial Intelligence/Tests/DeepSeekTests/DeepSeekTests.csproj" --no-build --verbosity normal --logger:nunit
     - name: cat testresults
       if: always()
