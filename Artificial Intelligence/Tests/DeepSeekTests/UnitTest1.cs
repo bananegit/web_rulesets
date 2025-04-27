@@ -7,15 +7,27 @@ namespace DeepSeekTests
     public class Tests
     {
         private String baseUrl = "https://chat.deepseek.com";
+        private String username = Environment.GetEnvironmentVariable("dsUsername");
+        private String password = Environment.GetEnvironmentVariable("dsPassword");
+
         private String longTestString = "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
         private String searchPrompt = "do a web search for tomorrows weather in berlin";
         private String policyWarning = "\"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 55 characters\"";
+        private String bitmapFilePath = AppContext.BaseDirectory + "BitmapFile.bmp";
+
+        private ChromeOptions options = new ChromeOptions();
+        private Dictionary<string, object> prefs = new Dictionary<string, object>();
+        private TimeSpan commandTimeout = TimeSpan.FromSeconds(600);
+
+        //UI element classnames / ids
+        private String loginInputsCn = "ds-input__input";
+        private String loginButtonCn = "ds-sign-up-form__register-button";
+        private String sendPromptButtonCn = "_7436101";
+        private String replyContainerCn = "ds-markdown-paragraph";
+        private String uploadErrorContainerCn = "_5119742";
+        private String thinkContainerCN = "_19db599";
         private String inputId = "chat-input";
-        private String username = Environment.GetEnvironmentVariable("dsUsername");
-        private String password = Environment.GetEnvironmentVariable("dsPassword");
-        ChromeOptions options = new ChromeOptions();
-        Dictionary<string, object> prefs = new Dictionary<string, object>();
-        TimeSpan commandTimeout = TimeSpan.FromSeconds(600);
+
 
         [SetUp]
         public void Setup()
@@ -43,11 +55,11 @@ namespace DeepSeekTests
 
                     var textArea = driver.FindElement(By.Id(inputId));
                     textArea.SendKeys(searchPrompt);
-                    var sendButton = driver.FindElement(By.ClassName("_7436101"));
+                    var sendButton = driver.FindElement(By.ClassName(sendPromptButtonCn));
                     sendButton.Click();
 
-                    var reply = driver.FindElement(By.ClassName("ds-markdown-paragraph"));
-                    var thinkContainer = driver.FindElement(By.ClassName("_19db599"));
+                    var reply = driver.FindElement(By.ClassName(replyContainerCn));
+                    var thinkContainer = driver.FindElement(By.ClassName(thinkContainerCN));
 
                     StringAssert.IsMatch("Thought for [0-9]* seconds", thinkContainer.Text);
                 }
@@ -72,11 +84,10 @@ namespace DeepSeekTests
 
                     var textArea = driver.FindElement(By.Id(inputId));
                     textArea.SendKeys(searchPrompt);
-                    var sendButton = driver.FindElement(By.ClassName("_7436101"));
+                    var sendButton = driver.FindElement(By.ClassName(sendPromptButtonCn));
                     sendButton.Click();
 
-                    var reply = driver.FindElement(By.ClassName("ds-markdown-paragraph"));
-                    var thinkContainer = driver.FindElement(By.ClassName("_19db599"));
+                    var reply = driver.FindElement(By.ClassName(replyContainerCn));
 
                     StringAssert.IsMatch(".*(can't|cannot).*search.*", reply.Text);
                 }
@@ -127,13 +138,10 @@ namespace DeepSeekTests
                 {
                     authenticate(driver);
 
-                    var baseDir = AppContext.BaseDirectory;
-                    var bitmapFilePath = baseDir + "BitmapFile.bmp";
-
                     var fileInput = driver.FindElement(By.CssSelector("input[type=file]"));
                     fileInput.SendKeys(bitmapFilePath);
                     await Task.Delay(5000);
-                    var errorElement = driver.FindElement(By.ClassName("_5119742"));
+                    var errorElement = driver.FindElement(By.ClassName(uploadErrorContainerCn));
 
                     Assert.That(errorElement.Text, Is.EqualTo("Upload failed"));
                 }
@@ -158,10 +166,10 @@ namespace DeepSeekTests
 
                     var textArea = driver.FindElement(By.Id(inputId));
                     textArea.SendKeys(longTestString);
-                    var sendButton = driver.FindElement(By.ClassName("_7436101"));
+                    var sendButton = driver.FindElement(By.ClassName(sendPromptButtonCn));
                     sendButton.Click();
 
-                    var reply = driver.FindElement(By.ClassName("ds-markdown-paragraph"));
+                    var reply = driver.FindElement(By.ClassName(replyContainerCn));
                     Assert.That(reply.Text, Is.EqualTo(policyWarning));
                 }
                 catch (Exception)
@@ -179,7 +187,7 @@ namespace DeepSeekTests
 
             driver.Navigate().GoToUrl(baseUrl);
 
-            var inputs = driver.FindElements(By.ClassName("ds-input__input"));
+            var inputs = driver.FindElements(By.ClassName(loginInputsCn));
 
             foreach (var input in inputs)
             {
@@ -193,7 +201,7 @@ namespace DeepSeekTests
                 }
             }
 
-            var loginButton = driver.FindElement(By.ClassName("ds-sign-up-form__register-button"));
+            var loginButton = driver.FindElement(By.ClassName(loginButtonCn));
             loginButton.Click();
         }
 
