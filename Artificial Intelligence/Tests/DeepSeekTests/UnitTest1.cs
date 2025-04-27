@@ -78,7 +78,7 @@ namespace DeepSeekTests
                     var reply = driver.FindElement(By.ClassName("ds-markdown-paragraph"));
                     var thinkContainer = driver.FindElement(By.ClassName("_19db599"));
 
-                    StringAssert.IsMatch(".*can't.*search.*", reply.Text);
+                    StringAssert.IsMatch(".*(can't|cannot).*search.*", reply.Text);
                 }
                 catch (Exception)
                 {
