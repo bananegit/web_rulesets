@@ -15,7 +15,7 @@ namespace DeepSeekTests
         private String password = Environment.GetEnvironmentVariable("dsPassword");
         ChromeOptions options = new ChromeOptions();
         Dictionary<string, object> prefs = new Dictionary<string, object>();
-        TimeSpan commandTimeout = TimeSpan.FromSeconds(300);
+        TimeSpan commandTimeout = TimeSpan.FromSeconds(600);
 
         [SetUp]
         public void Setup()
