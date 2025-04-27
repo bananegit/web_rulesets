@@ -8,9 +8,6 @@
 | Replace prompt (WebApp) | :white_check_mark: |
 Last Update: Sun, 27 Apr 2025 09:29:20 GMT
 <!--Tests:End-->
-Last Update: Sun, 27 Apr 2025 06:22:13 GMT
-Last Update: Sun, 27 Apr 2025 01:09:52 GMT
-Last Update: Sat, 26 Apr 2025 21:11:25 GMT
 ### Setup
 
 - In SSE go to Policy -> Web Policy -> Policy
