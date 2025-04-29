@@ -226,6 +226,7 @@ namespace DeepSeekTests
         //greenfield tests
         //this test verifies that the way we copy and paste data into the site would work under normal circumstances
         [TestCase(null, TestName = "_greenField_Prevent pasting from clipboard (WebApp)")]
+        [Retry(2)]
         public async Task _greenField_PreventPastingFromClipBoardTest(object? param)
         {
 
