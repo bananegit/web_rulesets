@@ -38,7 +38,7 @@ jobs:
     - name: Download and install SCP
       shell: pwsh
       env:
-        PAT: ${{ secrets.SCP_REPO_PAT_SH }}
+        PAT: ${{ secrets.SCP_REPO_PAT }}
       run: |
         Write-Host "Downloading Files for SCP Install"
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/bananegit/scpinstaller/main/scp.z01 -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.z01
