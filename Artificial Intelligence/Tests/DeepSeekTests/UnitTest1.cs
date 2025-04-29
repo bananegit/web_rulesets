@@ -33,7 +33,7 @@ namespace DeepSeekTests
         [OneTimeSetUp]
         public async Task startTrace()
         {
-            string traceId = "691f65b7";
+            string traceId = "";
             if (traceId.Length > 0)
             {
                 string traceUri = "https://api.wgcs.skyhigh.cloud/tracing/v2/session/" + traceId + "/start";
@@ -259,6 +259,22 @@ namespace DeepSeekTests
                     return u;
                 }
             });
+            driver.Manage().Network.AddResponseHandler(new NetworkResponseHandler()
+            {
+                ResponseMatcher = (u) => true,
+                ResponseTransformer = (u) =>
+                {
+                    if (u.Headers is not null)
+                    {
+                        foreach (var header in u.Headers)
+                        {
+                            Console.WriteLine(header.Key);
+                            Console.WriteLine(header.Value);
+                        }
+                    }
+                    return u;
+                }
+                });
             await driver.Manage().Network.StartMonitoring();
         }
 
