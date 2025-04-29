@@ -252,6 +252,10 @@ namespace DeepSeekTests
                     Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                     throw;
                 }
+                finally
+                {
+                    await driver.Manage().Network.StopMonitoring();
+                }
             }
         }
 
