@@ -67,7 +67,7 @@ jobs:
       run: |
         $replaceRegex = "<!--Tests:Start-->[\s\S]*<!--Tests:End-->";
         $markdown = @("<!--Tests:Start-->", "| Test case | Result |", "| --- | --- |");
-        [XML]$testResults = Get-Content "Artificial Intelligence/DeepSeek/Tests/TestResults/TestResults.xml";
+        [XML]$testResults = Get-Content "Artificial Intelligence/Tests/DeepSeekTests/TestResults/TestResults.xml";
         $testCases = $testResults.'test-run'.'test-suite'.'test-suite'.'test-suite'.'test-case';
         foreach($testcase in $testCases){if($testcase.name.startswith("_greenField")){continue;};$markdown += "| " + $testcase.name + " | " + (&{If($testcase.result -eq "Passed"){":white_check_mark:"}else{":x:"; if($testcase.failure.message -match "server is busy"){" (server busy)"};if($testcase.failure.message -match "Timeout"){" (connection timeout)"}}}) + " |";};
         $markdown+="Last update: " + (Get-Date -Format r);
