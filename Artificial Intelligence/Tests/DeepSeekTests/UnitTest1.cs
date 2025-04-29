@@ -207,14 +207,16 @@ namespace DeepSeekTests
 
         private void addHeader(UndetectedChromeDriver? driver, string headerName, string content)
         {
-            Dictionary<string, object> headers = new Dictionary<string, object>();
-            headers.Add(headerName, content);
-            driver.ExecuteCdpCommand("Network.setExtraHTTPHeaders", headers);
+            SetExtraHTTPHeadersCommandSettings commandSettings = new SetExtraHTTPHeadersCommandSettings();
+            commandSettings.Headers = new Headers();
+            commandSettings.Headers.Add(headerName, content);
+            var devtools = driver.GetDevToolsSession();
+            devtools.SendCommand(commandSettings);
         }
 
 
         //greenfield tests
-
+        //this test verifies that the way we copy and paste data into the site would work under normal circumstances
         [TestCase(null, TestName = "_greenField_Prevent pasting from clipboard (WebApp)")]
         public async Task _greenField_PreventPastingFromClipBoardTest(object? param)
         {
