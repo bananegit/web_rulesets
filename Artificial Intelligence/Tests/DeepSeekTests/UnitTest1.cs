@@ -1,5 +1,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.DevTools;
 using OpenQA.Selenium.DevTools.V133.Network;
 using SeleniumUndetectedChromeDriver;
 
@@ -37,7 +38,7 @@ namespace DeepSeekTests
             prefs = new Dictionary<string, object>();
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
-            options.AddArguments("--headless=new");
+            //options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
             
@@ -206,13 +207,19 @@ namespace DeepSeekTests
             loginButton.Click();
         }
 
-        private void addHeader(UndetectedChromeDriver? driver, string headerName, string content)
+        private async Task addHeader(UndetectedChromeDriver? driver, string headerName, string content)
         {
-            SetExtraHTTPHeadersCommandSettings commandSettings = new SetExtraHTTPHeadersCommandSettings();
-            commandSettings.Headers = new Headers();
-            commandSettings.Headers.Add(headerName, content);
-            var devtools = driver.GetDevToolsSession();
-            devtools.SendCommand(commandSettings);
+            driver.Manage().Network.AddRequestHandler(new NetworkRequestHandler()
+            {
+                RequestMatcher = (u) => true,
+                RequestTransformer = (u) =>
+                {
+                    if (u.Headers is null) { u.Headers = new Headers(); }
+                    u.Headers[headerName] = content;
+                    return u;
+                }
+            });
+            await driver.Manage().Network.StartMonitoring();
         }
 
 
@@ -226,7 +233,7 @@ namespace DeepSeekTests
             {
                 try
                 {
-                    addHeader(driver, "bypass", "ds1");
+                    await addHeader(driver, "bypass", "ds1");
                     authenticate(driver);
 
                     driver.ExecuteScript("navigator.clipboard.writeText(\"" + longTestString + "\");");
