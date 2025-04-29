@@ -29,6 +29,9 @@
     <None Update="BitmapFile.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="modheader.crx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TextFile.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
