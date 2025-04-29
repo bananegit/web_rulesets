@@ -33,7 +33,7 @@ namespace DeepSeekTests
         [OneTimeSetUp]
         public async Task startTrace()
         {
-            string traceId = "8deb5be7";
+            string traceId = "";
             if (traceId.Length > 0)
             {
                 string traceUri = "https://api.wgcs.skyhigh.cloud/tracing/v2/session/" + traceId + "/start";
