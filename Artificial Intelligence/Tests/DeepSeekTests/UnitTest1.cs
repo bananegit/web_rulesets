@@ -28,14 +28,12 @@ namespace DeepSeekTests
         private String uploadErrorContainerCn = "_5119742";
         private String thinkContainerCN = "_19db599";
         private String inputId = "chat-input";
-        private int x = 0;
-        private int y = 0;
 
 
         [OneTimeSetUp]
         public async Task startTrace()
         {
-            string traceId = "f9d62e51";
+            string traceId = "";
             if (traceId.Length > 0)
             {
                 string traceUri = "https://api.wgcs.skyhigh.cloud/tracing/v2/session/" + traceId + "/start";
@@ -248,7 +246,8 @@ namespace DeepSeekTests
             var loginButton = driver.FindElement(By.ClassName(loginButtonCn));
             loginButton.Click();
         }
-
+        private int x = 0;
+        private int y = 0;
         private async Task addHeader(UndetectedChromeDriver? driver, string headerName, string content)
         {
             driver.Manage().Network.AddRequestHandler(new NetworkRequestHandler()
@@ -256,7 +255,7 @@ namespace DeepSeekTests
                 RequestMatcher = (u) => true,
                 RequestTransformer = (u) =>
                 {
-                    Console.WriteLine("request: " + y);
+                    Console.WriteLine("request: " + u.Url);
                     y++;
                     if (u.Headers is null) { u.Headers = new Headers(); }
                     u.Headers[headerName] = content;
@@ -268,7 +267,7 @@ namespace DeepSeekTests
                 ResponseMatcher = (u) => true,
                 ResponseTransformer = (u) =>
                 {
-                    Console.WriteLine("response: " + x);
+                    Console.WriteLine("response: " + u.Url);
                     x++;
                     if (u.Headers is not null)
                     {
