@@ -1,5 +1,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.DevTools.V133.Network;
 using SeleniumUndetectedChromeDriver;
 
 namespace DeepSeekTests
