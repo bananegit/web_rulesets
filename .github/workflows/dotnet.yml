@@ -65,7 +65,16 @@ jobs:
       env:
         ghMail: ${{ secrets.GHMAIL }}
       run: |
-        $replaceRegex = "<!--Tests:Start-->[\s\S]*<!--Tests:End-->";$markdown = @("<!--Tests:Start-->", "| Test case | Result |", "| --- | --- |");[XML]$testResults = Get-Content "Artificial Intelligence/Tests/DeepSeekTests/TestResults/TestResults.xml";$testCases = $testResults.'test-run'.'test-suite'.'test-suite'.'test-suite'.'test-case';foreach($testcase in $testCases){$markdown += "| " + $testcase.name + " | " + (&{If($testcase.result -eq "Passed"){":white_check_mark:"}else{":x:"}}) + " |";};$markdown+="Last Update: " + (Get-Date -Format r);$markdown+="<!--Tests:End-->";$readme=Get-content "Artificial Intelligence/DeepSeek/readme.md" -raw;$readme= $readme -replace $replaceRegex, ($markdown -join "`n");$readme | Out-File "Artificial Intelligence/DeepSeek/readme.md";
+        $replaceRegex = "<!--Tests:Start-->[\s\S]*<!--Tests:End-->";
+        $markdown = @("<!--Tests:Start-->", "| Test case | Result |", "| --- | --- |");
+        [XML]$testResults = Get-Content "Artificial Intelligence/DeepSeek/Tests/TestResults/TestResults.xml";
+        $testCases = $testResults.'test-run'.'test-suite'.'test-suite'.'test-suite'.'test-case';
+        foreach($testcase in $testCases){if($testcase.name.startswith("_greenField){continue;};$markdown += "| " + $testcase.name + " | " + (&{If($testcase.result -eq "Passed"){":white_check_mark:"}else{":x:"; if($testcase.failure.message -match "server is busy"){" (server busy)"};if($testcase.failure.message -match "Timeout"){" (connection timeout)"}}}) + " |";};
+        $markdown+="Last update: " + (Get-Date -Format r);
+        $markdown+="<!--Tests:End-->";
+        $readme=Get-content "Artificial Intelligence/DeepSeek/readme.md" -raw;
+        $readme= $readme -replace $replaceRegex, ($markdown -join "`n");
+        $readme | Out-File "Artificial Intelligence/DeepSeek/readme.md";
         git config --global user.email $env:ghMail
         git config --global user.name "bananegit"
         git commit -m "Automated Update by Test Workflow" "Artificial Intelligence/DeepSeek/readme.md"
