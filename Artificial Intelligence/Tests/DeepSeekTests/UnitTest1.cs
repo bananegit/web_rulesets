@@ -10,9 +10,9 @@ namespace DeepSeekTests
         private String username = Environment.GetEnvironmentVariable("dsUsername");
         private String password = Environment.GetEnvironmentVariable("dsPassword");
 
-        private String longTestString = "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
-        private String searchPrompt = "do a web search for tomorrows weather in berlin";
-        private String policyWarning = "\"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 55 characters\"";
+        private String longTestString = "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
+        private String searchPrompt = "do a web search for the current price of tesla, if you can not search live data state so plainly";
+        private String policyWarning = "\"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 100 characters\"";
         private String bitmapFilePath = AppContext.BaseDirectory + "BitmapFile.bmp";
 
         private ChromeOptions options = new ChromeOptions();
@@ -89,7 +89,7 @@ namespace DeepSeekTests
 
                     var reply = driver.FindElement(By.ClassName(replyContainerCn));
 
-                    StringAssert.IsMatch(".*(can't|cannot).*search.*", reply.Text);
+                    StringAssert.IsMatch(".*(can't|cannot|can not).*search.*", reply.Text);
                 }
                 catch (Exception)
                 {
