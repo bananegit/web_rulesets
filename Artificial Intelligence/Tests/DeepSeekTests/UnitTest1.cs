@@ -71,6 +71,10 @@ namespace DeepSeekTests
                     Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                     throw;
                 }
+                finally
+                {
+                    driver.Quit();
+                }
             }
         }
 
@@ -99,6 +103,10 @@ namespace DeepSeekTests
                     Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                     throw;
                 }
+                finally
+                {
+                    driver.Quit();
+                }
             }
         }
 
@@ -126,7 +134,11 @@ namespace DeepSeekTests
                         var ss = driver.GetScreenshot();
                         Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                         throw;
-                    }
+                }
+                finally
+                {
+                    driver.Quit();
+                }
             }
         }
 
@@ -152,6 +164,10 @@ namespace DeepSeekTests
                     var ss = driver.GetScreenshot();
                     Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                     throw;
+                }
+                finally
+                {
+                    driver.Quit();
                 }
             }
         }
@@ -179,6 +195,10 @@ namespace DeepSeekTests
                     var ss = driver.GetScreenshot();
                     Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                     throw;
+                }
+                finally
+                {
+                    driver.Quit();
                 }
             }
         }
@@ -226,7 +246,6 @@ namespace DeepSeekTests
         //greenfield tests
         //this test verifies that the way we copy and paste data into the site would work under normal circumstances
         [TestCase(null, TestName = "_greenField_Prevent pasting from clipboard (WebApp)")]
-        [Retry(2)]
         public async Task _greenField_PreventPastingFromClipBoardTest(object? param)
         {
 
@@ -255,6 +274,7 @@ namespace DeepSeekTests
                 finally
                 {
                     await driver.Manage().Network.StopMonitoring();
+                    driver.Quit();
                 }
             }
         }
