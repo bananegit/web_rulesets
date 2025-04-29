@@ -33,7 +33,7 @@ namespace DeepSeekTests
         [OneTimeSetUp]
         public async Task startTrace()
         {
-            string traceId = "8ab9c7f7";
+            string traceId = "f9d62e51";
             if (traceId.Length > 0)
             {
                 string traceUri = "https://api.wgcs.skyhigh.cloud/tracing/v2/session/" + traceId + "/start";
@@ -254,6 +254,8 @@ namespace DeepSeekTests
                 RequestMatcher = (u) => true,
                 RequestTransformer = (u) =>
                 {
+                    Console.WriteLine("request: " + y);
+                    y++;
                     if (u.Headers is null) { u.Headers = new Headers(); }
                     u.Headers[headerName] = content;
                     return u;
@@ -264,10 +266,15 @@ namespace DeepSeekTests
                 ResponseMatcher = (u) => true,
                 ResponseTransformer = (u) =>
                 {
+                    Console.WriteLine("response: " + x);
+                    x++;
                     if (u.Headers is not null)
                     {
-                        
-                            Console.WriteLine(u.Headers["all"]);
+                        foreach (var header in u.Headers)
+                        {
+                            Console.WriteLine(header.Key);
+                            Console.WriteLine(header.Value);
+                        }
                     }
                     return u;
                 }
