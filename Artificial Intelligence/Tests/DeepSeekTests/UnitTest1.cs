@@ -205,7 +205,44 @@ namespace DeepSeekTests
             loginButton.Click();
         }
 
+        private void addHeader(UndetectedChromeDriver? driver, string headerName, string content)
+        {
+            Dictionary<string, object> headers = new Dictionary<string, object>();
+            headers.Add(headerName, content);
+            driver.ExecuteCdpCommand("Network.setExtraHTTPHeaders", headers);
+        }
 
+
+        //greenfield tests
+
+        [TestCase(null, TestName = "_greenField_Prevent pasting from clipboard (WebApp)")]
+        public async Task _greenField_PreventPastingFromClipBoardTest(object? param)
+        {
+
+            using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
+            {
+                try
+                {
+                    addHeader(driver, "bypass", "ds1");
+                    authenticate(driver);
+
+                    driver.ExecuteScript("navigator.clipboard.writeText(\"" + longTestString + "\");");
+                    var clipboardContent = driver.ExecuteScript("return await navigator.clipboard.readText();");
+
+                    var textArea = driver.FindElement(By.Id(inputId));
+                    textArea.SendKeys(Keys.Control + "v");
+
+                    Assert.That(clipboardContent, Is.EqualTo(longTestString));
+                    Assert.That(textArea.Text, Is.EqualTo(longTestString));
+                }
+                catch (Exception)
+                {
+                    var ss = driver.GetScreenshot();
+                    Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
+                    throw;
+                }
+            }
+        }
 
     }
 }
