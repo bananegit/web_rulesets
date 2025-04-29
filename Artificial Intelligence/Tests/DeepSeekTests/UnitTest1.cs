@@ -28,6 +28,8 @@ namespace DeepSeekTests
         private String uploadErrorContainerCn = "_5119742";
         private String thinkContainerCN = "_19db599";
         private String inputId = "chat-input";
+        private int x = 0;
+        private int y = 0;
 
 
         [OneTimeSetUp]
