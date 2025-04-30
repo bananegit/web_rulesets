@@ -1,16 +1,15 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools.V135;
 using SeleniumUndetectedChromeDriver;
 
 namespace DeepSeekTests
 {
-    using CurrentCdpVersion = OpenQA.Selenium.DevTools.V135;
     public class Tests
     {
         private String baseUrl = "https://chat.deepseek.com";
         private String username = Environment.GetEnvironmentVariable("dsUsername");
         private String password = Environment.GetEnvironmentVariable("dsPassword");
+        private String ci = Environment.GetEnvironmentVariable("CI");
 
         private String longTestString = "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
         private String searchPrompt = "do a web search for the price of tsla, if you cannot do so answer with \"cannot search\"";
@@ -20,6 +19,7 @@ namespace DeepSeekTests
         private ChromeOptions options = new ChromeOptions();
         private Dictionary<string, object> prefs = new Dictionary<string, object>();
         private TimeSpan commandTimeout = TimeSpan.FromSeconds(600);
+
 
         //UI element classnames / ids
         private String loginInputsCn = "ds-input__input";
@@ -32,24 +32,10 @@ namespace DeepSeekTests
 
 
         [OneTimeSetUp]
-        public async Task startTrace()
+        public async Task oneTimeInit()
         {
             string traceId = "";
-            if (traceId.Length > 0)
-            {
-                string traceUri = "https://api.wgcs.skyhigh.cloud/tracing/v2/session/" + traceId + "/start";
-                StringContent content = new StringContent("action=start");
-                try
-                {
-                    using (var httpclient = new HttpClient())
-                    {
-                        await httpclient.PostAsync(traceUri, content);
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            }
+            await startTrace(traceId);
         }
 
         [SetUp]
@@ -59,7 +45,7 @@ namespace DeepSeekTests
             prefs = new Dictionary<string, object>();
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
-            options.AddArguments("--headless=new");
+            //options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
             
@@ -248,17 +234,42 @@ namespace DeepSeekTests
             loginButton.Click();
         }
 
+        private async Task startTrace(string traceId)
+        {
+            if (traceId.Length > 0)
+            {
+                string traceUri = "https://api.wgcs.skyhigh.cloud/tracing/v2/session/" + traceId + "/start";
+                StringContent content = new StringContent("action=start");
+                try
+                {
+                    using (var httpclient = new HttpClient())
+                    {
+                        await httpclient.PostAsync(traceUri, content);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Failed to start trace with ID " + traceId);
+                    Console.WriteLine(e);
+                }
+            }
+        }
 
         //greenfield tests
         //this test verifies that the way we copy and paste data into the site would work under normal circumstances
         [TestCase(null, TestName = "_greenField_Prevent pasting from clipboard (WebApp)")]
         public async Task _greenField_PreventPastingFromClipBoardTest(object? param)
         {
+            if (!String.IsNullOrEmpty(ci))
+            {
+                overWriteSCPPolicy();
+            }
             using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
             {
                 try
                 {
-                    configureModHeader(driver);
+                    //driver.Navigate().GoToUrl("https://manytools.org/http-html-text/http-request-headers/");
+                    //await Task.Delay(5000);
                     authenticate(driver);
 
                     driver.ExecuteScript("navigator.clipboard.writeText(\"" + longTestString + "\");");
@@ -280,24 +291,25 @@ namespace DeepSeekTests
                 {
                     await driver.Manage().Network.StopMonitoring();
                     driver.Quit();
+                    if (!String.IsNullOrEmpty(ci))
+                    {
+                        restoreSCPPolicy();
+                    }
+                        
                 }
             }
         }
 
-        private async void configureModHeader(UndetectedChromeDriver? driver)
+        private void restoreSCPPolicy()
         {
-            var dt = driver.GetDevToolsSession();
-            var domains = dt.GetVersionSpecificDomains<CurrentCdpVersion.DevToolsSessionDomains>();
-            await domains.Network.Enable(new CurrentCdpVersion.Network.EnableCommandSettings());
-
-            var additionalHeaders = new CurrentCdpVersion.Network.Headers();
-            additionalHeaders.Add("bypass", "ds1");
-            var resp = await domains.Network.SetExtraHTTPHeaders(new CurrentCdpVersion.Network.SetExtraHTTPHeadersCommandSettings()
-            {
-                Headers = additionalHeaders
-            });
-            Console.WriteLine("");
+            var usPolicyFile = AppContext.BaseDirectory + "ScpPolicy.opg";
+            File.Copy(usPolicyFile, "C:\\ProgramData\\Skyhigh\\SCP\\Policy\\Temp\\ScpPolicy.opg");
         }
 
+        private void overWriteSCPPolicy()
+        {
+            var usPolicyFile = AppContext.BaseDirectory + "usPolicy.opg";
+            File.Copy(usPolicyFile, "C:\\ProgramData\\Skyhigh\\SCP\\Policy\\Temp\\ScpPolicy.opg");
+        }
     }
 }
