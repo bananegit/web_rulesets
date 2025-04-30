@@ -1,10 +1,11 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools.V133.Network;
+using OpenQA.Selenium.DevTools.V135;
 using SeleniumUndetectedChromeDriver;
 
 namespace DeepSeekTests
 {
+    using CurrentCdpVersion = OpenQA.Selenium.DevTools.V135;
     public class Tests
     {
         private String baseUrl = "https://chat.deepseek.com";
@@ -58,7 +59,7 @@ namespace DeepSeekTests
             prefs = new Dictionary<string, object>();
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
-            options.AddArguments("--headless=new");
+            //options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
             
@@ -246,42 +247,6 @@ namespace DeepSeekTests
             var loginButton = driver.FindElement(By.ClassName(loginButtonCn));
             loginButton.Click();
         }
-        private int x = 0;
-        private int y = 0;
-        private async Task addHeader(UndetectedChromeDriver? driver, string headerName, string content)
-        {
-            driver.Manage().Network.AddRequestHandler(new NetworkRequestHandler()
-            {
-                RequestMatcher = (u) => true,
-                RequestTransformer = (u) =>
-                {
-                    Console.WriteLine("request: " + u.Url);
-                    y++;
-                    if (u.Headers is null) { u.Headers = new Headers(); }
-                    u.Headers[headerName] = content;
-                    return u;
-                }
-            });
-            driver.Manage().Network.AddResponseHandler(new NetworkResponseHandler()
-            {
-                ResponseMatcher = (u) => true,
-                ResponseTransformer = (u) =>
-                {
-                    Console.WriteLine("response: " + u.Url);
-                    x++;
-                    if (u.Headers is not null)
-                    {
-                        foreach (var header in u.Headers)
-                        {
-                            Console.WriteLine(header.Key);
-                            Console.WriteLine(header.Value);
-                        }
-                    }
-                    return u;
-                }
-                });
-            await driver.Manage().Network.StartMonitoring();
-        }
 
 
         //greenfield tests
@@ -289,12 +254,11 @@ namespace DeepSeekTests
         [TestCase(null, TestName = "_greenField_Prevent pasting from clipboard (WebApp)")]
         public async Task _greenField_PreventPastingFromClipBoardTest(object? param)
         {
-
             using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
             {
                 try
                 {
-                    await addHeader(driver, "bypass", "ds1");
+                    configureModHeader(driver);
                     authenticate(driver);
 
                     driver.ExecuteScript("navigator.clipboard.writeText(\"" + longTestString + "\");");
@@ -318,6 +282,21 @@ namespace DeepSeekTests
                     driver.Quit();
                 }
             }
+        }
+
+        private async void configureModHeader(UndetectedChromeDriver? driver)
+        {
+            var dt = driver.GetDevToolsSession();
+            var domains = dt.GetVersionSpecificDomains<CurrentCdpVersion.DevToolsSessionDomains>();
+            await domains.Network.Enable(new CurrentCdpVersion.Network.EnableCommandSettings());
+
+            var additionalHeaders = new CurrentCdpVersion.Network.Headers();
+            additionalHeaders.Add("bypass", "ds1");
+            var resp = await domains.Network.SetExtraHTTPHeaders(new CurrentCdpVersion.Network.SetExtraHTTPHeadersCommandSettings()
+            {
+                Headers = additionalHeaders
+            });
+            Console.WriteLine("");
         }
 
     }
