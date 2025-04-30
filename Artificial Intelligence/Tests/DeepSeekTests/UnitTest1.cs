@@ -34,7 +34,7 @@ namespace DeepSeekTests
         [OneTimeSetUp]
         public async Task oneTimeInit()
         {
-            string traceId = "";
+            string traceId = "9b3d8915";
             await startTrace(traceId);
         }
 
@@ -293,18 +293,19 @@ namespace DeepSeekTests
                     driver.Quit();
                     if (!String.IsNullOrEmpty(ci))
                     {
-                        restoreSCPPolicy();
+                        await restoreSCPPolicy();
                     }
                         
                 }
             }
         }
 
-        private void restoreSCPPolicy()
+        private async Task restoreSCPPolicy()
         {
             Console.WriteLine("restoring scp policy");
             var usPolicyFile = AppContext.BaseDirectory + "ScpPolicy.opg";
             File.Copy(usPolicyFile, "C:\\ProgramData\\Skyhigh\\SCP\\Policy\\Temp\\ScpPolicy.opg", true);
+            await Task.Delay(10000);
         }
 
         private void overWriteSCPPolicy()
