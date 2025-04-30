@@ -303,13 +303,13 @@ namespace DeepSeekTests
         private void restoreSCPPolicy()
         {
             var usPolicyFile = AppContext.BaseDirectory + "ScpPolicy.opg";
-            File.Copy(usPolicyFile, "C:\\ProgramData\\Skyhigh\\SCP\\Policy\\Temp\\ScpPolicy.opg");
+            File.Copy(usPolicyFile, "C:\\ProgramData\\Skyhigh\\SCP\\Policy\\Temp\\ScpPolicy.opg", true);
         }
 
         private void overWriteSCPPolicy()
         {
             var usPolicyFile = AppContext.BaseDirectory + "usPolicy.opg";
-            File.Copy(usPolicyFile, "C:\\ProgramData\\Skyhigh\\SCP\\Policy\\Temp\\ScpPolicy.opg");
+            File.Copy(usPolicyFile, "C:\\ProgramData\\Skyhigh\\SCP\\Policy\\Temp\\ScpPolicy.opg", true);
         }
     }
 }
