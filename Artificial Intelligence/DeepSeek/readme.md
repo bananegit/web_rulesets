@@ -2,11 +2,11 @@
 | Test case | Result |
 | --- | --- |
 | Block File Upload (WebApp) | :white_check_mark: |
-| Enforce DeepThink Setting (WebApp) | :x: |
+| Enforce DeepThink Setting (WebApp) | :white_check_mark: |
 | Enforce Search Setting (WebApp) | :x: |
 | Prevent pasting from clipboard (WebApp) | :white_check_mark: |
 | Replace prompt (WebApp) | :x: |
-Last update: Wed, 30 Apr 2025 07:23:46 GMT
+Last update: Wed, 30 Apr 2025 08:28:51 GMT
 <!--Tests:End-->
 ### Setup
 
@@ -76,6 +76,7 @@ Rule: Replace prompt (API)
 Adjust variable "maxPromptLength" based on your requirements
 
 Remove entries for roles for that you do NOT want to replace the prompt for from the "limitedRoles" variable
+
 
 
 
