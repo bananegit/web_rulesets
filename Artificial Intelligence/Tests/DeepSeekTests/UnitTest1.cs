@@ -18,7 +18,7 @@ namespace DeepSeekTests
 
         private ChromeOptions options = new ChromeOptions();
         private Dictionary<string, object> prefs = new Dictionary<string, object>();
-        private TimeSpan commandTimeout = TimeSpan.FromSeconds(900);
+        private TimeSpan commandTimeout = TimeSpan.FromSeconds(600);
 
 
         //UI element classnames / ids
@@ -212,7 +212,7 @@ namespace DeepSeekTests
 
         private void authenticate(UndetectedChromeDriver? driver)
         {
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(300000);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500000);
 
             driver.Navigate().GoToUrl(baseUrl);
 
