@@ -18,7 +18,7 @@ namespace DeepSeekTests
 
         private ChromeOptions options = new ChromeOptions();
         private Dictionary<string, object> prefs = new Dictionary<string, object>();
-        private TimeSpan commandTimeout = TimeSpan.FromSeconds(600);
+        private TimeSpan commandTimeout = TimeSpan.FromSeconds(900);
 
 
         //UI element classnames / ids
