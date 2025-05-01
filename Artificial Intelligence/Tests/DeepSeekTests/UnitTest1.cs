@@ -36,7 +36,7 @@ namespace DeepSeekTests
         [OneTimeSetUp]
         public async Task oneTimeInit()
         {
-            string traceId = "";
+            string traceId = "53366b23";
             await startTrace(traceId);
         }
 
@@ -155,6 +155,7 @@ namespace DeepSeekTests
                         Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                         if (executionCounter == retries)
                         {
+                            Console.WriteLine("Exec counter: " + executionCounter);
                             throw;
                         }
                     }
@@ -198,6 +199,7 @@ namespace DeepSeekTests
                         Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                         if(executionCounter == retries)
                         {
+                            Console.WriteLine("Exec counter: " + executionCounter);
                             throw;
                         }
                     }
@@ -239,6 +241,7 @@ namespace DeepSeekTests
                         Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                         if(executionCounter == retries)
                         {
+                            Console.WriteLine("Exec counter: " + executionCounter);
                             throw;
                         }
                     }
@@ -278,6 +281,7 @@ namespace DeepSeekTests
                         Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                         if (executionCounter == retries) 
                         {  
+                            Console.WriteLine("Exec counter: " + executionCounter);
                             throw; 
                         }
                     }
@@ -318,6 +322,7 @@ namespace DeepSeekTests
                         Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                         if(executionCounter == retries)
                         {
+                            Console.WriteLine("Exec counter: " + executionCounter);
                             throw;
                         }
                     }
@@ -361,7 +366,10 @@ namespace DeepSeekTests
                 {
                     var ss = driver.GetScreenshot();
                     Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
-                    throw;
+                    if(executionCounter == retries) {
+                        Console.WriteLine("Exec counter: " + executionCounter);
+                        throw;
+                    }
                 }
                 finally
                 {
