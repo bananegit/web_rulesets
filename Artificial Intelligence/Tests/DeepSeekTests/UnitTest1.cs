@@ -30,7 +30,7 @@ namespace DeepSeekTests
         private String thinkContainerCN = "_19db599";
         private String inputId = "chat-input";
         private int executionCounter = 0;
-        private int retries = 3;
+        private int retries = 2;
 
 
         [OneTimeSetUp]
@@ -130,7 +130,7 @@ namespace DeepSeekTests
         [TestCase(null, TestName ="Enforce DeepThink Setting (WebApp)")]
         public async Task EnforceDeepThinkSettingsTest(object? param)
         {
-            while (executionCounter < retries)
+            while (executionCounter <= retries)
             {
                 using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
                 {
@@ -171,7 +171,7 @@ namespace DeepSeekTests
         [TestCase(null, TestName = "Enforce Search Setting (WebApp)")]
         public async Task EnforceSearchSettingsTest(object? param)
         {
-            while(executionCounter < retries)
+            while(executionCounter <= retries)
             {
                 using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
                 {
@@ -180,6 +180,8 @@ namespace DeepSeekTests
                         authenticate(driver);
 
                         //TODO actually enable search in UI
+                        var searchButton = driver.FindElements(By.ClassName("_3172d9f"))[1];
+                        searchButton.Click();
                         var textArea = driver.FindElement(By.Id(inputId));
                         textArea.SendKeys(searchPrompt);
                         var sendButton = driver.FindElement(By.ClassName(sendPromptButtonCn));
@@ -213,7 +215,7 @@ namespace DeepSeekTests
         [TestCase(null, TestName = "Prevent pasting from clipboard (WebApp)")]
         public async Task PreventPastingFromClipBoardTest(object? param)
         {
-            while(executionCounter < retries)
+            while(executionCounter <= retries)
             {
                 using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
                 {
@@ -254,7 +256,7 @@ namespace DeepSeekTests
         [TestCase(null, TestName = "Block File Upload (WebApp)")]
         public async Task BlockFileUploadsTest(object? param)
         {
-            while (executionCounter < retries)
+            while (executionCounter <= retries)
             {
                 using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
                 {
@@ -264,7 +266,7 @@ namespace DeepSeekTests
 
                         var fileInput = driver.FindElement(By.CssSelector("input[type=file]"));
                         fileInput.SendKeys(bitmapFilePath);
-                        await Task.Delay(5000);
+                        await Task.Delay(10000);
                         var errorElement = driver.FindElement(By.ClassName(uploadErrorContainerCn));
 
                         Assert.That(errorElement.Text, Is.EqualTo("Upload failed"));
@@ -293,7 +295,7 @@ namespace DeepSeekTests
         [TestCase(null, TestName = "Replace prompt (WebApp)")]
         public async Task ReplacePromptTest(object? param)
         {
-            while (executionCounter < retries)
+            while (executionCounter <= retries)
             {
                 using (var driver = UndetectedChromeDriver.Create(options, commandTimeout: commandTimeout, prefs: prefs, driverExecutablePath: await new ChromeDriverInstaller().Auto()))
                 {
