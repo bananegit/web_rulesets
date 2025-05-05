@@ -9,8 +9,8 @@ namespace DeepSeekTests
         private String baseUrl = "https://chat.deepseek.com";
         private String username = Environment.GetEnvironmentVariable("dsUsername");
         private String password = Environment.GetEnvironmentVariable("dsPassword");
-        //private String ci = Environment.GetEnvironmentVariable("CI");
-        private String ci = "";
+        private String ci = Environment.GetEnvironmentVariable("CI");
+        //private String ci = "";
 
         private String longTestString = "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
         private String searchPrompt = "do a web search for the price of tsla, if you cannot do so answer with \"cannot search\"";
@@ -380,6 +380,7 @@ namespace DeepSeekTests
                     if (!String.IsNullOrEmpty(ci))
                     {
                         restoreSCPPolicy();
+                        await Task.Delay(10000);
                     }
 
                 }
