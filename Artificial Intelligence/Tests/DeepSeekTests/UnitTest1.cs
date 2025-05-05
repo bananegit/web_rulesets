@@ -36,7 +36,7 @@ namespace DeepSeekTests
         [OneTimeSetUp]
         public async Task oneTimeInit()
         {
-            string traceId = "53366b23";
+            string traceId = "b0c04ffb";
             await startTrace(traceId);
         }
 
