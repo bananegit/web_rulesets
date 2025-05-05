@@ -45,6 +45,7 @@ jobs:
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/scp.z02 -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.z02
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/scp.zip -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.zip
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/ca.pem -Headers @{Authorization="Token $($env:PAT)"} -OutFile ca.pem
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/usPolicy.opg -Headers @{Authorization="Token $($env:PAT)"} -OutFile usPolicy.opg
         Write-Host "Unpacking SCP Bundle"
         7z x .\scp.zip
         Write-Host "Running SCP Installer"
