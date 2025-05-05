@@ -38,14 +38,13 @@ jobs:
     - name: Download and install SCP
       shell: pwsh
       env:
-        PAT: ${{ secrets.SCP_REPO_PAT }}
+        PAT: ${{ secrets.SCP_REPO_PAT_SH }}
       run: |
         Write-Host "Downloading Files for SCP Install"
-        Invoke-WebRequest -Uri https://raw.githubusercontent.com/bananegit/scpinstaller/main/scp.z01 -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.z01
-        Invoke-WebRequest -Uri https://raw.githubusercontent.com/bananegit/scpinstaller/main/scp.z02 -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.z02
-        Invoke-WebRequest -Uri https://raw.githubusercontent.com/bananegit/scpinstaller/main/scp.zip -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.zip
-        Invoke-WebRequest -Uri https://raw.githubusercontent.com/bananegit/scpinstaller/main/ca.pem -Headers @{Authorization="Token $($env:PAT)"} -OutFile ca.pem
-        Invoke-WebRequest -Uri https://raw.githubusercontent.com/bananegit/scpinstaller/main/usPolicy.opg -Headers @{Authorization="Token $($env:PAT)"} -OutFile usPolicy.opg
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/scp.z01 -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.z01
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/scp.z02 -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.z02
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/scp.zip -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.zip
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/ca.pem -Headers @{Authorization="Token $($env:PAT)"} -OutFile ca.pem
         Write-Host "Unpacking SCP Bundle"
         7z x .\scp.zip
         Write-Host "Running SCP Installer"
