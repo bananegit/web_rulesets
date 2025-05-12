@@ -189,6 +189,7 @@ namespace PerplexityTests
                     }
                     catch (Exception)
                     {
+                        await Task.Delay(500);
                         var ss = driver.GetScreenshot();
                         driver.SwitchTo().Window(driver.CurrentWindowHandle);
                         Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
@@ -224,12 +225,13 @@ namespace PerplexityTests
                         fileInput.SendKeys(bitmapFilePath);
                         await Task.Delay(10000);
 
-                        //the div with the upload failed text has no proper identifier, using the error icon instead as it´s unique
+                        //the div with the upload failed text has no proper identifier, using the error icon instead as itÂ´s unique
                         var errorElement = driver.FindElement(By.ClassName(uploadErrorContainerCn));
                         return;
                     }
                     catch (Exception)
                     {
+                        await Task.Delay(500);
                         var ss = driver.GetScreenshot();
                         Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                         if (executionCounter == retries)
@@ -270,6 +272,7 @@ namespace PerplexityTests
                     }
                     catch (Exception)
                     {
+                        await Task.Delay(500);
                         var ss = driver.GetScreenshot();
                         Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                         if (executionCounter == retries)
@@ -315,6 +318,7 @@ namespace PerplexityTests
                 }
                 catch (Exception)
                 {
+                    await Task.Delay(500);
                     var ss = driver.GetScreenshot();
                     Console.WriteLine("Error Screenshot: \r\n" + ss.AsBase64EncodedString);
                     if (executionCounter == retries)
