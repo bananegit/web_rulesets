@@ -80,5 +80,6 @@ jobs:
         $readme | Out-File "Artificial Intelligence/DeepSeek/readme.md";
         git config --global user.email $env:ghMail
         git config --global user.name "bananegit"
+        git pull
         git commit -m "Automated Update by Test Workflow" "Artificial Intelligence/DeepSeek/readme.md"
         git push
