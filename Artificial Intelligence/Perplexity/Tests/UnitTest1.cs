@@ -9,6 +9,7 @@ using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Auth.OAuth2.Responses;
 using System.Text;
 using System.Text.RegularExpressions;
+using OpenQA.Selenium.Internal;
 
 namespace PerplexityTests
 {
@@ -41,7 +42,7 @@ namespace PerplexityTests
         private int executionCounter = 0;
         private int retries = 0;
 
-        Regex signinLinkPattern = new Regex("(https:\\/\\/www\\.perplexity.ai\\/api\\/auth\\/callback\\/[\\S]*\\.com)", RegexOptions.IgnoreCase);
+        Regex signinCodePattern = new Regex("[\r\n]([a-z0-9]*-[a-z0-9]*)[\r\n]", RegexOptions.IgnoreCase | RegexOptions.Singleline);
         GmailService service;
 
 
@@ -69,11 +70,17 @@ namespace PerplexityTests
 
             UserCredential cred = new UserCredential(flow, username, token);
 
-            var service = new GmailService(new BaseClientService.Initializer()
+            service = new GmailService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = cred,
                 ApplicationName = "automated tests"
             });
+        }
+
+        [OneTimeTearDown]
+        public void oneTimeTearDown()
+        {
+            if (service != null) { service.Dispose(); }
         }
 
         [SetUp]
@@ -139,8 +146,12 @@ namespace PerplexityTests
             //wait a bit for email to arrive
             await Task.Delay(5000);
 
-            String signinLink = await getSigninLink();
-            driver.Navigate().GoToUrl(signinLink);
+            String signinCode = await getSigninCode();
+            var codeInput = driver.FindElement(By.TagName("input"));
+            codeInput.SendKeys(signinCode);
+            buttons = driver.FindElements(By.TagName("button"));
+            buttons.FirstOrDefault((e) => { return e.Text.Equals("Continue"); }).Click();
+
         }
 
         private async Task startTrace(string traceId)
@@ -224,7 +235,6 @@ namespace PerplexityTests
 
                         var fileInput = driver.FindElement(By.CssSelector("input[type=file]"));
                         fileInput.SendKeys(bitmapFilePath);
-                        await Task.Delay(10000);
 
                         //the div with the upload failed text has no proper identifier, using the error icon instead as it´s unique
                         var errorElement = driver.FindElement(By.ClassName(uploadErrorContainerCn));
@@ -342,7 +352,7 @@ namespace PerplexityTests
         }
 
 
-        private async Task<String> getSigninLink()
+        private async Task<String> getSigninCode()
         {
             var emailRequest = service.Users.Messages.List("me");
             emailRequest.MaxResults = 20;
@@ -355,12 +365,12 @@ namespace PerplexityTests
                 var subject = email.Payload.Headers.FirstOrDefault((e) => { return e.Name.Equals("Subject"); });
                 if (subject is not null && from is not null && from.Value.Equals("Perplexity <team@mail.perplexity.ai>") && subject.Value.Equals("Sign in to Perplexity"))
                 {
-                    body = Encoding.UTF8.GetString(Convert.FromBase64String(email.Payload.Parts[0].Body.Data));
+                    body = Encoding.UTF8.GetString(Base64UrlEncoder.DecodeBytes(email.Payload.Parts[0].Body.Data));
                     break;
                 }
             }
 
-            var matches = signinLinkPattern.Matches(body);
+            var matches = signinCodePattern.Matches(body);
             return matches.First().Value;
         }
     }
