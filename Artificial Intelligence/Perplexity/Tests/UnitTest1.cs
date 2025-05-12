@@ -34,10 +34,10 @@ namespace PerplexityTests
 
         //UI element classnames / ids
         private String loginButton1CN = "gap-sm";
-        private String replyContainerCn = "ds-markdown-paragraph";
         private String uploadErrorContainerCn = "tabler-icon-alert-circle";
         private String thinkContainerCN = "_19db599";
         private String inputId = "ask-input";
+        private String replyContainerId = "markdown-content-0";
         private int executionCounter = 0;
         private int retries = 0;
 
@@ -258,14 +258,13 @@ namespace PerplexityTests
                 {
                     try
                     {
-                        authenticate(driver);
+                        await authenticate(driver);
 
                         var textArea = driver.FindElement(By.Id(inputId));
                         textArea.SendKeys(longTestString);
-                        var sendButton = driver.FindElement(By.ClassName(sendPromptButtonCn));
-                        sendButton.Click();
+                        textArea.SendKeys(Keys.Enter);
 
-                        var reply = driver.FindElement(By.ClassName(replyContainerCn));
+                        var reply = driver.FindElement(By.Id(replyContainerId));
                         Assert.That(reply.Text, Is.EqualTo(policyWarning));
                         return;
                     }
