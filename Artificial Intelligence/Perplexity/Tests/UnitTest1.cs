@@ -91,7 +91,7 @@ namespace PerplexityTests
             prefs = new Dictionary<string, object>();
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
-            //options.AddArguments("--headless=new");
+            options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
 
@@ -104,7 +104,7 @@ namespace PerplexityTests
             prefs = new Dictionary<string, object>();
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
-            //options.AddArguments("--headless=new");
+            options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
 
@@ -147,6 +147,7 @@ namespace PerplexityTests
             await Task.Delay(5000);
 
             String signinCode = await getSigninCode();
+            Console.WriteLine("extracted code " + signinCode);
             var codeInput = driver.FindElement(By.TagName("input"));
             codeInput.SendKeys(signinCode);
             buttons = driver.FindElements(By.TagName("button"));
