@@ -50,6 +50,8 @@ jobs:
       env:
         ppxUsername: ${{ secrets.PPXUSERNAME }}
         ppxPassword: ${{ secrets.PPXPASSWORD }}
+        gmailPAT: ${{ secrets.GMAILPAT }}
+        gmailRefreshToken: ${{ secrets.GMAIL_REFRESHTOKEN }}
       run: dotnet test "Artificial Intelligence/Perplexity/Tests/PerplexityTests.csproj" --no-build --verbosity normal --logger:nunit
     - name: Parse Testresults and update readme
       if: always()
