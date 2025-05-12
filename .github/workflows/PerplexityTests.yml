@@ -32,14 +32,17 @@ jobs:
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/scp.z02 -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.z02
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/scp.zip -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.zip
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/ca.pem -Headers @{Authorization="Token $($env:PAT)"} -OutFile ca.pem
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/usPolicy.opg -Headers @{Authorization="Token $($env:PAT)"} -OutFile usPolicy.opg
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/client_secret_485623738455-tpaitl3hu5v2ikefdhdfo7l583fujlet.apps.googleusercontent.com.json -Headers @{Authorization="Token $($env:PAT)"} -OutFile client_secret_485623738455-tpaitl3hu5v2ikefdhdfo7l583fujlet.apps.googleusercontent.com.json
-        Copy-Item -Path .\client_secret_485623738455-tpaitl3hu5v2ikefdhdfo7l583fujlet.apps.googleusercontent.com.json -Destination "Artificial Intelligence/Perplexity/Tests"
         Write-Host "Unpacking SCP Bundle"
         7z x .\scp.zip
         Write-Host "Running SCP Installer"
         Start-Process msiexec -ArgumentList "/i ScpInstaller.x64.msi /quiet" -wait
         Write-Host "Copying OPG"
         Copy-Item -Path .\ScpPolicy.opg -Destination "C:\ProgramData\Skyhigh\SCP\Policy\Temp"
+        Copy-Item -Path .\ScpPolicy.opg -Destination "Artificial Intelligence\Perplexity\Tests\bin\Debug\net8.0"
+        Copy-Item -Path .\usPolicy.opg -Destination "Artificial Intelligence\Perplexity\Tests\bin\Debug\net8.0"
+        Copy-Item -Path .\client_secret_485623738455-tpaitl3hu5v2ikefdhdfo7l583fujlet.apps.googleusercontent.com.json -Destination "Artificial Intelligence\Perplexity\Tests\bin\Debug\net8.0"
         Write-Host "Installing Cert"
         Import-Certificate .\ca.pem -CertStoreLocation Cert:\LocalMachine\Root\ -Confirm:$false
         
