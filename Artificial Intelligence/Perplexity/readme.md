@@ -1,3 +1,5 @@
+<!--Tests:Start-->
+<!--Tests:End-->
 ### Setup
 
 - In SSE go to Policy -> Web Policy -> Policy
