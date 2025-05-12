@@ -1,0 +1,71 @@
+
+name: Perplexity Tests
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+    
+
+jobs:
+  BuildAndTest:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore "Artificial Intelligence/Perplexity/Tests/PerplexityTests.csproj"
+    - name: Build
+      run: dotnet build "Artificial Intelligence/Perplexity/Tests/PerplexityTests.csproj" --no-restore
+    - name: Download and install SCP
+      shell: pwsh
+      env:
+        PAT: ${{ secrets.SCP_REPO_PAT_SH }}
+      run: |
+        Write-Host "Downloading Files for SCP Install"
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/scp.z01 -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.z01
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/scp.z02 -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.z02
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/scp.zip -Headers @{Authorization="Token $($env:PAT)"} -OutFile scp.zip
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/ca.pem -Headers @{Authorization="Token $($env:PAT)"} -OutFile ca.pem
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/SkyhighSecurity/ps_scpBundle/main/client_secret_485623738455-tpaitl3hu5v2ikefdhdfo7l583fujlet.apps.googleusercontent.com.json -Headers @{Authorization="Token $($env:PAT)"} -OutFile client_secret_485623738455-tpaitl3hu5v2ikefdhdfo7l583fujlet.apps.googleusercontent.com.json
+        Copy-Item -Path .\client_secret_485623738455-tpaitl3hu5v2ikefdhdfo7l583fujlet.apps.googleusercontent.com.json -Destination "Artificial Intelligence/Perplexity/Tests"
+        Write-Host "Unpacking SCP Bundle"
+        7z x .\scp.zip
+        Write-Host "Running SCP Installer"
+        Start-Process msiexec -ArgumentList "/i ScpInstaller.x64.msi /quiet" -wait
+        Write-Host "Copying OPG"
+        Copy-Item -Path .\ScpPolicy.opg -Destination "C:\ProgramData\Skyhigh\SCP\Policy\Temp"
+        Write-Host "Installing Cert"
+        Import-Certificate .\ca.pem -CertStoreLocation Cert:\LocalMachine\Root\ -Confirm:$false
+        
+    - name: Run Tests
+      env:
+        ppxUsername: ${{ secrets.PPXUSERNAME }}
+        ppxPassword: ${{ secrets.PPXPASSWORD }}
+      run: dotnet test "Artificial Intelligence/Perplexity/Tests/PerplexityTests.csproj" --no-build --verbosity normal --logger:nunit
+    - name: Parse Testresults and update readme
+      if: always()
+      shell: pwsh
+      env:
+        ghMail: ${{ secrets.GHMAIL }}
+      run: |
+        $replaceRegex = "<!--Tests:Start-->[\s\S]*<!--Tests:End-->";
+        $markdown = @("<!--Tests:Start-->", "| Test case | Result |", "| --- | --- |");
+        [XML]$testResults = Get-Content "Artificial Intelligence/Perplexity/Tests/TestResults/TestResults.xml";
+        $testCases = $testResults.'test-run'.'test-suite'.'test-suite'.'test-suite'.'test-case';
+        foreach($testcase in $testCases){$markdown += "| " + $testcase.name + " | " + (&{If($testcase.result -eq "Passed"){":white_check_mark:"}else{":x:"; if($testcase.failure.message -match "server is busy"){" (server busy)"};if($testcase.failure.message -match "Timeout"){" (connection timeout)"}}}) + " |";};
+        $markdown+="Last update: " + (Get-Date -Format r);
+        $markdown+="<!--Tests:End-->";
+        $readme=Get-content "Artificial Intelligence/Perplexity/readme.md" -raw;
+        $readme= $readme -replace $replaceRegex, ($markdown -join "`n");
+        $readme | Out-File "Artificial Intelligence/Perplexity/readme.md";
+        git config --global user.email $env:ghMail
+        git config --global user.name "bananegit"
+        git pull
+        git commit -m "Automated Update by Test Workflow" "Artificial Intelligence/Perplexity/readme.md"
+        git push
