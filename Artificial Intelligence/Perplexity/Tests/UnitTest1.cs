@@ -128,7 +128,8 @@ namespace PerplexityTests
             //confirm cookies
             await Task.Delay(500);
             var buttons = driver.FindElements(By.TagName("button"));
-            buttons.First((e) => { return e.Text.Equals("Necessary Cookies"); }).Click();
+            var cookieConsentButton = buttons.FirstOrDefault((e) => { return e.Text.Equals("Necessary Cookies"); });
+            if (cookieConsentButton != null) { cookieConsentButton.Click(); }
 
             var emailInput = driver.FindElement(By.CssSelector("input[type=email]"));
             emailInput.SendKeys(username);
@@ -333,7 +334,7 @@ namespace PerplexityTests
                     driver.Quit();
                     if (!String.IsNullOrEmpty(ci))
                     {
-                        restoreSCPPolicy();
+                        await restoreSCPPolicy();
                     }
 
                 }
