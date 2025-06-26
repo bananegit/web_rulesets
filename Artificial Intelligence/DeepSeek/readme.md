@@ -5,8 +5,8 @@
 | Enforce DeepThink Setting (WebApp) | :white_check_mark: |
 | Enforce Search Setting (WebApp) | :white_check_mark: |
 | Prevent pasting from clipboard (WebApp) | :white_check_mark: |
-| Replace prompt (WebApp) | :white_check_mark: |
-Last update: Thu, 26 Jun 2025 09:21:44 GMT
+| Replace prompt (WebApp) | :x: |
+Last update: Thu, 26 Jun 2025 10:22:21 GMT
 <!--Tests:End-->
 ### Setup
 
@@ -76,6 +76,7 @@ Rule: Replace prompt (API)
 Adjust variable "maxPromptLength" based on your requirements
 
 Remove entries for roles for that you do NOT want to replace the prompt for from the "limitedRoles" variable
+
 
 
 
