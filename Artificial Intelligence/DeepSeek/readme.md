@@ -6,7 +6,7 @@
 | Enforce Search Setting (WebApp) | :x: |
 | Prevent pasting from clipboard (WebApp) | :x: |
 | Replace prompt (WebApp) | :x: |
-Last update: Fri, 19 Sep 2025 20:50:43 GMT
+Last update: Fri, 19 Sep 2025 21:48:13 GMT
 <!--Tests:End-->
 ### Setup
 
@@ -76,6 +76,7 @@ Rule: Replace prompt (API)
 Adjust variable "maxPromptLength" based on your requirements
 
 Remove entries for roles for that you do NOT want to replace the prompt for from the "limitedRoles" variable
+
 
 
 
