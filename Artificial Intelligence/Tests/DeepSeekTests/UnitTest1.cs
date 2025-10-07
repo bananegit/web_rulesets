@@ -48,6 +48,7 @@ namespace DeepSeekTests
             prefs = new Dictionary<string, object>();
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
+            options.AddArgument("--auto-open-devtools-for-tabs");
             //options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
@@ -61,6 +62,7 @@ namespace DeepSeekTests
             prefs = new Dictionary<string, object>();
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
+            options.AddArgument("--auto-open-devtools-for-tabs");
             //options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));

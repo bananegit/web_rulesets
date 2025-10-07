@@ -460,7 +460,7 @@
           }
         }
       },
-      "Selenium.WebDriver/4.31.0": {
+      "Selenium.WebDriver/4.36.0": {
         "type": "package",
         "compile": {
           "lib/net8.0/WebDriver.dll": {
@@ -474,6 +474,20 @@
         },
         "build": {
           "buildTransitive/Selenium.WebDriver.targets": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux/native/selenium-manager": {
+            "assetType": "native",
+            "rid": "linux"
+          },
+          "runtimes/osx/native/selenium-manager": {
+            "assetType": "native",
+            "rid": "osx"
+          },
+          "runtimes/win/native/selenium-manager.exe": {
+            "assetType": "native",
+            "rid": "win"
+          }
         }
       },
       "System.Buffers/4.3.0": {
@@ -1517,10 +1531,10 @@
         "selenium.undetectedchromedriver.nuspec"
       ]
     },
-    "Selenium.WebDriver/4.31.0": {
-      "sha512": "RT5Pg6UVyxe/+S/H808VAbfXX4kHQdvo/U28oViwUcCpC4WL7zHq2GgxY/b9zNLTcwJ8zfqu+WmHPifkTx+BCQ==",
+    "Selenium.WebDriver/4.36.0": {
+      "sha512": "jYehpVsZyC8Sn6BJJ2xr8vM9QyPTDks7MdrlfZQFxs3wa8Jg4LPHPnzEYRT1CY1vSSydxhBxuDJ8tnUxrXo9Qw==",
       "type": "package",
-      "path": "selenium.webdriver/4.31.0",
+      "path": "selenium.webdriver/4.36.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1532,10 +1546,10 @@
         "lib/net8.0/WebDriver.xml",
         "lib/netstandard2.0/WebDriver.dll",
         "lib/netstandard2.0/WebDriver.xml",
-        "manager/linux/selenium-manager",
-        "manager/macos/selenium-manager",
-        "manager/windows/selenium-manager.exe",
-        "selenium.webdriver.4.31.0.nupkg.sha512",
+        "runtimes/linux/native/selenium-manager",
+        "runtimes/osx/native/selenium-manager",
+        "runtimes/win/native/selenium-manager.exe",
+        "selenium.webdriver.4.36.0.nupkg.sha512",
         "selenium.webdriver.nuspec"
       ]
     },
@@ -2747,7 +2761,7 @@
       "NUnit3TestAdapter >= 4.5.0",
       "NunitXml.TestLogger >= 6.1.0",
       "Selenium.UndetectedChromeDriver >= 1.1.3",
-      "Selenium.WebDriver >= 4.31.0",
+      "Selenium.WebDriver >= 4.36.0",
       "coverlet.collector >= 6.0.0"
     ]
   },
@@ -2831,7 +2845,7 @@
           },
           "Selenium.WebDriver": {
             "target": "Package",
-            "version": "[4.31.0, )"
+            "version": "[4.36.0, )"
           },
           "coverlet.collector": {
             "target": "Package",
