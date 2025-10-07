@@ -13,7 +13,7 @@ namespace DeepSeekTests
 
         private String longTestString = "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
         private String searchPrompt = "do a web search for the price of tsla, if you cannot do so answer with \"cannot search\"";
-        private String policyWarning = "\"Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 100 characters\"";
+        private String policyWarning = "Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 100 characters";
         private String bitmapFilePath = AppContext.BaseDirectory + "BitmapFile.bmp";
 
         private ChromeOptions options = new ChromeOptions();
