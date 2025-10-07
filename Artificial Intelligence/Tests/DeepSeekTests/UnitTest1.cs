@@ -10,7 +10,6 @@ namespace DeepSeekTests
         private String username = Environment.GetEnvironmentVariable("dsUsername");
         private String password = Environment.GetEnvironmentVariable("dsPassword");
         private String ci = Environment.GetEnvironmentVariable("CI");
-        //private String ci = "";
 
         private String longTestString = "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
         private String searchPrompt = "do a web search for the price of tsla, if you cannot do so answer with \"cannot search\"";
@@ -28,8 +27,8 @@ namespace DeepSeekTests
         private String sendPromptButtonCn = "_7436101";
         private String replyContainerCn = "ds-markdown-paragraph";
         private String uploadErrorContainerCn = "_5119742";
-        private String thinkContainerCN = "_19db599";
-        private String inputId = "chat-input";
+        private String thinkContainerCN = "_4d41763";
+        private String inputCN = "d96f2d2a";
         private int executionCounter = 0;
         private int retries = 2;
 
@@ -49,7 +48,7 @@ namespace DeepSeekTests
             prefs = new Dictionary<string, object>();
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
-            options.AddArguments("--headless=new");
+            //options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
 
@@ -62,7 +61,7 @@ namespace DeepSeekTests
             prefs = new Dictionary<string, object>();
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
-            options.AddArguments("--headless=new");
+            //options.AddArguments("--headless=new");
             options.AddArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0");
             var t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
 
@@ -139,7 +138,7 @@ namespace DeepSeekTests
                     {
                         authenticate(driver);
 
-                        var textArea = driver.FindElement(By.Id(inputId));
+                        var textArea = driver.FindElement(By.ClassName(inputCN));
                         textArea.SendKeys(searchPrompt);
                         var sendButton = driver.FindElement(By.ClassName(sendPromptButtonCn));
                         sendButton.Click();
@@ -184,7 +183,7 @@ namespace DeepSeekTests
                         //TODO actually enable search in UI
                         var searchButton = driver.FindElements(By.ClassName("_3172d9f"))[1];
                         searchButton.Click();
-                        var textArea = driver.FindElement(By.Id(inputId));
+                        var textArea = driver.FindElement(By.ClassName(inputCN));
                         textArea.SendKeys(searchPrompt);
                         var sendButton = driver.FindElement(By.ClassName(sendPromptButtonCn));
                         sendButton.Click();
@@ -229,7 +228,7 @@ namespace DeepSeekTests
                         driver.ExecuteScript("navigator.clipboard.writeText(\"" + longTestString + "\");");
                         var clipboardContent = driver.ExecuteScript("return await navigator.clipboard.readText();");
 
-                        var textArea = driver.FindElement(By.Id(inputId));
+                        var textArea = driver.FindElement(By.ClassName(inputCN));
                         textArea.SendKeys(Keys.Control + "v");
 
                         Assert.That(clipboardContent, Is.EqualTo(longTestString));
@@ -308,7 +307,7 @@ namespace DeepSeekTests
                     {
                         authenticate(driver);
 
-                        var textArea = driver.FindElement(By.Id(inputId));
+                        var textArea = driver.FindElement(By.ClassName(inputCN));
                         textArea.SendKeys(longTestString);
                         var sendButton = driver.FindElement(By.ClassName(sendPromptButtonCn));
                         sendButton.Click();
@@ -357,7 +356,7 @@ namespace DeepSeekTests
                     driver.ExecuteScript("navigator.clipboard.writeText(\"" + longTestString + "\");");
                     var clipboardContent = driver.ExecuteScript("return await navigator.clipboard.readText();");
 
-                    var textArea = driver.FindElement(By.Id(inputId));
+                    var textArea = driver.FindElement(By.ClassName(inputCN));
                     textArea.SendKeys(Keys.Control + "v");
 
                     Assert.That(clipboardContent, Is.EqualTo(longTestString));
