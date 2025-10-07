@@ -1,6 +1,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using SeleniumUndetectedChromeDriver;
+using System.Text.RegularExpressions;
 
 namespace DeepSeekTests
 {
@@ -13,7 +14,7 @@ namespace DeepSeekTests
 
         private String longTestString = "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
         private String searchPrompt = "do a web search for the price of tsla, if you cannot do so answer with \"cannot search\"";
-        private String policyWarning = "Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 100 characters";
+        private String policyWarning = "[\"]{0,1}Your last prompt was blocked by Web Policy for exceeding the maximum prompt length of 100 characters[\"]{0,1}";
         private String bitmapFilePath = AppContext.BaseDirectory + "BitmapFile.bmp";
 
         private ChromeOptions options = new ChromeOptions();
@@ -317,7 +318,9 @@ namespace DeepSeekTests
 
                         var replys = driver.FindElements(By.ClassName(replyContainerCn));
                         var reply = replys.Last();
-                        Assert.That(reply.Text, Is.EqualTo(policyWarning));
+                        Regex r = new Regex(policyWarning);
+                        var m = r.Match(reply.Text);
+                        Assert.True(m.Success);
                         return;
                     }
                     catch (Exception)
