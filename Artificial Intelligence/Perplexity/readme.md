@@ -4,7 +4,7 @@
 | Block File Upload (WebApp) | :x: |
 | Prevent pasting from clipboard (WebApp) | :x: |
 | Replace prompt (WebApp) | :x: |
-Last update: Fri, 02 Jan 2026 18:41:58 GMT
+Last update: Sat, 03 Jan 2026 02:02:28 GMT
 <!--Tests:End-->
 ### Setup
 
@@ -77,6 +77,7 @@ Rule: Replace prompt (API)
 Adjust variable "maxPromptLength" based on your requirements
 
 Remove entries for roles for that you do NOT want to replace the prompt for from the "limitedRoles" variable
+
 
 
 
